@@ -1,4 +1,4 @@
--- S01_Logic/Pset1.lean
+-- C01_Logic/Pset1.lean
 -- Problem set 1: The implication.
 -- Gabriel Sierra Gallego.
 -- Seville, October 1, 2024

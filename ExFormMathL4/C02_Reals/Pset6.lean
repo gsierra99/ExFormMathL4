@@ -1,5 +1,5 @@
 import Mathlib.Tactic
-import ExFormMathL4.S02_Reals.Pset5
+import ExFormMathL4.C02_Reals.Pset5
 
 namespace Section2sheet6
 
