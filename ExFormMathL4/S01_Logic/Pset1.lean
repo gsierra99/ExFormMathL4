@@ -7,7 +7,7 @@
 -- In this problem set, we begin the study of logic by considering
 -- proofs where the only connective used is the implication.
 --
--- It is based on [Section01logic//Sheet1.lean](https://tinyurl.com/23vjltb2)
+-- It is based on [Section01logic/Sheet1.lean](https://tinyurl.com/23vjltb2)
 -- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
 
 import Mathlib.Tactic
