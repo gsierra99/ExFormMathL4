@@ -1,0 +1,10 @@
+name = "ExFormMathL4"
+defaultTargets = ["ExFormMathL4"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+
+[[lean_lib]]
+name = "ExFormMathL4"
+globs = ["ExFormMathL4.+"]
