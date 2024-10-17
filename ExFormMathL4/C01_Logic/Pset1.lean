@@ -499,12 +499,38 @@ example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P :=
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
   tauto
 
--- Comentario: La 2ª prueba se puede transformar en un término, como se
--- muestra en la 5ª prueba.
+-- Comment: The proof 2 can be transformed into a term, as shown in
+-- proof 5.
 
 -- Proof 5
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P :=
 fun hPQR hQRP _hRPQ => hQRP (fun hQ => hPQR (fun _hP => hQ))
+
+-- Comment: The proof 3 can be transformed into a detailed using
+-- `suffices`, as shown in proof 6.
+
+-- Proof 6
+example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
+  intro hPQR hQRP _hRPQ
+  -- hPQR : (P → Q) → R
+  -- hQRP : (Q → R) → P
+  -- _hRPQ : (R → P) → Q
+  -- ⊢ P
+  suffices hQR : Q → R
+  . -- ⊢ P
+    exact hQRP hQR
+  . -- ⊢ Q → R
+    intro hQ
+    -- hQ : Q
+    -- ⊢ R
+    suffices hPQ : P → Q
+    . -- ⊢ R
+      exact hPQR hPQ
+    . -- ⊢ P → Q
+      intro _hP
+      -- _hP : P
+      -- ⊢ Q
+      exact hQ
 
 -- ---------------------------------------------------------------------
 -- Exercise 13. Prove that
