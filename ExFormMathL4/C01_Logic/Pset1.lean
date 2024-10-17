@@ -499,6 +499,12 @@ example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P :=
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
   tauto
 
+-- Comentario: La 2ª prueba se puede transformar en un término, como se
+-- muestra en la 5ª prueba.
+
+-- Proof 5
+example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P :=
+fun hPQR hQRP _hRPQ => hQRP (fun hQ => hPQR (fun _hP => hQ))
 
 -- ---------------------------------------------------------------------
 -- Exercise 13. Prove that
