@@ -478,17 +478,26 @@ example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P :=
 
 -- Proof 2
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
-  intro hPQR hQRP hRPQ
-  exact hQRP (fun hQ => hPQR (fun hP => hQ))
+  intro hPQR hQRP _hRPQ
+  -- hPQR : (P → Q) → R
+  -- hQRP : (Q → R) → P
+  -- _hRPQ : (R → P) → Q
+  -- ⊢ P
+  exact hQRP (fun hQ => hPQR (fun _hP => hQ))
 
 -- Proof 3
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
-  intro hPQR hQRP hRPQ
-  have hQR : Q → R := fun hQ => hPQR (fun hP => hQ)
+  intro hPQR hQRP _hRPQ
+  -- hPQR : (P → Q) → R
+  -- hQRP : (Q → R) → P
+  -- _hRPQ : (R → P) → Q
+  -- ⊢ P
+  have hQR : Q → R := fun hQ => hPQR (fun _hP => hQ)
   exact hQRP hQR
 
 -- Proof 4
-example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by tauto
+example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
+  tauto
 
 
 -- ---------------------------------------------------------------------
