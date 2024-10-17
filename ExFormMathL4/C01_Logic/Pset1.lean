@@ -452,24 +452,100 @@ by
 --    ⊢ ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P
 -- ---------------------------------------------------------------------
 
+-- Proof 1
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
-  sorry
+  intro hPQR hQRP hRPQ
+  apply hQRP
+  intro hQ
+  apply hPQR
+  intro hP
+  apply hRPQ
+  intro hR
+  exact hP
+
+-- Proof 2
+example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
+  intro hPQR hQRP hRPQ
+  exact hQRP (fun hQ => hPQR (fun hP => hQ))
+
+-- Proof 3
+example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
+  intro hPQR hQRP hRPQ
+  have hQR : Q → R := fun hQ => hPQR (fun hP => hQ)
+  exact hQRP hQR
+
+-- Proof 4
+example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by tauto
+
 
 -- ---------------------------------------------------------------------
 -- Exercise 13. Prove that
 --    ⊢ ((Q → P) → P) → (Q → R) → (R → P) → P
 -- ---------------------------------------------------------------------
 
+-- Proof 1
 example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
-  sorry
+  intro hQPP hQR hRP
+  apply hQPP
+  intro hQ
+  apply hQR at hQ
+  apply hRP at hQ
+  exact hQ
+
+-- Proof 2
+
+example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
+  intro hQPP hQR hRP
+  apply hQPP
+  intro hQ
+  apply hRP
+  apply hQR
+  exact hQ
+
+-- Proof 3
+example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
+  intro hQPP hQR hRP
+  have hQP : Q → P := fun hQ => hRP (hQR hQ)
+  apply hQPP
+  exact hQP
+
+-- Proof 4
+example : ((Q → P) → P) → (Q → R) → (R → P) → P :=
+  fun hQPP hQR hRP =>
+    hQPP (fun hQ => hRP (hQR hQ))
 
 -- ---------------------------------------------------------------------
 -- Exercise 14. Prove that
 --    ⊢ (((P → Q) → Q) → Q) → P → Q
 -- ---------------------------------------------------------------------
 
+-- Proof 1
 example : (((P → Q) → Q) → Q) → P → Q := by
-  sorry
+  intro hPQQQ hP
+  apply hPQQQ
+  intro hPQ
+  apply hPQ
+  exact hP
+
+-- Proof 2
+example : (((P → Q) → Q) → Q) → P → Q := by
+  intro hPQQQ hP
+  have hPQQ : ((P → Q) → Q) := fun hPQ => hPQ hP
+  exact hPQQQ hPQQ
+
+-- Proof 3
+example : (((P → Q) → Q) → Q) → P → Q := by
+  intro hPQQQ hP
+  exact hPQQQ (fun hPQ => hPQ hP)
+
+-- Proof 4
+example : (((P → Q) → Q) → Q) → P → Q :=
+  fun hPQQQ hP =>
+    hPQQQ (fun hPQ => hPQ hP)
+
+-- Proof 5
+example : (((P → Q) → Q) → Q) → P → Q := by
+  tauto
 
 -- ---------------------------------------------------------------------
 -- Exercise 15. Prove that
@@ -479,9 +555,16 @@ example : (((P → Q) → Q) → Q) → P → Q := by
 --      R
 -- ---------------------------------------------------------------------
 
+-- Proof 1
 example :
     (((P → Q → Q) → (P → Q) → Q) → R) →
     ((((P → P) → Q) → P → P → Q) → R) →
     (((P → P → Q) → (P → P) → Q) → R) →
     R := by
-  sorry
+  intro h1 h2 h3
+  apply h2
+  intro h4
+  have h5 : P → P := fun hP => hP
+  apply h4 at h5
+  have h6 : P → P → Q := fun hP => (fun hP' => h5)
+  exact h6

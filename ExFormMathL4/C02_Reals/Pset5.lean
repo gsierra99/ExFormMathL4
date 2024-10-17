@@ -42,6 +42,6 @@ theorem tendsTo_add {a b : ℕ → ℝ} {t u : ℝ} (ha : TendsTo a t) (hb : Ten
 
 theorem tendsTo_sub {a b : ℕ → ℝ} {t u : ℝ} (ha : TendsTo a t) (hb : TendsTo b u) :
     TendsTo (fun n ↦ a n - b n) (t - u) := by
-  sorry
+  simpa [sub_eq_add_neg] using tendsTo_add ha (tendsTo_neg hb)
 
 end Section2sheet5
