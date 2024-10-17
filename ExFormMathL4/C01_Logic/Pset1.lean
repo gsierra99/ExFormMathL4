@@ -455,12 +455,25 @@ by
 -- Proof 1
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
   intro hPQR hQRP hRPQ
+  -- hPQR : (P → Q) → R
+  -- hQRP : (Q → R) → P
+  -- hRPQ : (R → P) → Q
+  -- ⊢ P
   apply hQRP
-  intro hQ
+  -- ⊢ Q → R
+  intro _hQ
+  -- _hQ : Q
+  -- ⊢ R
   apply hPQR
+  -- ⊢ P → Q
   intro hP
+  -- hP : P
+  -- ⊢ Q
   apply hRPQ
-  intro hR
+  -- ⊢ R → P
+  intro _hR
+  -- _hR : R
+  -- ⊢ P
   exact hP
 
 -- Proof 2
