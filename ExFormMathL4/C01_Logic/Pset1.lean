@@ -455,28 +455,82 @@ by
 -- Proof 1
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
   intro hPQR hQRP hRPQ
+  -- hPQR : (P → Q) → R
+  -- hQRP : (Q → R) → P
+  -- hRPQ : (R → P) → Q
+  -- ⊢ P
   apply hQRP
-  intro hQ
+  -- ⊢ Q → R
+  intro _hQ
+  -- _hQ : Q
+  -- ⊢ R
   apply hPQR
+  -- ⊢ P → Q
   intro hP
+  -- hP : P
+  -- ⊢ Q
   apply hRPQ
-  intro hR
+  -- ⊢ R → P
+  intro _hR
+  -- _hR : R
+  -- ⊢ P
   exact hP
 
 -- Proof 2
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
-  intro hPQR hQRP hRPQ
-  exact hQRP (fun hQ => hPQR (fun hP => hQ))
+  intro hPQR hQRP _hRPQ
+  -- hPQR : (P → Q) → R
+  -- hQRP : (Q → R) → P
+  -- _hRPQ : (R → P) → Q
+  -- ⊢ P
+  exact hQRP (fun hQ => hPQR (fun _hP => hQ))
 
 -- Proof 3
 example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
-  intro hPQR hQRP hRPQ
-  have hQR : Q → R := fun hQ => hPQR (fun hP => hQ)
+  intro hPQR hQRP _hRPQ
+  -- hPQR : (P → Q) → R
+  -- hQRP : (Q → R) → P
+  -- _hRPQ : (R → P) → Q
+  -- ⊢ P
+  have hQR : Q → R := fun hQ => hPQR (fun _hP => hQ)
   exact hQRP hQR
 
 -- Proof 4
-example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by tauto
+example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
+  tauto
 
+-- Comment: The proof 2 can be transformed into a term, as shown in
+-- proof 5.
+
+-- Proof 5
+example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P :=
+fun hPQR hQRP _hRPQ => hQRP (fun hQ => hPQR (fun _hP => hQ))
+
+-- Comment: The proof 3 can be transformed into a detailed using
+-- `suffices`, as shown in proof 6.
+
+-- Proof 6
+example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
+  intro hPQR hQRP _hRPQ
+  -- hPQR : (P → Q) → R
+  -- hQRP : (Q → R) → P
+  -- _hRPQ : (R → P) → Q
+  -- ⊢ P
+  suffices hQR : Q → R
+  . -- ⊢ P
+    exact hQRP hQR
+  . -- ⊢ Q → R
+    intro hQ
+    -- hQ : Q
+    -- ⊢ R
+    suffices hPQ : P → Q
+    . -- ⊢ R
+      exact hPQR hPQ
+    . -- ⊢ P → Q
+      intro _hP
+      -- _hP : P
+      -- ⊢ Q
+      exact hQ
 
 -- ---------------------------------------------------------------------
 -- Exercise 13. Prove that
