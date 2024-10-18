@@ -631,9 +631,16 @@ example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
 -- Proof 1
 example : (((P → Q) → Q) → Q) → P → Q := by
   intro hPQQQ hP
+  -- hPQQQ : ((P → Q) → Q) → Q
+  -- hP : P
+  -- ⊢ Q
   apply hPQQQ
+  -- ⊢ (P → Q) → Q
   intro hPQ
+  -- hPQ : P → Q
+  -- ⊢ Q
   apply hPQ
+  -- ⊢ P
   exact hP
 
 -- Proof 2
@@ -670,10 +677,10 @@ example :
     ((((P → P) → Q) → P → P → Q) → R) →
     (((P → P → Q) → (P → P) → Q) → R) →
     R := by
-  intro h1 h2 h3
+  intro _h1 h2 _h3
   apply h2
   intro h4
   have h5 : P → P := fun hP => hP
   apply h4 at h5
-  have h6 : P → P → Q := fun hP => (fun hP' => h5)
+  have h6 : P → P → Q := fun _hP => (fun _hP' => h5)
   exact h6
