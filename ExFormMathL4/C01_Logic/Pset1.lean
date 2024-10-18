@@ -684,9 +684,20 @@ example :
     (((P → P → Q) → (P → P) → Q) → R) →
     R := by
   intro _h1 h2 _h3
+  -- _h1 : ((P → Q → Q) → (P → Q) → Q) → R
+  -- h2 : (((P → P) → Q) → P → P → Q) → R
+  -- _h3 : ((P → P → Q) → (P → P) → Q) → R
+  -- ⊢ R
   apply h2
+  -- ⊢ ((P → P) → Q) → P → P → Q
   intro h4
+  -- h4 : (P → P) → Q
+  -- ⊢ P → P → Q
   have h5 : P → P := fun hP => hP
   apply h4 at h5
-  have h6 : P → P → Q := fun _hP => (fun _hP' => h5)
+  -- h5 : Q
+  have h6 : P → (P → Q) := fun _hP => (fun _hP' => h5)
   exact h6
+
+-- Comentario de JA: No se usa h1, h3, hP y hP'; por eso les he añadido
+-- un _ delante para hacerlas anónimas.
