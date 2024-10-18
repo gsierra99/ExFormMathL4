@@ -593,6 +593,13 @@ example : ((Q → P) → P) → (Q → R) → (R → P) → P :=
   fun hQPP hQR hRP =>
     hQPP (fun hQ => hRP (hQR hQ))
 
+-- Comentario de JA: Faltaba la demostración automática que añado a
+-- continuación.
+
+-- Proof 5
+example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
+  tauto
+
 -- ---------------------------------------------------------------------
 -- Exercise 14. Prove that
 --    ⊢ (((P → Q) → Q) → Q) → P → Q
