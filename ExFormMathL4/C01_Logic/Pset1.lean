@@ -524,7 +524,8 @@ example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P :=
     -- hQ : Q
     -- ⊢ R
     suffices hPQ : P → Q
-    . -- ⊢ R
+    . -- hPQ : P → Q
+      -- ⊢ R
       exact hPQR hPQ
     . -- ⊢ P → Q
       intro _hP
@@ -599,6 +600,28 @@ example : ((Q → P) → P) → (Q → R) → (R → P) → P :=
 -- Proof 5
 example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
   tauto
+
+-- Comentario: Se puede demostrar usando la táctica suffices como se
+-- muestra a continuación
+
+-- Proof 6
+example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
+  intro hQPP hQR hRP
+  -- hQPP : (Q → P) → P
+  -- hQR : Q → R
+  -- hRP : R → P
+  -- ⊢ P
+  suffices hQP : Q → P
+  . -- hQP : Q → P
+    -- ⊢ P
+    exact hQPP hQP
+  . -- ⊢ Q → P
+    intro hQ
+    -- hQ : Q
+    -- ⊢ P
+    have hR : R := hQR hQ
+    show P
+    exact hRP hR
 
 -- ---------------------------------------------------------------------
 -- Exercise 14. Prove that
