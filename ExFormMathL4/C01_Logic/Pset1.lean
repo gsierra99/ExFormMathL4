@@ -646,6 +646,9 @@ example : (((P → Q) → Q) → Q) → P → Q := by
 -- Proof 2
 example : (((P → Q) → Q) → Q) → P → Q := by
   intro hPQQQ hP
+  -- hPQQQ : ((P → Q) → Q) → Q
+  -- hP : P
+  -- ⊢ Q
   have hPQQ : ((P → Q) → Q) := fun hPQ => hPQ hP
   exact hPQQQ hPQQ
 
