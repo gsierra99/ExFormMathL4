@@ -836,3 +836,14 @@ example :
   -- _h3 : ((P → P → Q) → (P → P) → Q) → R
   -- ⊢ R
   exact h2 (fun h4 _hP1 _hP2 => h4 (fun hP => hP))
+
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 8
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R :=
+fun _h1 h2 _h3 => h2 (fun h4 _hP1 _hP2 => h4 (fun hP => hP))
