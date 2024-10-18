@@ -579,8 +579,13 @@ example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
 -- Proof 3
 example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
   intro hQPP hQR hRP
+  -- hQPP : (Q → P) → P
+  -- hQR : Q → R
+  -- hRP : R → P
+  -- ⊢ P
   have hQP : Q → P := fun hQ => hRP (hQR hQ)
   apply hQPP
+  -- ⊢ Q → P
   exact hQP
 
 -- Proof 4
