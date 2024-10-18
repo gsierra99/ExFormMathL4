@@ -701,3 +701,33 @@ example :
 
 -- Comentario de JA: No se usa h1, h3, hP y hP'; por eso les he añadido
 -- un _ delante para hacerlas anónimas.
+
+-- Comentario de JA: En la demostración anterior se modifica la
+-- hipótesis h4, pero se puede evitar como se muestra en la siguiente
+-- demostración.
+
+-- Proof 2
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R := by
+  intro _h1 h2 _h3
+  -- _h1 : ((P → Q → Q) → (P → Q) → Q) → R
+  -- h2 : (((P → P) → Q) → P → P → Q) → R
+  -- _h3 : ((P → P → Q) → (P → P) → Q) → R
+  -- ⊢ R
+  apply h2
+  -- ⊢ ((P → P) → Q) → P → P → Q
+  intro h4
+  -- h4 : (P → P) → Q
+  -- ⊢ P → P → Q
+  intro _hP1 _hP2
+  -- _hP1 _hP2 : P
+  -- ⊢ Q
+  apply h4
+  -- ⊢ P → P
+  intro hP
+  -- hP : P
+  -- ⊢ P
+  exact hP
