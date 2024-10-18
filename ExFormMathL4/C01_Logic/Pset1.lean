@@ -559,13 +559,21 @@ example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
 -- modificar el contenido de hQ que va tomando los valores Q, R y P.
 
 -- Proof 2
-
 example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
   intro hQPP hQR hRP
+  -- hQPP : (Q → P) → P
+  -- hQR : Q → R
+  -- hRP : R → P
+  -- ⊢ P
   apply hQPP
+  -- ⊢ Q → P
   intro hQ
+  -- hQ : Q
+  -- ⊢ P
   apply hRP
+  -- ⊢ R
   apply hQR
+  -- hQ : Q
   exact hQ
 
 -- Proof 3
