@@ -847,3 +847,14 @@ example :
     (((P → P → Q) → (P → P) → Q) → R) →
     R :=
 fun _h1 h2 _h3 => h2 (fun h4 _hP1 _hP2 => h4 (fun hP => hP))
+
+-- Comentario de JA: Se puede demostrar automáticame como se muestra a
+-- continuación.
+
+-- Proof 9
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R :=
+by tauto
