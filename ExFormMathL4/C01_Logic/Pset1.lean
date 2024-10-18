@@ -524,7 +524,8 @@ example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P :=
     -- hQ : Q
     -- ⊢ R
     suffices hPQ : P → Q
-    . -- ⊢ R
+    . -- hPQ : P → Q
+      -- ⊢ R
       exact hPQR hPQ
     . -- ⊢ P → Q
       intro _hP
@@ -540,33 +541,87 @@ example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P :=
 -- Proof 1
 example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
   intro hQPP hQR hRP
+  -- hQPP : (Q → P) → P
+  -- hQR : Q → R
+  -- hRP : R → P
+  -- ⊢ P
   apply hQPP
+  -- ⊢ Q → P
   intro hQ
+  -- hQ : Q
+  -- ⊢ P
   apply hQR at hQ
+  -- hQ : R
   apply hRP at hQ
+  -- hQ : P
   exact hQ
 
--- Proof 2
+-- Comentario de JA: La demostración anterior tiene el inconveniente de
+-- modificar el contenido de hQ que va tomando los valores Q, R y P.
 
+-- Proof 2
 example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
   intro hQPP hQR hRP
+  -- hQPP : (Q → P) → P
+  -- hQR : Q → R
+  -- hRP : R → P
+  -- ⊢ P
   apply hQPP
+  -- ⊢ Q → P
   intro hQ
+  -- hQ : Q
+  -- ⊢ P
   apply hRP
+  -- ⊢ R
   apply hQR
+  -- hQ : Q
   exact hQ
 
 -- Proof 3
 example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
   intro hQPP hQR hRP
+  -- hQPP : (Q → P) → P
+  -- hQR : Q → R
+  -- hRP : R → P
+  -- ⊢ P
   have hQP : Q → P := fun hQ => hRP (hQR hQ)
   apply hQPP
+  -- ⊢ Q → P
   exact hQP
 
 -- Proof 4
 example : ((Q → P) → P) → (Q → R) → (R → P) → P :=
   fun hQPP hQR hRP =>
     hQPP (fun hQ => hRP (hQR hQ))
+
+-- Comentario de JA: Faltaba la demostración automática que añado a
+-- continuación.
+
+-- Proof 5
+example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
+  tauto
+
+-- Comentario: Se puede demostrar usando la táctica suffices como se
+-- muestra a continuación
+
+-- Proof 6
+example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
+  intro hQPP hQR hRP
+  -- hQPP : (Q → P) → P
+  -- hQR : Q → R
+  -- hRP : R → P
+  -- ⊢ P
+  suffices hQP : Q → P
+  . -- hQP : Q → P
+    -- ⊢ P
+    exact hQPP hQP
+  . -- ⊢ Q → P
+    intro hQ
+    -- hQ : Q
+    -- ⊢ P
+    have hR : R := hQR hQ
+    show P
+    exact hRP hR
 
 -- ---------------------------------------------------------------------
 -- Exercise 14. Prove that
@@ -576,20 +631,33 @@ example : ((Q → P) → P) → (Q → R) → (R → P) → P :=
 -- Proof 1
 example : (((P → Q) → Q) → Q) → P → Q := by
   intro hPQQQ hP
+  -- hPQQQ : ((P → Q) → Q) → Q
+  -- hP : P
+  -- ⊢ Q
   apply hPQQQ
+  -- ⊢ (P → Q) → Q
   intro hPQ
+  -- hPQ : P → Q
+  -- ⊢ Q
   apply hPQ
+  -- ⊢ P
   exact hP
 
 -- Proof 2
 example : (((P → Q) → Q) → Q) → P → Q := by
   intro hPQQQ hP
+  -- hPQQQ : ((P → Q) → Q) → Q
+  -- hP : P
+  -- ⊢ Q
   have hPQQ : ((P → Q) → Q) := fun hPQ => hPQ hP
   exact hPQQQ hPQQ
 
 -- Proof 3
 example : (((P → Q) → Q) → Q) → P → Q := by
   intro hPQQQ hP
+  -- hPQQQ : ((P → Q) → Q) → Q
+  -- hP : P
+  -- ⊢ Q
   exact hPQQQ (fun hPQ => hPQ hP)
 
 -- Proof 4
@@ -615,10 +683,178 @@ example :
     ((((P → P) → Q) → P → P → Q) → R) →
     (((P → P → Q) → (P → P) → Q) → R) →
     R := by
-  intro h1 h2 h3
+  intro _h1 h2 _h3
+  -- _h1 : ((P → Q → Q) → (P → Q) → Q) → R
+  -- h2 : (((P → P) → Q) → P → P → Q) → R
+  -- _h3 : ((P → P → Q) → (P → P) → Q) → R
+  -- ⊢ R
   apply h2
+  -- ⊢ ((P → P) → Q) → P → P → Q
   intro h4
+  -- h4 : (P → P) → Q
+  -- ⊢ P → P → Q
   have h5 : P → P := fun hP => hP
   apply h4 at h5
-  have h6 : P → P → Q := fun hP => (fun hP' => h5)
+  -- h5 : Q
+  have h6 : P → (P → Q) := fun _hP => (fun _hP' => h5)
   exact h6
+
+-- Comentario de JA: No se usa h1, h3, hP y hP'; por eso les he añadido
+-- un _ delante para hacerlas anónimas.
+
+-- Comentario de JA: En la demostración anterior se modifica la
+-- hipótesis h4, pero se puede evitar como se muestra en la siguiente
+-- demostración.
+
+-- Proof 2
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R := by
+  intro _h1 h2 _h3
+  -- _h1 : ((P → Q → Q) → (P → Q) → Q) → R
+  -- h2 : (((P → P) → Q) → P → P → Q) → R
+  -- _h3 : ((P → P → Q) → (P → P) → Q) → R
+  -- ⊢ R
+  apply h2
+  -- ⊢ ((P → P) → Q) → P → P → Q
+  intro h4
+  -- h4 : (P → P) → Q
+  -- ⊢ P → P → Q
+  intro _hP1 _hP2
+  -- _hP1 _hP2 : P
+  -- ⊢ Q
+  apply h4
+  -- ⊢ P → P
+  intro hP
+  -- hP : P
+  -- ⊢ P
+  exact hP
+
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 3
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R := by
+  intro _h1 h2 _h3
+  -- _h1 : ((P → Q → Q) → (P → Q) → Q) → R
+  -- h2 : (((P → P) → Q) → P → P → Q) → R
+  -- _h3 : ((P → P → Q) → (P → P) → Q) → R
+  -- ⊢ R
+  apply h2
+  -- ⊢ ((P → P) → Q) → P → P → Q
+  intro h4
+  -- h4 : (P → P) → Q
+  -- ⊢ P → P → Q
+  intro _hP1 _hP2
+  -- _hP1 _hP2 : P
+  -- ⊢ Q
+  apply h4
+  -- ⊢ P → P
+  exact fun hP => hP
+
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 4
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R := by
+  intro _h1 h2 _h3
+  -- _h1 : ((P → Q → Q) → (P → Q) → Q) → R
+  -- h2 : (((P → P) → Q) → P → P → Q) → R
+  -- _h3 : ((P → P → Q) → (P → P) → Q) → R
+  -- ⊢ R
+  apply h2
+  -- ⊢ ((P → P) → Q) → P → P → Q
+  intro h4
+  -- h4 : (P → P) → Q
+  -- ⊢ P → P → Q
+  intro _hP1 _hP2
+  -- _hP1 _hP2 : P
+  -- ⊢ Q
+  exact h4 (fun hP => hP)
+
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 5
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R := by
+  intro _h1 h2 _h3
+  -- _h1 : ((P → Q → Q) → (P → Q) → Q) → R
+  -- h2 : (((P → P) → Q) → P → P → Q) → R
+  -- _h3 : ((P → P → Q) → (P → P) → Q) → R
+  -- ⊢ R
+  apply h2
+  -- ⊢ ((P → P) → Q) → P → P → Q
+  intro h4
+  -- h4 : (P → P) → Q
+  -- ⊢ P → P → Q
+  exact fun _hP1 _hP2 => h4 (fun hP => hP)
+
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 6
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R := by
+  intro _h1 h2 _h3
+  -- _h1 : ((P → Q → Q) → (P → Q) → Q) → R
+  -- h2 : (((P → P) → Q) → P → P → Q) → R
+  -- _h3 : ((P → P → Q) → (P → P) → Q) → R
+  -- ⊢ R
+  apply h2
+  -- ⊢ ((P → P) → Q) → P → P → Q
+  exact fun h4 _hP1 _hP2 => h4 (fun hP => hP)
+
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 7
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R := by
+  intro _h1 h2 _h3
+  -- _h1 : ((P → Q → Q) → (P → Q) → Q) → R
+  -- h2 : (((P → P) → Q) → P → P → Q) → R
+  -- _h3 : ((P → P → Q) → (P → P) → Q) → R
+  -- ⊢ R
+  exact h2 (fun h4 _hP1 _hP2 => h4 (fun hP => hP))
+
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 8
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R :=
+fun _h1 h2 _h3 => h2 (fun h4 _hP1 _hP2 => h4 (fun hP => hP))
+
+-- Comentario de JA: Se puede demostrar automáticame como se muestra a
+-- continuación.
+
+-- Proof 9
+example :
+    (((P → Q → Q) → (P → Q) → Q) → R) →
+    ((((P → P) → Q) → P → P → Q) → R) →
+    (((P → P → Q) → (P → P) → Q) → R) →
+    R :=
+by tauto
