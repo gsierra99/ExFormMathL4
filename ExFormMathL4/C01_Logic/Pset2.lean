@@ -437,24 +437,64 @@ example : (P → False) → P → Q := by
 example : (P → False) → P → Q := by
   tauto
 
--- Example 10: Proving (True → False) → P
+-- ---------------------------------------------------------------------
+-- Exercise 10. Prove that
+--    (True → False) → P
+-- ---------------------------------------------------------------------
 
---Proof 1 (Detailed)
+-- Proof 1 (Detailed)
 example : (True → False) → P := by
   intro hTF
+  -- hTF : True → False
+  -- ⊢ P
   exfalso
+  -- ⊢ False
   apply hTF
+  -- ⊢ True
   exact True.intro
 
---Proof 2 (Automatic)
+-- Comentario de JA: Se puede eliminar el uso de exfalso como se muestra
+-- a continuación.
+
+-- Proof 2
 example : (True → False) → P := by
   intro hTF
+  -- hTF : True → False
+  -- ⊢ P
+  apply False.elim
+  -- ⊢ False
+  apply hTF
+  -- ⊢ True
+  exact True.intro
+
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 3
+example : (True → False) → P :=
+  fun hTF => False.elim (hTF True.intro)
+
+-- Proof 4
+example : (True → False) → P := by
+  intro hTF
+  -- hTF : True → False
+  -- ⊢ P
   contradiction
 
---Proof 3 (Balanced)
+-- Proof 5
 example : (True → False) → P := by
   intro hTF
+  -- hTF : True → False
+  -- ⊢ P
   exfalso
+  -- ⊢ False
   trivial
+
+-- Comentario de JA: Se puede demostrar automáticamente como se muestra
+-- a continuación.
+
+-- Proof 6
+example : (True → False) → P := by
+  tauto
 
 -- Comentario de JA: He puesto como anónimas las variables no usadas.
