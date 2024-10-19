@@ -127,23 +127,46 @@ example : False → True := by
 example : False → True := by
   tauto
 
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that
+--    False → False
+-- ---------------------------------------------------------------------
 
--- Example 4: Proving False → False
-
---Proof 1 (Detailed)
+-- Proof 1 (Detailed)
 example : False → False := by
-  intro hF
-  exact hF
+  intro h
+  -- h : False
+  -- ⊢ False
+  exact h
 
---Proof 2 (Automatic)
-example : False → False := by
-    trivial
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
 
---Proof 3 (Balanced)
+-- Proof 2
+example : False → False :=
+  fun h => h
+
+-- Proof 3
 example : False → False := by
-  intro hF
+  intro h
+  -- h : False
+  -- ⊢ False
   assumption
 
+-- Proof 4 (Automatic)
+example : False → False := by
+  trivial
+
+-- Comentario de JA: A continuación se muestran otras posibles
+-- demostraciones.
+
+-- Proof 5
+example : False → False := by
+  decide
+
+-- Proof 6
+example : False → False := by
+  tauto
 
 -- Example 5: Proving (True → False) → False
 
