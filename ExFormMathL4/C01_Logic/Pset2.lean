@@ -1,3 +1,15 @@
+-- C01_Logic/Pset2.lean
+-- Problem set 2: True and False.
+-- Gabriel Sierra Gallego.
+-- Seville, October 13, 2024
+-- ---------------------------------------------------------------------
+
+-- In this problem set, we study how to work with the truth values True
+-- and False in Lean4.
+--
+-- It is based on [Section01logic/Sheet2.lean](https://tinyurl.com/22v2rm6q)
+-- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
+
 import Mathlib.Tactic
 
 variable (P Q R : Prop)
