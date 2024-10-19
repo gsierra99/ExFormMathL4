@@ -327,25 +327,51 @@ example : True → False → True → False → True → False := by
 example : True → False → True → False → True → False := by
   tauto
 
--- Example 8: Proving P → (P → False) → False
+-- ---------------------------------------------------------------------
+-- Exercise 8. Prove that
+--    P → ((P → False) → False)
+-- ---------------------------------------------------------------------
 
---Proof 1 (Detailed)
+-- Proof 1 (Detailed)
 example : P → (P → False) → False := by
   intro hP hPF
+  -- hP : P
+  -- hPF : P → False
+  -- ⊢ False
   apply hPF
+  -- ⊢ P
   exact hP
 
---Proof 2 (Automatic)
+-- Comentario de JA: La demostración anterior se ouede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 2
+example : P → (P → False) → False :=
+  fun hP hPF => hPF hP
+
+-- Proof 2 (Automatic)
 example : P → (P → False) → False := by
   intro hP hPF
+  -- hPF : P → False
+  -- ⊢ False
   contradiction
 
---Proof 3 (Balanced)
+-- Proof 3 (Balanced)
 example : P → (P → False) → False := by
   intro hP hPF
+  -- hP : P
+  -- hPF : P → False
+  -- ⊢ False
   apply hPF at hP
+  -- hP : False
   exact hP
 
+-- Comentario de JA: Se puede demostrar automáticamente como se muestra
+-- a continuación.
+
+-- Proof 4
+example : P → (P → False) → False := by
+  tauto
 
 -- Example 9: Proving (P → False) → P → Q
 
