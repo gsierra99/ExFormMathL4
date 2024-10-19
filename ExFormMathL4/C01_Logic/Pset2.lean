@@ -373,26 +373,69 @@ example : P → (P → False) → False := by
 example : P → (P → False) → False := by
   tauto
 
--- Example 9: Proving (P → False) → P → Q
+-- ---------------------------------------------------------------------
+-- Exercise 9. Prove that
+--    (P → False) → (P → Q)
+-- ---------------------------------------------------------------------
 
---Proof 1 (Detailed)
-example : (P → False) → P → Q := by
+-- Proof 1 (Detailed)
+example : (P → False) → (P → Q) := by
   intro hPF hP
+  -- hPF : P → False
+  -- hP : P
+  -- ⊢ Q
   exfalso
+  -- ⊢ False
   apply hPF
+  -- ⊢ P
   exact hP
 
---Proof 2 (Automatic)
+-- Comentario de JA: Se puede evitar el uso de exfalso como se muestra a
+-- continuación.
+
+-- Proof 2
+example : (P → False) → (P → Q) := by
+  intro hPF hP
+  -- hPF : P → False
+  -- hP : P
+  -- ⊢ Q
+  apply False.elim
+  -- ⊢ False
+  apply hPF
+  -- ⊢ P
+  exact hP
+
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 3
+example : (P → False) → (P → Q) :=
+  fun hPF hP => False.elim (hPF hP)
+
+-- Proof 4
 example : (P → False) → P → Q := by
   intro hPF hP
+  -- hPF : P → False
+  -- hP : P
+  -- ⊢ Q
   contradiction
 
---Proof 3 (Balanced)
+-- Proof 5
 example : (P → False) → P → Q := by
   intro hPF hP
+  -- hPF : P → False
+  -- hP : P
+  -- ⊢ Q
   apply hPF at hP
+  -- hP : False
   contradiction
 
+-- Comentario de JA: Se puede demostrar automáticamente como se muestra
+-- a continuación.
+
+-- Proof 6
+example : (P → False) → P → Q := by
+  tauto
 
 -- Example 10: Proving (True → False) → P
 
