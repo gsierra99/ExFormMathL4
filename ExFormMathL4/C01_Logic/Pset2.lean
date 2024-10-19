@@ -19,17 +19,32 @@ variable (P Q R : Prop)
 --    True
 -- ---------------------------------------------------------------------
 
---Proof 1 (Detailed)
+-- Proof 1 (Detailed)
 example : True := by
   exact True.intro
 
---Proof 2 (Automatic)
+-- Proof 2 (Automatic)
 example : True := by
   trivial
 
---Proof 3 (Balanced)
+-- Proof 3 (Balanced)
 example : True := by
   constructor
+
+-- Comentario de JA: Se puede demostrar con otras tácticas, como se
+-- demuestra en las siguientes pruebas.
+
+-- Proof 4
+example : True := by
+  decide
+
+-- Proof 5
+example : True := by
+  tauto
+
+-- Proof 6
+example : True := by
+  simp only
 
 -- Example 2: Proving True → True
 
@@ -62,7 +77,7 @@ example : False → True := by
 
 --Proof 3 (Balanced)
 example : False → True := by
-  intro hF
+  intro _hF
   trivial
 
 
@@ -127,7 +142,7 @@ example : False → P := by
 
 --Proof 1 (Detailed)
 example : True → False → True → False → True → False := by
-  intro hT hF1 hT2 hF2 hT3
+  intro _hT hF1 _hT2 _hF2 _hT3
   exact hF1
 
 --Proof 2 (Automatic)
@@ -136,7 +151,7 @@ example : True → False → True → False → True → False := by
 
 --Proof 3 (Balanced)
 example : True → False → True → False → True → False := by
-  intro hT hF1 hT2 hF2 hT3
+  intro _hT _hF1 _hT2 hF2 _hT3
   assumption
 
 
@@ -200,3 +215,5 @@ example : (True → False) → P := by
   intro hTF
   exfalso
   trivial
+
+-- Comentario de JA: He puesto como anónimas las variables no usadas.
