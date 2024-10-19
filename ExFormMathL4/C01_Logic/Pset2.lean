@@ -220,25 +220,63 @@ example : (True → False) → False := by
 example : (True → False) → False :=
   fun a => a trivial
 
--- Example 6: Proving False → P
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that
+--    False → P
+-- ---------------------------------------------------------------------
 
---Proof 1 (Detailed)
+-- Proof 1 (Detailed)
 example : False → P := by
-  intro hF
+  intro h
+  -- h : False
+  -- ⊢ P
   exfalso
-  exact hF
+  -- ⊢ False
+  exact h
 
---Proof 2 (Automatic)
+-- Comentario de JA: Se puede evitar usar exfalso como se muestra a
+-- continuación.
+
+-- Proof 2
+example : False → P := by
+  intro h
+  -- h : False
+  -- ⊢ P
+  exact False.elim h
+
+-- Comentario de JA: La demostración anterior se puede factorizar como
+-- se muestra a continuación.
+
+-- Proof 3
+example : False → P :=
+  fun h => False.elim h
+
+-- Proof 4 (Automatic)
 example : False → P := by
   intro hF
+  -- hF : False
+  -- ⊢ P
   contradiction
 
---Proof 3 (Balanced)
+-- Proof 5 (Balanced)
 example : False → P := by
   intro hF
+  -- hF : False
+  -- ⊢ P
   exfalso
+  -- ⊢ False
   assumption
 
+-- Comentario de JA: A continuación se muestran otras posibles
+-- demostraciones.
+
+-- Proof 6
+example : False → P := by
+  tauto
+
+-- Proof 7
+example : False → P := by
+  simp only [false_implies]
 
 -- Example 7: Proving True → False → True → False → True → False
 
