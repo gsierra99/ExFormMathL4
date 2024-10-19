@@ -46,22 +46,43 @@ example : True := by
 example : True := by
   simp only
 
--- Example 2: Proving True → True
+-- ---------------------------------------------------------------------
+-- Exercise 2. Prove that
+--    True → True
+-- ---------------------------------------------------------------------
 
---Proof 1 (Detailed)
+-- Proof 1 (Detailed)
 example : True → True := by
-    intro hT
-    exact hT
+  intro hT
+  -- hT : True
+  -- ⊢ True
+  exact hT
 
---Proof 2 (Automatic)
+-- Comentario de JA: La demostración anterior se puede factorizar como
+-- se muestra a continuación.
+
+-- Proof 2
+example : True → True :=
+  fun hT => hT
+
+-- Proof 3 (Automatic)
 example : True → True := by
-    trivial
+  trivial
 
---Proof 3 (Balanced)
+-- Comentario de JA: Se puede demostrar con otras tácticas, como se
+-- muestra a continuación.
+
+-- Proof 4
 example : True → True := by
-    trivial
+  decide
 
+-- Proof 5
+example : True → True := by
+  tauto
 
+-- Proof 6
+example : True → True := by
+  simp only [imp_self]
 
 -- Example 3: Proving False → True
 
