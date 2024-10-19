@@ -14,8 +14,10 @@ import Mathlib.Tactic
 
 variable (P Q R : Prop)
 
-
--- Example 1: Proving True
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that
+--    True
+-- ---------------------------------------------------------------------
 
 --Proof 1 (Detailed)
 example : True := by
