@@ -278,22 +278,54 @@ example : False → P := by
 example : False → P := by
   simp only [false_implies]
 
--- Example 7: Proving True → False → True → False → True → False
+-- ---------------------------------------------------------------------
+-- Exercise 7. Prove that
+--    True → (False → (True → (False → (True → False))))
+-- ---------------------------------------------------------------------
 
---Proof 1 (Detailed)
-example : True → False → True → False → True → False := by
+-- Proof 1 (Detailed)
+example : True → (False → (True → (False → (True → False)))) := by
   intro _hT hF1 _hT2 _hF2 _hT3
+  -- _hT : True
+  -- hF1 : False
+  -- _hT2 : True
+  -- _hF2 : False
+  -- _hT3 : True
+  -- ⊢ False
   exact hF1
 
---Proof 2 (Automatic)
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 2
+example : True → (False → (True → (False → (True → False)))) :=
+  fun _ h _ _ _ => h
+
+-- Proof 3 (Automatic)
 example : True → False → True → False → True → False := by
   trivial
 
---Proof 3 (Balanced)
+-- Proof 4 (Balanced)
 example : True → False → True → False → True → False := by
   intro _hT _hF1 _hT2 hF2 _hT3
+  -- _hT : True
+  -- _hF1 : False
+  -- _hT2 : True
+  -- hF2 : False
+  -- _hT3 : True
+  -- ⊢ False
   assumption
 
+-- Comentario de JA: Otras posibles demostraciones se muestran a
+-- continuación
+
+-- Proof 5
+example : True → False → True → False → True → False := by
+  decide
+
+-- Proof 6
+example : True → False → True → False → True → False := by
+  tauto
 
 -- Example 8: Proving P → (P → False) → False
 
