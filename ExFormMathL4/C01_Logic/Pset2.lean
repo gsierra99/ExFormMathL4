@@ -84,22 +84,48 @@ example : True → True := by
 example : True → True := by
   simp only [imp_self]
 
--- Example 3: Proving False → True
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--    False → True
+-- ---------------------------------------------------------------------
 
---Proof 1 (Detailed)
+-- Proof 1 (Detailed)
 example : False → True := by
-  intro hF
+  intro h
+  -- h : False
+  -- ⊢ True
   exfalso
-  exact hF
+  -- ⊢ False
+  exact h
 
---Proof 2 (Automatic)
+-- Comentario de JA: Se puede eliminar el uso de exfalso como se muestra
+-- a continuación.
+
+-- Proof 2
+example : False → True := by
+  exact False.elim
+
+-- Comentario de JA: Se puede eliminar el uso de exact como se muestra
+-- a continuación.
+
+-- Proof 3
+example : False → True :=
+  False.elim
+
+-- Proof 4 (Automatic)
 example : False → True := by
   trivial
 
---Proof 3 (Balanced)
+-- Comentario de JA: Se puede demostrar con otras tácticas como se
+-- muestra a continuación
+
+-- Proof 5
 example : False → True := by
-  intro _hF
-  trivial
+  decide
+
+-- Proof 6
+example : False → True := by
+  tauto
 
 
 -- Example 4: Proving False → False
