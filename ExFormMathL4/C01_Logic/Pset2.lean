@@ -168,25 +168,57 @@ example : False → False := by
 example : False → False := by
   tauto
 
--- Example 5: Proving (True → False) → False
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that
+--    (True → False) → False
+-- ---------------------------------------------------------------------
 
---Proof 1 (Detailed)
+-- Proof 1 (Detailed)
 example : (True → False) → False := by
   intro hTF
+  -- hTF : True → False
+  -- ⊢ False
   apply hTF
+  -- ⊢ True
   exact True.intro
 
---Proof 2 (Automatic)
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 2
+example : (True → False) → False :=
+  fun hTF => hTF True.intro
+
+-- Proof 3
 example : (True → False) → False := by
   intro hTF
+  -- hTF : True → False
+  -- ⊢ False
   contradiction
 
---Proof 3 (Balanced)
+-- Proof 4
 example : (True → False) → False := by
   intro hTF
+  -- hTF : True → False
+  -- ⊢ False
   apply hTF
+  -- ⊢ True
   trivial
 
+-- Comentario de JA: A continuación se muestran otras posibles
+-- demostraciones.
+
+-- Proof 5
+example : (True → False) → False := by
+  decide
+
+-- Proof 6
+example : (True → False) → False := by
+  tauto
+
+-- Proof 7
+example : (True → False) → False :=
+  fun a => a trivial
 
 -- Example 6: Proving False → P
 
