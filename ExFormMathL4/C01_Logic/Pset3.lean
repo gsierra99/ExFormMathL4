@@ -510,28 +510,79 @@ example : ¬¬False → False := by
 example : ¬¬False → False :=
   fun hnnF => hnnF (fun hF => hF)
 
+-- ---------------------------------------------------------------------
+-- Exercise 10. Prove that
+--    ¬¬P → P
+-- ---------------------------------------------------------------------
 
--- Example 10: ¬¬P → P
-
--- Detailed proof
+-- Proof 1
 example : ¬¬P → P := by
   intro hnnP
+  -- hnnP : ¬¬P
+  -- ⊢ P
   change (P → False) → False at hnnP
+  -- hnnP : (P → False) → False
   by_contra hnP
+  -- hnP : ¬P
+  -- ⊢ False
   apply hnnP
+  -- ⊢ P → False
   exact hnP
 
--- Automatic proof
+-- Proof 2
 example : ¬¬P → P := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : ¬¬P → P := by
   intro hnnP
+  -- hnnP : ¬¬P
+  -- ⊢ P
   by_contra hnP
+  -- hnP : ¬P
+  -- ⊢ False
   apply hnnP at hnP
+  -- hnP : False
   exact hnP
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : ¬¬P → P := by
+  intro hnnP
+  -- hnnP : ¬¬P
+  -- ⊢ P
+  by_contra hnP
+  -- hnP : ¬P
+  -- ⊢ False
+  exact hnnP hnP
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : ¬¬P → P := by?
+  intro hnnP
+  -- hnnP : ¬¬P
+  -- ⊢ P
+  apply Classical.byContradiction
+  -- ⊢ ¬P → False
+  exact hnnP
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : ¬¬P → P :=
+  fun hnnP => Classical.byContradiction hnnP
+
+-- Comentario de JA: La 6ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : ¬¬P → P :=
+  Classical.byContradiction
 
 -- Example 11: (¬Q → ¬P) → P → Q
 
