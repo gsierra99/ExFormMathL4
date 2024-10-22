@@ -190,7 +190,7 @@ example : ¬False → True :=
   fun _ => True.intro
 
 -- ---------------------------------------------------------------------
--- Exercise 3. Prove that
+-- Exercise 4. Prove that
 --    True → ¬False
 -- ---------------------------------------------------------------------
 
@@ -246,23 +246,50 @@ example : True → ¬False := by?
 example : True → ¬False :=
   fun _hT hF => hF
 
--- Example 5: False → ¬P
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that
+--    False → ¬P
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : False → ¬P := by
   intro hF
+  -- hF : False
+  -- ⊢ ¬P
   change P → False
+  -- ⊢ P → False
   intro _hP
+  -- _hP : P
+  -- ⊢ False
   exact hF
 
--- Automatic proof
+-- Proof 2
 example : False → ¬P := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : False → ¬P := by
   intro hF
+  -- hF : False
+  -- ⊢ ¬P
   contradiction
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : False → ¬P := by
+  intro hF
+  -- hF : False
+  -- ⊢ ¬P
+  exact False.elim hF
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : False → ¬P :=
+  fun hF => False.elim hF
 
 
 -- Example 6: P → ¬P → False
