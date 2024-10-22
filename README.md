@@ -5,4 +5,5 @@ This repository contains solutions to the exercises of the course [Formalising M
 + 1: Logic
   + [1: The implication](./ExFormMathL4/C01_Logic/Pset1.lean)
   + [2: True and False](./ExFormMathL4/C01_Logic/Pset2.lean)
-  + [2: The negation](./ExFormMathL4/C01_Logic/Pset3.lean)
+  + [3: The negation](./ExFormMathL4/C01_Logic/Pset3.lean)
+  + [4: The conjunction](./ExFormMathL4/C01_Logic/Pset4.lean)
