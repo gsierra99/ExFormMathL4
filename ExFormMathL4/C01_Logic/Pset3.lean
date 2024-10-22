@@ -391,27 +391,79 @@ example : P → ¬¬P := by
 example : P → ¬¬P :=
   fun hP hnP => hnP hP
 
--- Example 8: (P → Q) → ¬Q → ¬P
+-- ---------------------------------------------------------------------
+-- Exercise 8. Prove that
+--    (P → Q) → (¬Q → ¬P)
+-- -----------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : (P → Q) → ¬Q → ¬P := by
   intro hPQ hnQ
+  -- hPQ : P → Q
+  -- hnQ : ¬Q
+  -- ⊢ ¬P
   change P → False
+  -- ⊢ P → False
   intro hP
+  -- hP : P
+  -- ⊢ False
   apply hPQ at hP
+  -- hP : Q
   apply hnQ at hP
+  -- hP : False
   exact hP
 
--- Automatic proof
+-- Proof 2
 example : (P → Q) → ¬Q → ¬P := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P → Q) → ¬Q → ¬P := by
   intro hPQ hnQ hP
+  -- hPQ : P → Q
+  -- hnQ : ¬Q
+  -- hP : P
+  -- ⊢ False
   apply hPQ at hP
+  -- hP : Q
   contradiction
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P → Q) → ¬Q → ¬P := by
+  intro hPQ hnQ hP
+  -- hPQ : P → Q
+  -- hnQ : ¬Q
+  -- hP : P
+  -- ⊢ False
+  apply hnQ
+  -- ⊢ Q
+  apply hPQ
+  -- ⊢ P
+  exact hP
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : (P → Q) → ¬Q → ¬P :=
+  fun hPQ hnQ hP => hnQ (hPQ hP)
+
+-- Comentario de JA: La 5ª demostración se puede detallar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : (P → Q) → ¬Q → ¬P := by
+  intro hPQ hnQ hP
+  -- hPQ : P → Q
+  -- hnQ : ¬Q
+  -- hP : P
+  -- ⊢ False
+  have hQ : Q := hPQ hP
+  show False
+  exact hnQ hQ
 
 -- Example 9: ¬¬False → False
 
