@@ -465,25 +465,50 @@ example : (P → Q) → ¬Q → ¬P := by
   show False
   exact hnQ hQ
 
--- Example 9: ¬¬False → False
+-- ---------------------------------------------------------------------
+-- Exercise 9. Prove that
+--    ¬¬False → False
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+--Proof 1
 example : ¬¬False → False := by
   intro hnnF
+  -- hnnF : ¬¬False
+  -- ⊢ False
   change (False → False) → False at hnnF
+  -- hnnF : (False → False) → False
   apply hnnF
+  -- ⊢ False → False
   intro hF
+  -- hF : False
+  -- ⊢ False
   exact hF
 
--- Automatic proof
+-- Proof 2
 example : ¬¬False → False := by
   tauto
 
--- Balanced proof
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 3
 example : ¬¬False → False := by
   intro hnnF
-  have hF : False := by tauto
+  -- hnnF : ¬¬False
+  -- ⊢ False
+  apply hnnF
+  -- ⊢ False → False
+  intro hF
+  -- hF : False
+  -- ⊢ False
   exact hF
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : ¬¬False → False :=
+  fun hnnF => hnnF (fun hF => hF)
 
 
 -- Example 10: ¬¬P → P
