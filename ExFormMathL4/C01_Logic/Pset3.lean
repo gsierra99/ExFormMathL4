@@ -83,24 +83,74 @@ example : ¬True → False := by
 example : ¬True → False := by
   tauto
 
--- Example 2: False → ¬True
+-- Proof 9
+example : ¬True → False := by
+  trivial
 
--- Detailed proof
+-- ---------------------------------------------------------------------
+-- Exercise 2. Prove that
+--    False → ¬True
+-- ---------------------------------------------------------------------
+
+-- Proof 1
 example : False → ¬True := by
   intro hF
+  -- hF : False
+  -- ⊢ ¬True
   change True → False
+  -- ⊢ True → False
   intro _hT
+  -- _hT : True
+  -- ⊢ False
   exact hF
 
--- Automatic proof
+-- Proof 2
 example : False → ¬True := by
   trivial
 
--- Balanced proof
+-- Proof 3
 example : False → ¬True := by
   intro hF
+  -- hF : False
+  -- ⊢ ¬True
   tauto
 
+-- Comentario de JA: La demostración anterior se puede simplificar como
+-- se muestra a continuación.
+
+-- Proof 4
+example : False → ¬True := by
+  tauto
+
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : False → ¬True := by
+  intro hF
+  -- hF : False
+  -- ⊢ ¬True
+  intro _hT
+  -- _hT : True
+  -- ⊢ False
+  exact hF
+
+-- Comentario de JA: La demostración anterior se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : False → ¬True :=
+  fun hF _hT => hF
+
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : False → ¬True := by?
+  intro hF
+  -- hF : False
+  -- ⊢ ¬True
+  contradiction
 
 -- Example 3: ¬False → True
 
