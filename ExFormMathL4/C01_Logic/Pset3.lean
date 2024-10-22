@@ -584,23 +584,97 @@ example : ¬¬P → P :=
 example : ¬¬P → P :=
   Classical.byContradiction
 
--- Example 11: (¬Q → ¬P) → P → Q
+-- ---------------------------------------------------------------------
+-- Exercise 10. Prove that
+--    (¬Q → ¬P) → (P → Q)
+-- ---------------------------------------------------------------------
 
--- Detailed proof
-example : (¬Q → ¬P) → P → Q := by
+-- Proof 1
+example : (¬Q → ¬P) → (P → Q) := by
   intro nQnP hP
+  -- nQnP : ¬Q → ¬P
+  -- hP : P
+  -- ⊢ Q
   by_contra hnQ
+  -- hnQ : ¬Q
+  -- ⊢ False
   apply nQnP at hnQ
+  -- hnQ : ¬P
   apply hnQ at hP
+  -- hP : False
   exact hP
 
--- Automatic proof
-example : (¬Q → ¬P) → P → Q := by
+-- Proof 2
+example : (¬Q → ¬P) → (P → Q) := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (¬Q → ¬P) → P → Q := by
   intro nQnP hP
+  -- nQnP : ¬Q → ¬P
+  -- hP : P
+  -- ⊢ Q
   by_contra hnQ
+  -- hnQ : ¬Q
+  -- ⊢ False
   apply nQnP at hnQ
+  -- hnQ : ¬P
   contradiction
+
+-- Comentario de JA: Se puede evitar modificar las hipótesis como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (¬Q → ¬P) → P → Q := by
+  intro nQnP hP
+  -- nQnP : ¬Q → ¬P
+  -- hP : P
+  -- ⊢ Q
+  by_contra hnQ
+  -- hnQ : ¬Q
+  -- ⊢ False
+  have hnP : ¬P := nQnP hnQ
+  apply hnP
+  -- ⊢ P
+  exact hP
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : (¬Q → ¬P) → P → Q := by
+  intro nQnP hP
+  -- nQnP : ¬Q → ¬P
+  -- hP : P
+  -- ⊢ Q
+  by_contra hnQ
+  -- hnQ : ¬Q
+  -- ⊢ False
+  apply (nQnP hnQ)
+  -- ⊢ P
+  exact hP
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : (¬Q → ¬P) → P → Q := by
+  intro nQnP hP
+  -- nQnP : ¬Q → ¬P
+  -- hP : P
+  -- ⊢ Q
+  apply Classical.byContradiction
+  -- ⊢ ¬Q → False
+  intro hnQ
+  -- hnQ : ¬Q
+  -- ⊢ False
+  apply (nQnP hnQ)
+  -- ⊢ P
+  exact hP
+
+-- Comentario de JA: La 6ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : (¬Q → ¬P) → P → Q :=
+  fun nQnP hP => Classical.byContradiction (fun hnQ => nQnP hnQ hP)
