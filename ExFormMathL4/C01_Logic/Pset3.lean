@@ -1,5 +1,5 @@
 -- C01_Logic/Pset3.lean
--- Problem set 3: Negation.
+-- Problem set 3: The negation.
 -- Gabriel Sierra Gallego.
 -- Seville, October 22, 2024
 -- ---------------------------------------------------------------------
@@ -13,26 +13,75 @@ import Mathlib.Tactic
 
 variable (P Q R : Prop)
 
--- Example 1: ¬True → False
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that
+--    ¬True → False
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : ¬True → False := by
   intro hnT
+  -- hnT : ¬True
+  -- ⊢ False
   change True → False at hnT
+  -- hnT : True → False
   apply hnT
+  -- ⊢ True
   exact True.intro
 
--- Automatic proof
+-- Proof 2
 example : ¬True → False := by
   intro hnT
+  -- hnT : ¬True
+  -- ⊢ False
   contradiction
 
--- Balanced proof
+-- Proof 3
 example : ¬True → False := by
   intro hnT
+  -- hnT : ¬True
+  -- ⊢ False
   have hT : True := True.intro
   contradiction
 
+-- Comentario de JA: En la demostración anterior se puede evitar el uso
+-- de la táctica contradiction como se muestra a continuación.
+
+-- Proof 4
+example : ¬True → False := by
+  intro hnT
+  -- hnT : ¬True
+  -- ⊢ False
+  have hT : True := True.intro
+  exact hnT hT
+
+-- Comentario de JA: La demostración anterior se puede simplificar como
+-- se muestra a continuación.
+
+-- Proof 5
+example : ¬True → False := by
+  intro hnT
+  -- hnT : ¬True
+  -- ⊢ False
+  exact hnT True.intro
+
+-- Comentario de JA: La demostración anterior se puede refactorizar como
+-- se muestra a continuación.
+
+-- Proof 6
+example : ¬True → False :=
+  fun hnT => hnT True.intro
+
+-- Comentario de JA: Se puede demostrar automáticamente como se muestra
+-- a continuación.
+
+-- Proof 7
+example : ¬True → False := by
+  decide
+
+-- Proof 8
+example : ¬True → False := by
+  tauto
 
 -- Example 2: False → ¬True
 
@@ -40,7 +89,7 @@ example : ¬True → False := by
 example : False → ¬True := by
   intro hF
   change True → False
-  intro hT
+  intro _hT
   exact hF
 
 -- Automatic proof
@@ -57,7 +106,7 @@ example : False → ¬True := by
 
 -- Detailed proof
 example : ¬False → True := by
-  intro hnF
+  intro _hnF
   exact True.intro
 
 -- Automatic proof
@@ -66,7 +115,7 @@ example : ¬False → True := by
 
 -- Balanced proof
 example : ¬False → True := by
-  intro hnF
+  intro _hnF
   trivial
 
 
@@ -74,7 +123,7 @@ example : ¬False → True := by
 
 -- Detailed proof
 example : True → ¬False := by
-  intro hT
+  intro _hT
   change False → False
   intro hF
   exact hF
@@ -85,7 +134,7 @@ example : True → ¬False := by
 
 -- Balanced proof
 example : True → ¬False := by
-  intro hT
+  intro _hT
   change False → False
   trivial
 
@@ -96,7 +145,7 @@ example : True → ¬False := by
 example : False → ¬P := by
   intro hF
   change P → False
-  intro hP
+  intro _hP
   exact hF
 
 -- Automatic proof
