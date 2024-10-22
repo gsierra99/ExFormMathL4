@@ -146,7 +146,7 @@ example : False → ¬True :=
 -- muestra a continuación.
 
 -- Proof 7
-example : False → ¬True := by?
+example : False → ¬True := by
   intro hF
   -- hF : False
   -- ⊢ ¬True
@@ -230,7 +230,7 @@ example : True → ¬False := by
 -- muestra a continuación.
 
 -- Proof 5
-example : True → ¬False := by?
+example : True → ¬False := by
   intro _hT
   -- _hT : True
   -- ⊢ ¬False
@@ -291,25 +291,51 @@ example : False → ¬P := by
 example : False → ¬P :=
   fun hF => False.elim hF
 
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that
+--    P → (¬P → False)
+-- ---------------------------------------------------------------------
 
--- Example 6: P → ¬P → False
-
--- Detailed proof
+-- Proof 1
 example : P → ¬P → False := by
   intro hP hnP
+  -- hP : P
+  -- hnP : ¬P
+  -- ⊢ False
   change P → False at hnP
+  -- hnP : P → False
   apply hnP
+  -- ⊢ P
   exact hP
 
--- Automatic proof
+-- Proof 2
 example : P → ¬P → False := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P → ¬P → False := by
   intro hP hnP
   contradiction
 
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : P → ¬P → False := by
+  intro hP hnP
+  -- hP : P
+  -- hnP : ¬P
+  -- ⊢ False
+  apply hnP
+  -- ⊢ P
+  exact hP
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : P → ¬P → False :=
+  fun hP hnP => hnP hP
 
 -- Example 7: P → ¬¬P
 
