@@ -189,25 +189,62 @@ example : ¬False → True := by
 example : ¬False → True :=
   fun _ => True.intro
 
--- Example 4: True → ¬False
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--    True → ¬False
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : True → ¬False := by
   intro _hT
+  -- _hT : True
+  -- ⊢ ¬False
   change False → False
+  -- ⊢ False → False
   intro hF
+  -- hF : False
+  -- ⊢ False
   exact hF
 
--- Automatic proof
+-- Proof 2
 example : True → ¬False := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : True → ¬False := by
   intro _hT
+  -- _hT : True
+  -- ⊢ ¬False
   change False → False
+  -- ⊢ False → False
   trivial
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : True → ¬False := by
+  trivial
+
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : True → ¬False := by?
+  intro _hT
+  -- _hT : True
+  -- ⊢ ¬False
+  intro hF
+  -- hF : False
+  -- ⊢ False
+  exact hF
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : True → ¬False :=
+  fun _hT hF => hF
 
 -- Example 5: False → ¬P
 
