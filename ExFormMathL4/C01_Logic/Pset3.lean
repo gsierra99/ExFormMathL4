@@ -152,22 +152,42 @@ example : False → ¬True := by?
   -- ⊢ ¬True
   contradiction
 
--- Example 3: ¬False → True
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--    ¬False → True
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : ¬False → True := by
   intro _hnF
+  -- _hnF : ¬False
+  -- ⊢ True
   exact True.intro
 
--- Automatic proof
+-- Proof 2
 example : ¬False → True := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : ¬False → True := by
   intro _hnF
+  -- _hnF : ¬False
+  -- ⊢ True
   trivial
 
+-- Comentario de JA: La demostración anterior se puede simplificar como
+-- se muestra a continuación.
+
+-- Proof 4
+example : ¬False → True := by
+  trivial
+
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : ¬False → True :=
+  fun _ => True.intro
 
 -- Example 4: True → ¬False
 
