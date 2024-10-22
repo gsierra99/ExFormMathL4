@@ -126,24 +126,114 @@ example : P ∧ Q → P := by
   -- ⊢ P
   exact hP
 
+-- ---------------------------------------------------------------------
+-- Exercise 2. Prove that
+--    P ∧ Q → Q
+-- ---------------------------------------------------------------------
 
-/-- Example 2: P ∧ Q → Q -/
-
--- Detailed proof
+-- Proof 1
 example : P ∧ Q → Q := by
-  intro hPyQ
-  cases' hPyQ with hP hQ
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ Q
+  cases' hPQ with hP hQ
+  -- hP : P
+  -- hQ : Q
   exact hQ
 
--- Automatic proof
+-- Proof 2
 example : P ∧ Q → Q := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ∧ Q → Q := by
-  intro hPyQ
-  exact hPyQ.right
+  intro hPQ
+  exact hPQ.right
 
+-- Comentario de JA: En la 1ª demostración se puede usar rcases en lugar
+-- de cases' como se muestra a continuación.
+
+-- Proof 4
+example : P ∧ Q → Q := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  rcases hPQ with ⟨_hP, hQ⟩
+  -- _hP : P
+  -- hQ : Q
+  -- ⊢ P
+  exact hQ
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : P ∧ Q → Q := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  rcases hPQ with ⟨-, hQ⟩
+  -- hQ : Q
+  exact hQ
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : P ∧ Q → Q := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  have hQ : Q := And.right hPQ
+  exact hQ
+
+-- Comentario de JA: La 6ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : P ∧ Q → Q := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  exact And.right hPQ
+
+-- Comentario de JA: La 7ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 8
+example : P ∧ Q → Q :=
+  And.right
+
+-- Comentario de JA: La 7ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 9
+example : P ∧ Q → Q := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  exact hPQ.2
+
+-- Comentario de JA: Se puede usar rintro como se muestra a
+-- continuación.
+
+-- Proof 10
+example : P ∧ Q → Q := by
+  rintro ⟨_hP, hQ⟩
+  -- _hP : P
+  -- hQ : Q
+  -- ⊢ Q
+  exact hQ
+
+-- Comentario de JA: La 10ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 11
+example : P ∧ Q → Q := by
+  rintro ⟨-, hQ⟩
+  -- hQ : Q
+  -- ⊢ Q
+  exact hQ
 
 /-- Example 3: (P → Q → R) → P ∧ Q → R -/
 -- Detailed proof
