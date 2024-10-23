@@ -606,20 +606,39 @@ example : P ∧ Q → Q ∧ R → P ∧ R := by
 example : P ∧ Q → Q ∧ R → P ∧ R :=
   fun ⟨hP, _⟩ ⟨_, hR⟩ => ⟨hP, hR⟩
 
-/-- Example 9: (P ∧ Q → R) → P → Q → R -/
+-- ---------------------------------------------------------------------
+-- Exercise 9. Prove that
+--    (P ∧ Q → R) → (P → (Q → R))
+-- ---------------------------------------------------------------------
 
--- Detailed proof
-example : (P ∧ Q → R) → P → Q → R := by
+-- Proof 1
+example : (P ∧ Q → R) → (P → (Q → R)) := by
   intro hPQR hP hQ
+  -- hPQR : P ∧ Q → R
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ R
   have hPQ : P ∧ Q := ⟨hP, hQ⟩
   apply hPQR at hPQ
+  -- hPQ : R
   exact hPQ
 
--- Automatic proof
+-- Proof 2
 example : (P ∧ Q → R) → P → Q → R := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P ∧ Q → R) → P → Q → R := by
   intro hPQR hP hQ
+  -- hPQR : P ∧ Q → R
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ R
   exact hPQR ⟨hP, hQ⟩
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P ∧ Q → R) → P → Q → R :=
+  fun hPQR hP hQ => hPQR ⟨hP, hQ⟩
