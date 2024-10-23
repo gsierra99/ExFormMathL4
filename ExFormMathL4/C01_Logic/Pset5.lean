@@ -336,34 +336,112 @@ example : (P ↔ Q) ↔ (Q ↔ P) := by
 example : (P ↔ Q) ↔ (Q ↔ P) :=
   Iff.comm
 
--- Example 4: (P ↔ Q) → (Q ↔ R) → (P ↔ R)
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that
+--    (P ↔ Q) → ((Q ↔ R) → (P ↔ R))
+-- ---------------------------------------------------------------------
 
--- Detailed proof
-example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) := by
+-- Proof 1
+example : (P ↔ Q) → ((Q ↔ R) → (P ↔ R)) := by
   intro hPiffQ hQiffR
+  -- hPiffQ : P ↔ Q
+  -- hQiffR : Q ↔ R
+  -- ⊢ P ↔ R
   cases' hPiffQ with hPQ hQP
+  -- hPQ : P → Q
+  -- hQP : Q → P
   cases' hQiffR with hQR hRQ
+  -- hQR : Q → R
+  -- hRQ : R → Q
   constructor
-  intro hP
-  apply hQR
-  apply hPQ
-  exact hP
-  intro hR
-  apply hQP
-  apply hRQ
-  exact hR
+  . -- ⊢ P → R
+    intro hP
+    -- hP : P
+    -- ⊢ R
+    apply hQR
+    -- ⊢ Q
+    apply hPQ
+    -- ⊢ P
+    exact hP
+  . -- ⊢ R → P
+    intro hR
+    -- hR : R
+    -- ⊢ P
+    apply hQP
+    -- ⊢ Q
+    apply hRQ
+    -- ⊢ R
+    exact hR
 
--- Automatic proof
+-- Proof 2
 example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) := by
   intro hPiffQ hQiffR
+  -- hPiffQ : P ↔ Q
+  -- hQiffR : Q ↔ R
+  -- ⊢ P ↔ R
   cases' hPiffQ with hPQ hQP
+  -- hPQ : P → Q
+  -- hQP : Q → P
   cases' hQiffR with hQR hRQ
+  -- hQR : Q → R
+  -- hRQ : R → Q
   exact ⟨fun hP => hQR (hPQ hP), fun hR => hQP (hRQ hR)⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) := by
+  rintro ⟨hPQ, hQP⟩ ⟨hQR, hRQ⟩
+  -- hPQ : P → Q
+  -- hQP : Q → P
+  -- hQR : Q → R
+  -- hRQ : R → Q
+  -- ⊢ P ↔ R
+  exact ⟨fun hP => hQR (hPQ hP), fun hR => hQP (hRQ hR)⟩
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) :=
+  fun ⟨hPQ, hQP⟩ ⟨hQR, hRQ⟩ => ⟨fun hP => hQR (hPQ hP),
+                                fun hR => hQP (hRQ hR)⟩
+
+-- Comentario de JA: Se puede demostrar con rw como se muestra a
+-- continuación.
+
+-- Proof 6
+example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) := by
+  intro hPiffQ hQiffR
+  -- hPiffQ : P ↔ Q
+  -- hQiffR : Q ↔ R
+  -- ⊢ P ↔ R
+  rw [hPiffQ]
+  -- ⊢ Q ↔ R
+  assumption
+
+-- Comentario de JA: La 5ª demostración se puede simplificar usando rwa
+-- como se muestra a continuación.
+
+-- Proof 7
+example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) := by
+  intro hPiffQ hQiffR
+  -- hPiffQ : P ↔ Q
+  -- hQiffR : Q ↔ R
+  -- ⊢ P ↔ R
+  rwa [hPiffQ]
+
+-- Comentario de JA: Se puede demostrar con Iff.trans como se muestra a
+-- continuación.
+
+-- Proof 8
+example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) :=
+  Iff.trans
 
 -- Example 5: P ∧ Q ↔ Q ∧ P
 
