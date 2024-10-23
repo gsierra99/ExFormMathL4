@@ -15,26 +15,50 @@ import Mathlib.Tactic
 variable (P Q R S : Prop)
 
 
--- Example 1: P ↔ P
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that
+--    P ↔ P
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : P ↔ P := by
   constructor
-  intro hP
-  exact hP
-  intro hP
-  exact hP
+  . -- ⊢ P → P
+    intro hP
+    -- hP : P
+    -- ⊢ P
+    exact hP
+  . -- ⊢ P → P
+    intro hP
+    -- hP : P
+    -- ⊢ P
+    exact hP
 
--- Automatic proof
+-- Proof 2
 example : P ↔ P := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ↔ P := by
   constructor
-  exact fun a => a
-  exact fun a => a
+  . -- ⊢ P → P
+    exact fun a => a
+  . -- ⊢ P → P
+    exact fun a => a
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : P ↔ P :=
+  ⟨fun a => a, fun a => a⟩
+
+-- Comentario de JA: Se puede demostar con Iff.refl como se muestra a
+-- continuación.
+
+-- Proof 5
+example : P ↔ P :=
+  Iff.refl P
 
 -- Example 2: (P ↔ Q) → (Q ↔ P)
 
