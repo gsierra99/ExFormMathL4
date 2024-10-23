@@ -308,10 +308,29 @@ example : (P → (Q → R)) → (P ∧ Q → R) := by
 example : (P → (Q → R)) → (P ∧ Q → R) :=
   fun hPQR hPQ => hPQR hPQ.1 hPQ.2
 
+-- Comentario de JA: Se puede demostrar con rintro como se muestra a
+-- continuación.
 
-/-- Example 4: P → Q → P ∧ Q -/
+-- Proof 7
+example : (P → (Q → R)) → (P ∧ Q → R) := by
+  rintro hPQR ⟨hP, hQ⟩
+  -- hPQR : P → Q → R
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ R
+  apply hPQR
+  . -- ⊢ P
+    exact hP
+  . -- ⊢ Q
+    exact hQ
+
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that
+--    P → (Q → P ∧ Q)
+-- ---------------------------------------------------------------------
+
 -- Detailed proof
-example : P → Q → P ∧ Q := by
+example : P → (Q → P ∧ Q) := by
   intro hP hQ
   constructor
   exact hP
