@@ -437,24 +437,39 @@ example : P ∧ Q → Q ∧ P := by
 example : P ∧ Q → Q ∧ P :=
   fun ⟨hP, hQ⟩ => ⟨hQ, hP⟩
 
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that
+--    P → P ∧ True
+-- ---------------------------------------------------------------------
 
-/-- Example 6: P → P ∧ True -/
--- Detailed proof
+-- Proof 1
 example : P → P ∧ True := by
   intro hP
+  -- hP : P
+  -- ⊢ P ∧ True
   constructor
-  exact hP
-  trivial
+  . -- ⊢ P
+    exact hP
+  . -- ⊢ True
+    trivial
 
--- Automatic proof
+-- Proof 2
 example : P → P ∧ True := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P → P ∧ True := by
   intro hP
+  -- hP : P
+  -- ⊢ P ∧ True
   exact ⟨hP, trivial⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : P → P ∧ True :=
+  fun hP => ⟨hP, trivial⟩
 
 /-- Example 7: False → P ∧ False -/
 
