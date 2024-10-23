@@ -547,26 +547,64 @@ example : False → P ∧ False := by
 example : False → P ∧ False :=
   fun hF => ⟨False.elim hF, hF⟩
 
-/-- Example 8: P ∧ Q → Q ∧ R → P ∧ R -/
+-- ---------------------------------------------------------------------
+-- Exercise 8. Prove that
+--    P ∧ Q → (Q ∧ R → P ∧ R)
+-- ---------------------------------------------------------------------
 
--- Detailed proof
-example : P ∧ Q → Q ∧ R → P ∧ R := by
-  intro hPQ hQyR
+-- Proof 1
+example : P ∧ Q → (Q ∧ R → P ∧ R) := by
+  intro hPQ hQR
+  -- hPQ : P ∧ Q
+  -- hQR : Q ∧ R
+  -- ⊢ P ∧ R
   cases' hPQ with hP hQ
-  cases' hQyR with hQ hR
+  -- hP : P
+  -- hQ : Q
+  cases' hQR with hQ hR
+  -- hR : R
   constructor
-  exact hP
-  exact hR
+  . -- ⊢ P
+    exact hP
+  . -- ⊢ R
+    exact hR
 
--- Automatic proof
+-- Proof 2
 example : P ∧ Q → Q ∧ R → P ∧ R := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ∧ Q → Q ∧ R → P ∧ R := by
-  intro hPQ hQyR
-  exact ⟨hPQ.left, hQyR.right⟩
+  intro hPQ hQR
+  -- hPQ : P ∧ Q
+  -- hQR : Q ∧ R
+  -- ⊢ P ∧ R
+  exact ⟨hPQ.left, hQR.right⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : P ∧ Q → Q ∧ R → P ∧ R :=
+  fun hPQ hQR => ⟨hPQ.1, hQR.2⟩
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : P ∧ Q → Q ∧ R → P ∧ R := by
+  rintro ⟨hP, -⟩ ⟨-, hR⟩
+  -- hP : P
+  -- hR : R
+  -- ⊢ P ∧ R
+  exact ⟨hP, hR⟩
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : P ∧ Q → Q ∧ R → P ∧ R :=
+  fun ⟨hP, _⟩ ⟨_, hR⟩ => ⟨hP, hR⟩
 
 /-- Example 9: (P ∧ Q → R) → P → Q → R -/
 
