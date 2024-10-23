@@ -338,6 +338,13 @@ example : (P → (Q → R)) → (P ∧ Q → R) := by
   . -- ⊢ Q
     exact hQ
 
+-- Comentario de JA: La 7ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 8
+example : (P → (Q → R)) → (P ∧ Q → R) :=
+  fun hPQR ⟨hP, hQ⟩ => hPQR hP hQ
+
 -- ---------------------------------------------------------------------
 -- Exercise 4. Prove that
 --    P → (Q → P ∧ Q)
