@@ -360,23 +360,61 @@ example : P → Q → P ∧ Q := by
 example : P → Q → P ∧ Q :=
   fun hP hQ => ⟨hP, hQ⟩
 
-/-- Example 5: P ∧ Q → Q ∧ P -/
--- Detailed proof
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that
+--    P ∧ Q → Q ∧ P
+-- ---------------------------------------------------------------------
+
+-- Proof 1
 example : P ∧ Q → Q ∧ P := by
   intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ Q ∧ P
   cases' hPQ with hP hQ
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ Q ∧ P
   constructor
-  exact hQ
-  exact hP
+  . -- ⊢ Q
+    exact hQ
+  . -- ⊢ P
+    exact hP
 
--- Automatic proof
+-- Proof 2
 example : P ∧ Q → Q ∧ P := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ∧ Q → Q ∧ P := by
   intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ Q ∧ P
   exact ⟨hPQ.right, hPQ.left⟩
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : P ∧ Q → Q ∧ P :=
+  fun hPQ => ⟨hPQ.2, hPQ.1⟩
+
+-- Comentario de JA: Se puede sdemostrar con rintro como se muestra a
+-- continuación.
+
+-- Proof 5
+example : P ∧ Q → Q ∧ P := by
+  rintro ⟨hP, hQ⟩
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ Q ∧ P
+  exact ⟨hQ, hP⟩
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : P ∧ Q → Q ∧ P :=
+  fun ⟨hP, hQ⟩ => ⟨hQ, hP⟩
 
 
 /-- Example 6: P → P ∧ True -/
