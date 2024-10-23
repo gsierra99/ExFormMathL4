@@ -53,12 +53,19 @@ example : P ↔ P := by
 example : P ↔ P :=
   ⟨fun a => a, fun a => a⟩
 
--- Comentario de JA: Se puede demostar con Iff.refl como se muestra a
+-- Comentario de JA: Se puede demostrar con Iff.refl como se muestra a
 -- continuación.
 
 -- Proof 5
 example : P ↔ P :=
   Iff.refl P
+
+-- Comentario de JA: Se puede demostrar con rfl como se muestra a
+-- continuación.
+
+-- Proof 6
+example : P ↔ P := by
+  rfl
 
 -- Example 2: (P ↔ Q) → (Q ↔ P)
 
