@@ -235,23 +235,78 @@ example : P ∧ Q → Q := by
   -- ⊢ Q
   exact hQ
 
-/-- Example 3: (P → Q → R) → P ∧ Q → R -/
--- Detailed proof
-example : (P → Q → R) → P ∧ Q → R := by
-  intro hPQR hPyQ
-  cases' hPyQ with hP hQ
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--    (P → (Q → R)) → (P ∧ Q → R)
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example : (P → (Q → R)) → (P ∧ Q → R) := by
+  intro hPQR hPQ
+  -- hPQR : P → Q → R
+  -- hPQ : P ∧ Q
+  -- ⊢ R
+  cases' hPQ with hP hQ
+  -- hP : P
+  -- hQ : Q
   apply hPQR at hP
+  -- hP : Q → R
   apply hP at hQ
+  -- hQ : R
   exact hQ
 
--- Automatic proof
+-- Proof 2
 example : (P → Q → R) → P ∧ Q → R := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P → Q → R) → P ∧ Q → R := by
-  intro hPQR hPyQ
-  exact hPQR hPyQ.left hPyQ.right
+  intro hPQR hPQ
+  -- hPQR : P → Q → R
+  -- hPQ : P ∧ Q
+  -- ⊢ R
+  exact hPQR hPQ.left hPQ.right
+
+-- Comentario de JA: La 1ª demostración se puede simplificar (evitando
+-- el uso de cases' y la modificación de hipotesis) como se muestra a
+-- continuación.
+
+-- Proof 4
+example : (P → (Q → R)) → (P ∧ Q → R) := by
+  intro hPQR hPQ
+  -- hPQR : P → Q → R
+  -- hPQ : P ∧ Q
+  -- ⊢ R
+  rcases hPQ with ⟨hP, hQ⟩
+  -- hP : P
+  -- hQ : Q
+  apply hPQR
+  . -- ⊢ P
+    exact hP
+  . -- ⊢ Q
+    exact hQ
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : (P → (Q → R)) → (P ∧ Q → R) := by
+  intro hPQR hPQ
+  -- hPQR : P → Q → R
+  -- hPQ : P ∧ Q
+  -- ⊢ R
+  apply hPQR
+  . -- ⊢ P
+    exact hPQ.1
+  . -- ⊢ Q
+    exact hPQ.2
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : (P → (Q → R)) → (P ∧ Q → R) :=
+  fun hPQR hPQ => hPQR hPQ.1 hPQ.2
 
 
 /-- Example 4: P → Q → P ∧ Q -/
@@ -276,8 +331,8 @@ example : P → Q → P ∧ Q := by
 /-- Example 5: P ∧ Q → Q ∧ P -/
 -- Detailed proof
 example : P ∧ Q → Q ∧ P := by
-  intro hPyQ
-  cases' hPyQ with hP hQ
+  intro hPQ
+  cases' hPQ with hP hQ
   constructor
   exact hQ
   exact hP
@@ -288,8 +343,8 @@ example : P ∧ Q → Q ∧ P := by
 
 -- Balanced proof
 example : P ∧ Q → Q ∧ P := by
-  intro hPyQ
-  exact ⟨hPyQ.right, hPyQ.left⟩
+  intro hPQ
+  exact ⟨hPQ.right, hPQ.left⟩
 
 
 /-- Example 6: P → P ∧ True -/
@@ -334,8 +389,8 @@ example : False → P ∧ False := by
 
 -- Detailed proof
 example : P ∧ Q → Q ∧ R → P ∧ R := by
-  intro hPyQ hQyR
-  cases' hPyQ with hP hQ
+  intro hPQ hQyR
+  cases' hPQ with hP hQ
   cases' hQyR with hQ hR
   constructor
   exact hP
@@ -347,18 +402,18 @@ example : P ∧ Q → Q ∧ R → P ∧ R := by
 
 -- Balanced proof
 example : P ∧ Q → Q ∧ R → P ∧ R := by
-  intro hPyQ hQyR
-  exact ⟨hPyQ.left, hQyR.right⟩
+  intro hPQ hQyR
+  exact ⟨hPQ.left, hQyR.right⟩
 
 
 /-- Example 9: (P ∧ Q → R) → P → Q → R -/
 
 -- Detailed proof
 example : (P ∧ Q → R) → P → Q → R := by
-  intro hPyQR hP hQ
-  have hPyQ : P ∧ Q := ⟨hP, hQ⟩
-  apply hPyQR at hPyQ
-  exact hPyQ
+  intro hPQR hP hQ
+  have hPQ : P ∧ Q := ⟨hP, hQ⟩
+  apply hPQR at hPQ
+  exact hPQ
 
 -- Automatic proof
 example : (P ∧ Q → R) → P → Q → R := by
@@ -366,5 +421,5 @@ example : (P ∧ Q → R) → P → Q → R := by
 
 -- Balanced proof
 example : (P ∧ Q → R) → P → Q → R := by
-  intro hPyQR hP hQ
-  exact hPyQR ⟨hP, hQ⟩
+  intro hPQR hP hQ
+  exact hPQR ⟨hP, hQ⟩
