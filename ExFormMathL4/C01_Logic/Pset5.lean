@@ -1,3 +1,15 @@
+-- C01_Logic/Pset5.lean
+-- Problem set 5: The bi-implication.
+-- Gabriel Sierra Gallego.
+-- Seville, October 23, 2024
+-- ---------------------------------------------------------------------
+
+-- In this problem set, we study how to work with the bi-implication in
+-- Lean4.
+--
+-- It is based on [Section01logic/Sheet4.lean](https://tinyurl.com/24urpkse)
+-- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
+
 import Mathlib.Tactic
 
 variable (P Q R S : Prop)
