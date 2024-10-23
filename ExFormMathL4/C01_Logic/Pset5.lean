@@ -67,7 +67,7 @@ example : P ↔ P := by
   rfl
 
 -- ---------------------------------------------------------------------
--- Exercise 1. Prove that
+-- Exercise 2. Prove that
 --    (P ↔ Q) → (Q ↔ P)
 -- ---------------------------------------------------------------------
 
@@ -174,44 +174,167 @@ example : (P ↔ Q) → (Q ↔ P) := by
 example : (P ↔ Q) → (Q ↔ P) :=
   Iff.symm
 
--- Example 3: (P ↔ Q) ↔ (Q ↔ P)
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--   (P ↔ Q) ↔ (Q ↔ P)
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : (P ↔ Q) ↔ (Q ↔ P) := by
   constructor
-  intro hPiffQ
-  cases' hPiffQ with hPQ hQP
-  constructor
-  intro hQ
-  apply hQP
-  exact hQ
-  intro hP
-  apply hPQ
-  exact hP
-  intro hQiffP
-  cases' hQiffP with hQP hPQ
-  constructor
-  intro hP
-  apply hPQ
-  exact hP
-  intro hQ
-  apply hQP
-  exact hQ
+  . -- ⊢ (P ↔ Q) → (Q ↔ P)
+    intro hPiffQ
+    -- hPiffQ : P ↔ Q
+    -- ⊢ Q ↔ P
+    cases' hPiffQ with hPQ hQP
+    -- hPQ : P → Q
+    -- hQP : Q → P
+    constructor
+    . -- ⊢ Q → P
+      intro hQ
+      -- hQ : Q
+      -- ⊢ P
+      apply hQP
+      -- ⊢ Q
+      exact hQ
+    . -- ⊢ P → Q
+      intro hP
+      -- hP : P
+      -- ⊢ Q
+      apply hPQ
+      -- ⊢ P
+      exact hP
+  . -- ⊢ (Q ↔ P) → (P ↔ Q)
+    intro hQiffP
+    -- hQiffP : Q ↔ P
+    -- ⊢ P ↔ Q
+    cases' hQiffP with hQP hPQ
+    -- hQP : Q → P
+    -- hPQ : P → Q
+    constructor
+    . -- ⊢ P → Q
+      intro hP
+      -- hP : P
+      -- ⊢ Q
+      apply hPQ
+      -- ⊢ P
+      exact hP
+    . -- ⊢ Q → P
+      intro hQ
+      -- hQ : Q
+      -- ⊢ P
+      apply hQP
+      -- ⊢ Q
+      exact hQ
 
--- Automatic proof
+-- Proof 2
 example : (P ↔ Q) ↔ (Q ↔ P) := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P ↔ Q) ↔ (Q ↔ P) := by
   constructor
-  intro hPiffQ
-  cases' hPiffQ with hPQ hQP
-  exact ⟨hQP, hPQ⟩
-  intro hQiffP
-  cases' hQiffP with hQP hPQ
-  exact ⟨hPQ, hQP⟩
+  . -- ⊢ (P ↔ Q) → (Q ↔ P)
+    intro hPiffQ
+    -- hPiffQ : P ↔ Q
+    -- ⊢ Q ↔ P
+    cases' hPiffQ with hPQ hQP
+    -- hPQ : P → Q
+    -- hQP : Q → P
+    exact ⟨hQP, hPQ⟩
+  . -- ⊢ (Q ↔ P) → (P ↔ Q)
+    intro hQiffP
+    -- hQiffP : Q ↔ P
+    -- ⊢ P ↔ Q
+    cases' hQiffP with hQP hPQ
+    -- hQP : Q → P
+    -- hPQ : P → Q
+    exact ⟨hPQ, hQP⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P ↔ Q) ↔ (Q ↔ P) := by
+  constructor
+  . -- ⊢ (P ↔ Q) → (Q ↔ P)
+    intro hPiffQ
+    -- hPiffQ : P ↔ Q
+    -- ⊢ Q ↔ P
+    exact ⟨hPiffQ.mpr, hPiffQ.mp⟩
+  . -- ⊢ (Q ↔ P) → (P ↔ Q)
+    intro hQiffP
+    -- hQiffP : Q ↔ P
+    -- ⊢ P ↔ Q
+    exact ⟨hQiffP.mpr, hQiffP.mp⟩
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : (P ↔ Q) ↔ (Q ↔ P) :=
+  ⟨fun hPiffQ => ⟨hPiffQ.mpr, hPiffQ.mp⟩,
+   fun hQiffP => ⟨hQiffP.mpr, hQiffP.mp⟩⟩
+
+-- Comentario de JA: La 6ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : (P ↔ Q) ↔ (Q ↔ P) :=
+  ⟨fun ⟨hPQ, hQP⟩ => ⟨hQP, hPQ⟩,
+   fun ⟨hQP, hPQ⟩ => ⟨hPQ, hQP⟩⟩
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : (P ↔ Q) ↔ (Q ↔ P) := by
+  constructor
+  . -- ⊢ (P ↔ Q) → (Q ↔ P)
+    rintro ⟨hPQ, hQP⟩
+    -- hPQ : P → Q
+    -- hQP : Q → P
+    -- ⊢ Q ↔ P
+    exact ⟨hQP, hPQ⟩
+  . -- ⊢ (Q ↔ P) → (P ↔ Q)
+    rintro ⟨hQP, hPQ⟩
+    -- hQP : Q → P
+    -- hPQ : P → Q
+    -- ⊢ P ↔ Q
+    exact ⟨hPQ, hQP⟩
+
+-- Comentario de JA: Se puede demostrar usando rw como se muestra a
+-- continuación.
+
+-- Proof 7
+example : (P ↔ Q) ↔ (Q ↔ P) := by
+  constructor
+  . -- ⊢ (P ↔ Q) → (Q ↔ P)
+    intro h
+    -- h : P ↔ Q
+    -- ⊢ Q ↔ P
+    rw [h]
+  . -- ⊢ (Q ↔ P) → (P ↔ Q)
+    intro h
+    -- h : Q ↔ P
+    -- ⊢ P ↔ Q
+    rw [h]
+
+-- Comentario de JA: La 7ª demostración se puede simplificar usando <;> como se
+-- muestra a continuación.
+
+-- Proof 8
+example : (P ↔ Q) ↔ (Q ↔ P) := by
+  constructor <;>
+  . intro h
+    rw [h]
+
+-- Comentario de JA: Se puede demostrar con Iff.comm como se muestra a
+-- continuación.
+
+-- Proof 9
+example : (P ↔ Q) ↔ (Q ↔ P) :=
+  Iff.comm
 
 -- Example 4: (P ↔ Q) → (Q ↔ R) → (P ↔ R)
 
