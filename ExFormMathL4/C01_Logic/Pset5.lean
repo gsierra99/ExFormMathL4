@@ -443,50 +443,114 @@ example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) := by
 example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) :=
   Iff.trans
 
--- Example 5: P ∧ Q ↔ Q ∧ P
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that
+--    P ∧ Q ↔ Q ∧ P
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : P ∧ Q ↔ Q ∧ P := by
   constructor
-  intro hPyQ
-  cases' hPyQ with hP hQ
-  constructor
-  exact hQ
-  exact hP
-  intro hQyP
-  cases' hQyP with hQ hP
-  constructor
-  exact hP
-  exact hQ
+  . -- ⊢ P ∧ Q → Q ∧ P
+    intro hPQ
+    -- hPQ : P ∧ Q
+    -- ⊢ Q ∧ P
+    cases' hPQ with hP hQ
+    -- hP : P
+    -- hQ : Q
+    constructor
+    . -- ⊢ Q
+      exact hQ
+    . -- ⊢ P
+      exact hP
+  . -- ⊢ Q ∧ P → P ∧ Q
+    intro hQP
+    -- hQP : Q ∧ P
+    -- ⊢ P ∧ Q
+    cases' hQP with hQ hP
+    -- hQ : Q
+    -- hP : P
+    constructor
+    . -- ⊢ P
+      exact hP
+    . -- ⊢ Q
+      exact hQ
 
--- Automatic proof
+-- Proof 2
 example : P ∧ Q ↔ Q ∧ P := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ∧ Q ↔ Q ∧ P := by
   constructor
-  intro hPyQ
-  exact ⟨hPyQ.right, hPyQ.left⟩
-  intro hQyP
-  exact ⟨hQyP.right, hQyP.left⟩
+  . -- ⊢ P ∧ Q → Q ∧ P
+    intro hPQ
+    -- hPQ : P ∧ Q
+    -- ⊢ Q ∧ P
+    exact ⟨hPQ.right, hPQ.left⟩
+  . -- ⊢ Q ∧ P → P ∧ Q
+    intro hQP
+    -- hQP : Q ∧ P
+    -- ⊢ P ∧ Q
+    exact ⟨hQP.right, hQP.left⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : P ∧ Q ↔ Q ∧ P :=
+  ⟨fun hPQ => ⟨hPQ.2, hPQ.1⟩,
+   fun hQP => ⟨hQP.2, hQP.1⟩⟩
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : P ∧ Q ↔ Q ∧ P := by
+  constructor
+  . -- ⊢ P ∧ Q → Q ∧ P
+    rintro ⟨hP, hQ⟩
+    -- hP : P
+    -- hQ : Q
+    -- ⊢ Q ∧ P
+    exact ⟨hQ, hP⟩
+  . -- ⊢ Q ∧ P → P ∧ Q
+    rintro ⟨hQ, hP⟩
+    -- hQ : Q
+    -- hP : P
+    -- ⊢ P ∧ Q
+    exact ⟨hP, hQ⟩
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : P ∧ Q ↔ Q ∧ P :=
+  ⟨fun ⟨hP, hQ⟩ => ⟨hQ, hP⟩,
+   fun ⟨hQ, hP⟩ => ⟨hP, hQ⟩⟩
+
+-- Comentario de JA: Se puede demostrar con And.comm como se muestra a
+-- continuación.
+
+-- Proof 7
+example : P ∧ Q ↔ Q ∧ P :=
+  And.comm
 
 -- Example 6: (P ∧ Q) ∧ R ↔ P ∧ Q ∧ R
 
 -- Detailed proof
 example : (P ∧ Q) ∧ R ↔ P ∧ Q ∧ R := by
   constructor
-  intro hPyQyR
-  cases' hPyQyR with hPyQ hR
-  cases' hPyQ with hP hQ
+  intro hPQyR
+  cases' hPQyR with hPQ hR
+  cases' hPQ with hP hQ
   constructor
   exact hP
   constructor
   exact hQ
   exact hR
-  intro hPyQyR
-  cases' hPyQyR with hP hQyR
+  intro hPQyR
+  cases' hPQyR with hP hQyR
   cases' hQyR with hQ hR
   constructor
   constructor
@@ -501,10 +565,10 @@ example : (P ∧ Q) ∧ R ↔ P ∧ Q ∧ R := by
 -- Balanced proof
 example : (P ∧ Q) ∧ R ↔ P ∧ Q ∧ R := by
   constructor
-  intro hPyQyR
-  exact ⟨hPyQyR.left.left, hPyQyR.left.right, hPyQyR.right⟩
-  intro hPyQyR
-  exact ⟨⟨hPyQyR.left, hPyQyR.right.left⟩, hPyQyR.right.right⟩
+  intro hPQyR
+  exact ⟨hPQyR.left.left, hPQyR.left.right, hPQyR.right⟩
+  intro hPQyR
+  exact ⟨⟨hPQyR.left, hPQyR.right.left⟩, hPQyR.right.right⟩
 
 
 -- Example 7: P ↔ P ∧ True
