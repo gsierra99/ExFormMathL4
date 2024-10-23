@@ -329,23 +329,36 @@ example : (P → (Q → R)) → (P ∧ Q → R) := by
 --    P → (Q → P ∧ Q)
 -- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : P → (Q → P ∧ Q) := by
   intro hP hQ
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ P ∧ Q
   constructor
-  exact hP
-  exact hQ
+  . -- ⊢ P
+    exact hP
+  . -- ⊢ Q
+    exact hQ
 
--- Automatic proof
+-- Proof 2
 example : P → Q → P ∧ Q := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P → Q → P ∧ Q := by
   intro hP hQ
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ P ∧ Q
   exact ⟨hP, hQ⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
 
+-- Proof 4
+example : P → Q → P ∧ Q :=
+  fun hP hQ => ⟨hP, hQ⟩
 
 /-- Example 5: P ∧ Q → Q ∧ P -/
 -- Detailed proof
