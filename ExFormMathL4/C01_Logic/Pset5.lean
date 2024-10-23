@@ -14,7 +14,6 @@ import Mathlib.Tactic
 
 variable (P Q R S : Prop)
 
-
 -- ---------------------------------------------------------------------
 -- Exercise 1. Prove that
 --    P ↔ P
@@ -67,30 +66,113 @@ example : P ↔ P :=
 example : P ↔ P := by
   rfl
 
--- Example 2: (P ↔ Q) → (Q ↔ P)
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that
+--    (P ↔ Q) → (Q ↔ P)
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : (P ↔ Q) → (Q ↔ P) := by
   intro hPiffQ
+  -- hPiffQ : P ↔ Q
+  -- ⊢ Q ↔ P
   cases' hPiffQ with hPQ hQP
+  -- hPQ : P → Q
+  -- hQP : Q → P
   constructor
-  intro hQ
-  apply hQP
-  exact hQ
-  intro hP
-  apply hPQ
-  exact hP
+  . -- ⊢ Q → P
+    intro hQ
+    -- hQ : Q
+    -- ⊢ P
+    apply hQP
+    -- ⊢ Q
+    exact hQ
+  . -- ⊢ P → Q
+    intro hP
+    -- hP : P
+    -- ⊢ Q
+    apply hPQ
+    -- ⊢ P
+    exact hP
 
--- Automatic proof
+-- Proof 2
 example : (P ↔ Q) → (Q ↔ P) := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P ↔ Q) → (Q ↔ P) := by
   intro hPiffQ
+  -- hPiffQ : P ↔ Q
+  -- ⊢ Q ↔ P
   cases' hPiffQ with hPQ hQP
+  -- hPQ : P → Q
+  -- hQP : Q → P
   exact ⟨hQP, hPQ⟩
 
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P ↔ Q) → (Q ↔ P) := by
+  intro hPiffQ
+  -- hPiffQ : P ↔ Q
+  -- ⊢ Q ↔ P
+  constructor
+  . -- ⊢ Q → P
+    exact hPiffQ.mpr
+  . -- ⊢ P → Q
+    exact hPiffQ.mp
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : (P ↔ Q) → (Q ↔ P) := by
+  intro hPiffQ
+  -- hPiffQ : P ↔ Q
+  -- ⊢ Q ↔ P
+  exact ⟨hPiffQ.mpr, hPiffQ.mp⟩
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : (P ↔ Q) → (Q ↔ P) :=
+  fun hPiffQ => ⟨hPiffQ.mpr, hPiffQ.mp⟩
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : (P ↔ Q) → (Q ↔ P) := by
+  rintro ⟨hPQ, hQP⟩
+  -- hPQ : P → Q
+  -- hQP : Q → P
+  exact ⟨hQP, hPQ⟩
+
+-- Comentario de JA: La 7ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 8
+example : (P ↔ Q) → (Q ↔ P) :=
+  fun ⟨hPQ, hQP⟩ => ⟨hQP, hPQ⟩
+
+-- Comentario de JA: Se puede demostrar con rw como se muestra a
+-- continuación.
+
+-- Proof 9
+example : (P ↔ Q) → (Q ↔ P) := by
+  intro hPiffQ
+  -- hPiffQ : P ↔ Q
+  -- ⊢ Q ↔ P
+  rw [hPiffQ]
+
+-- Comentario de JA: Se puede demostrar con Iff.symm como se muestra a
+-- continuación.
+
+-- Proof 10
+example : (P ↔ Q) → (Q ↔ P) :=
+  Iff.symm
 
 -- Example 3: (P ↔ Q) ↔ (Q ↔ P)
 
