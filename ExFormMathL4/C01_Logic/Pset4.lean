@@ -471,25 +471,81 @@ example : P → P ∧ True := by
 example : P → P ∧ True :=
   fun hP => ⟨hP, trivial⟩
 
-/-- Example 7: False → P ∧ False -/
+-- ---------------------------------------------------------------------
+-- Exercise 7. Prove that
+--    False → P ∧ False
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : False → P ∧ False := by
   intro hF
+  -- hF : False
+  -- ⊢ P ∧ False
   constructor
-  exfalso
-  exact hF
-  exact hF
+  . -- ⊢ P
+    exfalso
+    -- ⊢ False
+    exact hF
+  . -- ⊢ False
+    exact hF
 
--- Automatic proof
+-- Proof 2
 example : False → P ∧ False := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : False → P ∧ False := by
   intro hF
+  -- hF : False
+  -- ⊢ P ∧ False
   contradiction
 
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : False → P ∧ False := by
+  intro hF
+  -- hF : False
+  -- ⊢ P ∧ False
+  constructor
+  . -- ⊢ P
+    apply False.elim
+    -- ⊢ False
+    exact hF
+  . -- ⊢ False
+    exact hF
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : False → P ∧ False := by
+  intro hF
+  -- hF : False
+  -- ⊢ P ∧ False
+  constructor
+  . -- ⊢ P
+    exact False.elim hF
+  . -- ⊢ False
+    exact hF
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : False → P ∧ False := by
+  intro hF
+  -- hF : False
+  -- ⊢ P ∧ False
+  exact ⟨False.elim hF, hF⟩
+
+-- Comentario de JA: La 6ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : False → P ∧ False :=
+  fun hF => ⟨False.elim hF, hF⟩
 
 /-- Example 8: P ∧ Q → Q ∧ R → P ∧ R -/
 
