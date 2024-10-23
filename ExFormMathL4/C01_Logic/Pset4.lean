@@ -126,6 +126,13 @@ example : P ∧ Q → P := by
   -- ⊢ P
   exact hP
 
+-- Comentario de JA: La 11ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 12
+example : P ∧ Q → P :=
+  fun ⟨hP, _⟩ => hP
+
 -- ---------------------------------------------------------------------
 -- Exercise 2. Prove that
 --    P ∧ Q → Q
