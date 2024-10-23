@@ -1,173 +1,644 @@
+-- C01_Logic/Pset4.lean
+-- Problem set 4: The conjunction.
+-- Gabriel Sierra Gallego.
+-- Seville, October 22, 2024
+-- ---------------------------------------------------------------------
+
+-- In this problem set, we study how to work with the conjunction in Lean4.
+--
+-- It is based on [Section01logic/Sheet4.lean](https://tinyurl.com/29cyxpjz)
+-- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
+
 import Mathlib.Tactic
 
 variable (P Q R : Prop)
 
-/-- Example 1: P ∧ Q → P -/
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that
+--    P ∧ Q → P
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : P ∧ Q → P := by
-  intro hPyQ
-  cases' hPyQ with hP hQ
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  cases' hPQ with hP hQ
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ P
   exact hP
 
--- Automatic proof
+-- Proof 2
 example : P ∧ Q → P := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ∧ Q → P := by
-  intro hPyQ
-  exact hPyQ.left
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  exact hPQ.left
 
+-- Comentario de JA: En la 1ª demostración se puede usar rcases en lugar
+-- de cases' como se muestra a continuación.
 
-/-- Example 2: P ∧ Q → Q -/
+-- Proof 4
+example : P ∧ Q → P := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  rcases hPQ with ⟨hP, _hQ⟩
+  -- hP : P
+  -- _hQ : Q
+  -- ⊢ P
+  exact hP
 
--- Detailed proof
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : P ∧ Q → P := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  rcases hPQ with ⟨hP, -⟩
+  -- hP : P
+  -- ⊢ P
+  exact hP
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : P ∧ Q → P := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  have hP : P := And.left hPQ
+  exact hP
+
+-- Comentario de JA: La 6ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : P ∧ Q → P := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  exact And.left hPQ
+
+-- Comentario de JA: La 7ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 8
+example : P ∧ Q → P :=
+  And.left
+
+-- Comentario de JA: La 7ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 9
+example : P ∧ Q → P := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  exact hPQ.1
+
+-- Comentario de JA: Se puede usar rintro como se muestra a
+-- continuación.
+
+-- Proof 10
+example : P ∧ Q → P := by
+  rintro ⟨hP, _hQ⟩
+  -- hP : P
+  -- _hQ : Q
+  -- ⊢ P
+  exact hP
+
+-- Comentario de JA: La 10ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 11
+example : P ∧ Q → P := by
+  rintro ⟨hP, -⟩
+  -- hP : P
+  -- ⊢ P
+  exact hP
+
+-- Comentario de JA: La 11ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 12
+example : P ∧ Q → P :=
+  fun ⟨hP, _⟩ => hP
+
+-- ---------------------------------------------------------------------
+-- Exercise 2. Prove that
+--    P ∧ Q → Q
+-- ---------------------------------------------------------------------
+
+-- Proof 1
 example : P ∧ Q → Q := by
-  intro hPyQ
-  cases' hPyQ with hP hQ
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ Q
+  cases' hPQ with hP hQ
+  -- hP : P
+  -- hQ : Q
   exact hQ
 
--- Automatic proof
+-- Proof 2
 example : P ∧ Q → Q := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ∧ Q → Q := by
-  intro hPyQ
-  exact hPyQ.right
+  intro hPQ
+  exact hPQ.right
 
+-- Comentario de JA: En la 1ª demostración se puede usar rcases en lugar
+-- de cases' como se muestra a continuación.
 
-/-- Example 3: (P → Q → R) → P ∧ Q → R -/
--- Detailed proof
-example : (P → Q → R) → P ∧ Q → R := by
-  intro hPQR hPyQ
-  cases' hPyQ with hP hQ
+-- Proof 4
+example : P ∧ Q → Q := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  rcases hPQ with ⟨_hP, hQ⟩
+  -- _hP : P
+  -- hQ : Q
+  -- ⊢ P
+  exact hQ
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : P ∧ Q → Q := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  rcases hPQ with ⟨-, hQ⟩
+  -- hQ : Q
+  exact hQ
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : P ∧ Q → Q := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  have hQ : Q := And.right hPQ
+  exact hQ
+
+-- Comentario de JA: La 6ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : P ∧ Q → Q := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  exact And.right hPQ
+
+-- Comentario de JA: La 7ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 8
+example : P ∧ Q → Q :=
+  And.right
+
+-- Comentario de JA: La 7ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 9
+example : P ∧ Q → Q := by
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ P
+  exact hPQ.2
+
+-- Comentario de JA: Se puede usar rintro como se muestra a
+-- continuación.
+
+-- Proof 10
+example : P ∧ Q → Q := by
+  rintro ⟨_hP, hQ⟩
+  -- _hP : P
+  -- hQ : Q
+  -- ⊢ Q
+  exact hQ
+
+-- Comentario de JA: La 10ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 11
+example : P ∧ Q → Q := by
+  rintro ⟨-, hQ⟩
+  -- hQ : Q
+  -- ⊢ Q
+  exact hQ
+
+-- Comentario de JA: La 11ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 12
+example : P ∧ Q → Q :=
+  fun ⟨_, hQ⟩ => hQ
+
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--    (P → (Q → R)) → (P ∧ Q → R)
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example : (P → (Q → R)) → (P ∧ Q → R) := by
+  intro hPQR hPQ
+  -- hPQR : P → Q → R
+  -- hPQ : P ∧ Q
+  -- ⊢ R
+  cases' hPQ with hP hQ
+  -- hP : P
+  -- hQ : Q
   apply hPQR at hP
+  -- hP : Q → R
   apply hP at hQ
+  -- hQ : R
   exact hQ
 
--- Automatic proof
+-- Proof 2
 example : (P → Q → R) → P ∧ Q → R := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P → Q → R) → P ∧ Q → R := by
-  intro hPQR hPyQ
-  exact hPQR hPyQ.left hPyQ.right
+  intro hPQR hPQ
+  -- hPQR : P → Q → R
+  -- hPQ : P ∧ Q
+  -- ⊢ R
+  exact hPQR hPQ.left hPQ.right
 
+-- Comentario de JA: La 1ª demostración se puede simplificar (evitando
+-- el uso de cases' y la modificación de hipotesis) como se muestra a
+-- continuación.
 
-/-- Example 4: P → Q → P ∧ Q -/
--- Detailed proof
-example : P → Q → P ∧ Q := by
+-- Proof 4
+example : (P → (Q → R)) → (P ∧ Q → R) := by
+  intro hPQR hPQ
+  -- hPQR : P → Q → R
+  -- hPQ : P ∧ Q
+  -- ⊢ R
+  rcases hPQ with ⟨hP, hQ⟩
+  -- hP : P
+  -- hQ : Q
+  apply hPQR
+  . -- ⊢ P
+    exact hP
+  . -- ⊢ Q
+    exact hQ
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : (P → (Q → R)) → (P ∧ Q → R) := by
+  intro hPQR hPQ
+  -- hPQR : P → Q → R
+  -- hPQ : P ∧ Q
+  -- ⊢ R
+  apply hPQR
+  . -- ⊢ P
+    exact hPQ.1
+  . -- ⊢ Q
+    exact hPQ.2
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : (P → (Q → R)) → (P ∧ Q → R) :=
+  fun hPQR hPQ => hPQR hPQ.1 hPQ.2
+
+-- Comentario de JA: Se puede demostrar con rintro como se muestra a
+-- continuación.
+
+-- Proof 7
+example : (P → (Q → R)) → (P ∧ Q → R) := by
+  rintro hPQR ⟨hP, hQ⟩
+  -- hPQR : P → Q → R
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ R
+  apply hPQR
+  . -- ⊢ P
+    exact hP
+  . -- ⊢ Q
+    exact hQ
+
+-- Comentario de JA: La 7ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 8
+example : (P → (Q → R)) → (P ∧ Q → R) :=
+  fun hPQR ⟨hP, hQ⟩ => hPQR hP hQ
+
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that
+--    P → (Q → P ∧ Q)
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example : P → (Q → P ∧ Q) := by
   intro hP hQ
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ P ∧ Q
   constructor
-  exact hP
-  exact hQ
+  . -- ⊢ P
+    exact hP
+  . -- ⊢ Q
+    exact hQ
 
--- Automatic proof
+-- Proof 2
 example : P → Q → P ∧ Q := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P → Q → P ∧ Q := by
   intro hP hQ
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ P ∧ Q
   exact ⟨hP, hQ⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
 
+-- Proof 4
+example : P → Q → P ∧ Q :=
+  fun hP hQ => ⟨hP, hQ⟩
 
-/-- Example 5: P ∧ Q → Q ∧ P -/
--- Detailed proof
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that
+--    P ∧ Q → Q ∧ P
+-- ---------------------------------------------------------------------
+
+-- Proof 1
 example : P ∧ Q → Q ∧ P := by
-  intro hPyQ
-  cases' hPyQ with hP hQ
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ Q ∧ P
+  cases' hPQ with hP hQ
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ Q ∧ P
   constructor
-  exact hQ
-  exact hP
+  . -- ⊢ Q
+    exact hQ
+  . -- ⊢ P
+    exact hP
 
--- Automatic proof
+-- Proof 2
 example : P ∧ Q → Q ∧ P := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ∧ Q → Q ∧ P := by
-  intro hPyQ
-  exact ⟨hPyQ.right, hPyQ.left⟩
+  intro hPQ
+  -- hPQ : P ∧ Q
+  -- ⊢ Q ∧ P
+  exact ⟨hPQ.right, hPQ.left⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
 
-/-- Example 6: P → P ∧ True -/
--- Detailed proof
+-- Proof 4
+example : P ∧ Q → Q ∧ P :=
+  fun hPQ => ⟨hPQ.2, hPQ.1⟩
+
+-- Comentario de JA: Se puede sdemostrar con rintro como se muestra a
+-- continuación.
+
+-- Proof 5
+example : P ∧ Q → Q ∧ P := by
+  rintro ⟨hP, hQ⟩
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ Q ∧ P
+  exact ⟨hQ, hP⟩
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : P ∧ Q → Q ∧ P :=
+  fun ⟨hP, hQ⟩ => ⟨hQ, hP⟩
+
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that
+--    P → P ∧ True
+-- ---------------------------------------------------------------------
+
+-- Proof 1
 example : P → P ∧ True := by
   intro hP
+  -- hP : P
+  -- ⊢ P ∧ True
   constructor
-  exact hP
-  trivial
+  . -- ⊢ P
+    exact hP
+  . -- ⊢ True
+    trivial
 
--- Automatic proof
+-- Proof 2
 example : P → P ∧ True := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P → P ∧ True := by
   intro hP
+  -- hP : P
+  -- ⊢ P ∧ True
   exact ⟨hP, trivial⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
 
-/-- Example 7: False → P ∧ False -/
+-- Proof 4
+example : P → P ∧ True :=
+  fun hP => ⟨hP, trivial⟩
 
--- Detailed proof
+-- ---------------------------------------------------------------------
+-- Exercise 7. Prove that
+--    False → P ∧ False
+-- ---------------------------------------------------------------------
+
+-- Proof 1
 example : False → P ∧ False := by
   intro hF
+  -- hF : False
+  -- ⊢ P ∧ False
   constructor
-  exfalso
-  exact hF
-  exact hF
+  . -- ⊢ P
+    exfalso
+    -- ⊢ False
+    exact hF
+  . -- ⊢ False
+    exact hF
 
--- Automatic proof
+-- Proof 2
 example : False → P ∧ False := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : False → P ∧ False := by
   intro hF
+  -- hF : False
+  -- ⊢ P ∧ False
   contradiction
 
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
 
-/-- Example 8: P ∧ Q → Q ∧ R → P ∧ R -/
-
--- Detailed proof
-example : P ∧ Q → Q ∧ R → P ∧ R := by
-  intro hPyQ hQyR
-  cases' hPyQ with hP hQ
-  cases' hQyR with hQ hR
+-- Proof 4
+example : False → P ∧ False := by
+  intro hF
+  -- hF : False
+  -- ⊢ P ∧ False
   constructor
-  exact hP
-  exact hR
+  . -- ⊢ P
+    apply False.elim
+    -- ⊢ False
+    exact hF
+  . -- ⊢ False
+    exact hF
 
--- Automatic proof
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : False → P ∧ False := by
+  intro hF
+  -- hF : False
+  -- ⊢ P ∧ False
+  constructor
+  . -- ⊢ P
+    exact False.elim hF
+  . -- ⊢ False
+    exact hF
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : False → P ∧ False := by
+  intro hF
+  -- hF : False
+  -- ⊢ P ∧ False
+  exact ⟨False.elim hF, hF⟩
+
+-- Comentario de JA: La 6ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : False → P ∧ False :=
+  fun hF => ⟨False.elim hF, hF⟩
+
+-- ---------------------------------------------------------------------
+-- Exercise 8. Prove that
+--    P ∧ Q → (Q ∧ R → P ∧ R)
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example : P ∧ Q → (Q ∧ R → P ∧ R) := by
+  intro hPQ hQR
+  -- hPQ : P ∧ Q
+  -- hQR : Q ∧ R
+  -- ⊢ P ∧ R
+  cases' hPQ with hP hQ
+  -- hP : P
+  -- hQ : Q
+  cases' hQR with hQ hR
+  -- hR : R
+  constructor
+  . -- ⊢ P
+    exact hP
+  . -- ⊢ R
+    exact hR
+
+-- Proof 2
 example : P ∧ Q → Q ∧ R → P ∧ R := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ∧ Q → Q ∧ R → P ∧ R := by
-  intro hPyQ hQyR
-  exact ⟨hPyQ.left, hQyR.right⟩
+  intro hPQ hQR
+  -- hPQ : P ∧ Q
+  -- hQR : Q ∧ R
+  -- ⊢ P ∧ R
+  exact ⟨hPQ.left, hQR.right⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
 
-/-- Example 9: (P ∧ Q → R) → P → Q → R -/
+-- Proof 4
+example : P ∧ Q → Q ∧ R → P ∧ R :=
+  fun hPQ hQR => ⟨hPQ.1, hQR.2⟩
 
--- Detailed proof
-example : (P ∧ Q → R) → P → Q → R := by
-  intro hPyQR hP hQ
-  have hPyQ : P ∧ Q := ⟨hP, hQ⟩
-  apply hPyQR at hPyQ
-  exact hPyQ
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
 
--- Automatic proof
+-- Proof 5
+example : P ∧ Q → Q ∧ R → P ∧ R := by
+  rintro ⟨hP, -⟩ ⟨-, hR⟩
+  -- hP : P
+  -- hR : R
+  -- ⊢ P ∧ R
+  exact ⟨hP, hR⟩
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : P ∧ Q → Q ∧ R → P ∧ R :=
+  fun ⟨hP, _⟩ ⟨_, hR⟩ => ⟨hP, hR⟩
+
+-- ---------------------------------------------------------------------
+-- Exercise 9. Prove that
+--    (P ∧ Q → R) → (P → (Q → R))
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example : (P ∧ Q → R) → (P → (Q → R)) := by
+  intro hPQR hP hQ
+  -- hPQR : P ∧ Q → R
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ R
+  have hPQ : P ∧ Q := ⟨hP, hQ⟩
+  apply hPQR at hPQ
+  -- hPQ : R
+  exact hPQ
+
+-- Proof 2
 example : (P ∧ Q → R) → P → Q → R := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P ∧ Q → R) → P → Q → R := by
-  intro hPyQR hP hQ
-  exact hPyQR ⟨hP, hQ⟩
+  intro hPQR hP hQ
+  -- hPQR : P ∧ Q → R
+  -- hP : P
+  -- hQ : Q
+  -- ⊢ R
+  exact hPQR ⟨hP, hQ⟩
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P ∧ Q → R) → P → Q → R :=
+  fun hPQR hP hQ => hPQR ⟨hP, hQ⟩
