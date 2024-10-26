@@ -1,4 +1,16 @@
-import Mathlib.Tactic -- imports all the Lean tactics
+-- C01_Logic/Pset6.lean
+-- Problem set 6: The disjunction.
+-- Gabriel Sierra Gallego.
+-- Seville, October 26, 2024
+-- ---------------------------------------------------------------------
+
+-- In this problem set, we study how to work with the disjunction in
+-- Lean4.
+--
+-- It is based on [Section01logic/Sheet4.lean](https://tinyurl.com/2xlkt9kh)
+-- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
+
+import Mathlib.Tactic
 
 variable (P Q R S : Prop)
 
