@@ -53,24 +53,44 @@ example : P → P ∨ Q :=
 example : P → P ∨ Q :=
   Or.inl
 
--- Example 2: Q → P ∨ Q
+-- ---------------------------------------------------------------------
+-- Exercise 2. Prove that
+--    Q → P ∨ Q
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : Q → P ∨ Q := by
   intro hQ
+  -- hQ : Q
+  -- ⊢ P ∨ Q
   right
+  -- ⊢ Q
   exact hQ
 
-
--- Automatic proof
+-- Proof 2
 example : Q → P ∨ Q := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : Q → P ∨ Q := by
   intro hQ
+  -- hQ : Q
+  -- ⊢ P ∨ Q
   exact Or.inr hQ
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : Q → P ∨ Q :=
+  fun hQ => Or.inr hQ
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : Q → P ∨ Q :=
+  Or.inr
 
 -- Example 3: P ∨ Q → (P → R) → (Q → R) → R
 
