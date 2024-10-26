@@ -377,30 +377,109 @@ example : (P ∨ Q) ∨ R ↔ P ∨ Q ∨ R := by
 example : (P ∨ Q) ∨ R ↔ P ∨ Q ∨ R :=
   or_assoc
 
--- Example 6: (P → R) → (Q → S) → P ∨ Q → R ∨ S
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that
+--    (P → R) → ((Q → S) → (P ∨ Q → R ∨ S))
+-- ---------------------------------------------------------------------
 
--- Detailed proof
-example : (P → R) → (Q → S) → P ∨ Q → R ∨ S := by
+-- Proof 1
+example : (P → R) → ((Q → S) → (P ∨ Q → R ∨ S)) := by
   intro hPR hQS hPoQ
+  -- hPR : P → R
+  -- hQS : Q → S
+  -- hPoQ : P ∨ Q
+  -- ⊢ R ∨ S
   cases' hPoQ with hP hQ
-  apply hPR at hP
-  left
-  exact hP
-  apply hQS at hQ
-  right
-  exact hQ
+  . -- hP : P
+    apply hPR at hP
+    -- hP : R
+    left
+    -- ⊢ R
+    exact hP
+  . -- hQ : Q
+    apply hQS at hQ
+    -- hQ : S
+    right
+    -- ⊢ S
+    exact hQ
 
 -- Automatic proof
 example : (P → R) → (Q → S) → P ∨ Q → R ∨ S := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P → R) → (Q → S) → P ∨ Q → R ∨ S := by
   intro hPR hQS hPoQ
+  -- hPR : P → R
+  -- hQS : Q → S
+  -- hPoQ : P ∨ Q
+  -- ⊢ R ∨ S
   cases' hPoQ with hP hQ
-  exact Or.inl (hPR hP)
-  exact Or.inr (hQS hQ)
+  . -- hP : P
+    exact Or.inl (hPR hP)
+  . -- hQ : Q
+    exact Or.inr (hQS hQ)
 
+-- Comentario de JA: La 3ª demostración se puede nodificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P → R) → (Q → S) → P ∨ Q → R ∨ S := by
+  intro hPR hQS hPoQ
+  -- hPR : P → R
+  -- hQS : Q → S
+  -- hPoQ : P ∨ Q
+  -- ⊢ R ∨ S
+  apply Or.elim hPoQ
+  . -- ⊢ P → R ∨ S
+    exact fun hP => Or.inl (hPR hP)
+  . -- ⊢ Q → R ∨ S
+    exact fun hQ => Or.inr (hQS hQ)
+
+-- Comentario de JA: La 4ª demostración se puede modificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : (P → R) → (Q → S) → P ∨ Q → R ∨ S :=
+  fun hPR hQS hPoQ => Or.elim hPoQ (fun hP => Or.inl (hPR hP))
+                                   (fun hQ => Or.inr (hQS hQ))
+
+-- Comentario de JA: La 5ª demostración se puede simplificar usando
+-- composición de funciones como se muestra a continuación.
+
+-- Proof 6
+example : (P → R) → (Q → S) → P ∨ Q → R ∨ S :=
+  fun hPR hQS hPoQ => Or.elim hPoQ (Or.inl ∘ hPR)
+                                   (Or.inr ∘ hQS)
+
+-- Comentario de JA: La 5ª demostración se puede simplificar usando
+-- composición de funciones como se muestra a continuación.
+
+-- Proof 7
+example : (P → R) → (Q → S) → P ∨ Q → R ∨ S :=
+  fun hPR hQS hPoQ => .elim hPoQ (.inl ∘ hPR)
+                                 (.inr ∘ hQS)
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 8
+example : (P → R) → (Q → S) → P ∨ Q → R ∨ S := by
+  rintro hPR hQS (hP | hQ)
+  -- hPR : P → R
+  -- hQS : Q → S
+  -- ⊢ R ∨ S
+  . -- hP : P
+    exact Or.inl (hPR hP)
+  . -- hQ : Q
+    exact Or.inr (hQS hQ)
+
+-- Comentario de JA: Se puede demostrar con Or.imp como se muestra a
+-- continuación.
+
+-- Proof 9
+example : (P → R) → (Q → S) → P ∨ Q → R ∨ S :=
+  Or.imp
 
 -- Example 7: (P → Q) → P ∨ R → Q ∨ R
 
