@@ -629,31 +629,57 @@ example : (P ∧ Q) ∧ R ↔ P ∧ Q ∧ R :=
   ⟨fun ⟨⟨hP, hQ⟩, hR⟩ => ⟨hP, hQ, hR⟩,
    fun ⟨hP, ⟨hQ, hR⟩⟩ => ⟨⟨hP, hQ⟩, hR⟩⟩
 
--- Example 7: P ↔ P ∧ True
+-- ---------------------------------------------------------------------
+-- Exercise 7. Prove that
+--    P ↔ P ∧ True
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : P ↔ P ∧ True := by
   constructor
-  intro hP
-  constructor
-  exact hP
-  trivial
-  intro hPyT
-  cases' hPyT with hP hT
-  exact hP
+  . -- ⊢ P → P ∧ True
+    intro hP
+    -- hP : P
+    -- ⊢ P ∧ True
+    constructor
+    . -- ⊢ P
+      exact hP
+    . -- ⊢ True
+      trivial
+  . -- ⊢ P ∧ True → P
+    intro hPT
+    -- hPT : P ∧ True
+    -- ⊢ P
+    cases' hPT with hP hT
+    -- hP : P
+    -- hT : True
+    exact hP
 
--- Automatic proof
+-- Proof 2
 example : P ↔ P ∧ True := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ↔ P ∧ True := by
   constructor
-  intro hP
-  exact ⟨hP, trivial⟩
-  intro hPyT
-  exact hPyT.left
+  . -- ⊢ P → P ∧ True
+    intro hP
+    -- hP : P
+    -- ⊢ P ∧ True
+    exact ⟨hP, trivial⟩
+  . -- ⊢ P ∧ True → P
+    intro hPT
+    -- hPT : P ∧ True
+    -- ⊢ P
+    exact hPT.left
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : P ↔ P ∧ True :=
+  ⟨fun hP => ⟨hP, trivial⟩,
+   fun ⟨hP, _⟩ => hP⟩
 
 -- Example 8: False ↔ P ∧ False
 
