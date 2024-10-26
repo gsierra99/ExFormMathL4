@@ -258,56 +258,124 @@ example : P ∨ Q → Q ∨ P :=
 example : P ∨ Q → Q ∨ P :=
   Or.symm
 
--- Example 5: (P ∨ Q) ∨ R ↔ P ∨ Q ∨ R
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that
+--    (P ∨ Q) ∨ R ↔ P ∨ (Q ∨ R)
+-- ---------------------------------------------------------------------
 
--- Detailed proof
-example : (P ∨ Q) ∨ R ↔ P ∨ Q ∨ R := by
+-- Proof 1
+example : (P ∨ Q) ∨ R ↔ P ∨ (Q ∨ R) := by
   constructor
-  intro hPoQoR
-  cases' hPoQoR with hPoQ hR
-  cases' hPoQ with hP hQ
-  left
-  exact hP
-  right
-  left
-  exact hQ
-  right
-  right
-  exact hR
-  intro hPoQoR
-  cases' hPoQoR with hP hQoR
-  left
-  left
-  exact hP
-  cases' hQoR with hQ hR
-  left
-  right
-  exact hQ
-  right
-  exact hR
+  . -- ⊢ (P ∨ Q) ∨ R → P ∨ Q ∨ R
+    intro hPoQoR
+    -- hPoQoR : (P ∨ Q) ∨ R
+    -- ⊢ P ∨ Q ∨ R
+    cases' hPoQoR with hPoQ hR
+    . -- hPoQ : P ∨ Q
+      cases' hPoQ with hP hQ
+      . -- hP : P
+        left
+        -- ⊢ P
+        exact hP
+      . -- hQ : Q
+        right
+        -- ⊢ Q ∨ R
+        left
+        -- ⊢ Q
+        exact hQ
+    . -- hR : R
+      right
+      -- ⊢ Q ∨ R
+      right
+      -- ⊢ R
+      exact hR
+  . -- ⊢ P ∨ Q ∨ R → (P ∨ Q) ∨ R
+    intro hPoQoR
+    -- hPoQoR : P ∨ Q ∨ R
+    -- ⊢ (P ∨ Q) ∨ R
+    cases' hPoQoR with hP hQoR
+    . -- hP : P
+      left
+      -- ⊢ P ∨ Q
+      left
+      -- ⊢ P
+      exact hP
+    . -- hQoR : Q ∨ R
+      cases' hQoR with hQ hR
+      . -- hQ : Q
+        left
+        -- ⊢ P ∨ Q
+        right
+        -- ⊢ Q
+        exact hQ
+      . -- hR : R
+        right
+        -- ⊢ R
+        exact hR
 
--- Automatic proof
+-- Proof 2
 example : (P ∨ Q) ∨ R ↔ P ∨ Q ∨ R := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P ∨ Q) ∨ R ↔ P ∨ Q ∨ R := by
   constructor
-  -- Forward direction
-  intro hPoQoR
-  cases' hPoQoR with hPQ hR
-  cases' hPQ with hP hQ
-  exact Or.inl hP
-  exact Or.inr (Or.inl hQ)
-  exact Or.inr (Or.inr hR)
-  -- Backward direction
-  intro hPoQoR
-  cases' hPoQoR with hP hQoR
-  exact Or.inl (Or.inl hP)
-  cases' hQoR with hQ hR
-  exact Or.inl (Or.inr hQ)
-  exact Or.inr hR
+  . -- ⊢ (P ∨ Q) ∨ R → P ∨ Q ∨ R
+    intro hPoQoR
+    -- hPoQoR : (P ∨ Q) ∨ R
+    -- ⊢ P ∨ Q ∨ R
+    cases' hPoQoR with hPQ hR
+    . -- hPQ : P ∨ Q
+      cases' hPQ with hP hQ
+      . -- hP : P
+        exact Or.inl hP
+      . -- hQ : Q
+        exact Or.inr (Or.inl hQ)
+    . -- hR : R
+      exact Or.inr (Or.inr hR)
+  . -- ⊢ P ∨ Q ∨ R → (P ∨ Q) ∨ R
+    intro hPoQoR
+    -- hPoQoR : P ∨ Q ∨ R
+    -- ⊢ (P ∨ Q) ∨ R
+    cases' hPoQoR with hP hQoR
+    . -- hP : P
+      exact Or.inl (Or.inl hP)
+    . -- hQoR : Q ∨ R
+      cases' hQoR with hQ hR
+      . -- hQ : Q
+        exact Or.inl (Or.inr hQ)
+      . -- hR : R
+        exact Or.inr hR
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P ∨ Q) ∨ R ↔ P ∨ Q ∨ R := by
+  constructor
+  . -- ⊢ (P ∨ Q) ∨ R → P ∨ (Q ∨ R)
+    rintro ((hP | hQ) | hR)
+    . -- hP : P
+      exact Or.inl hP
+    . -- hQ : Q
+      exact Or.inr (Or.inl hQ)
+    . -- hR : R
+      exact Or.inr (Or.inr hR)
+  . -- ⊢ P ∨ (Q ∨ R) → (P ∨ Q) ∨ R
+    rintro (hP | (hQ | hR))
+    . -- hP : P
+      exact Or.inl (Or.inl hP)
+    . -- hQ : Q
+      exact Or.inl (Or.inr hQ)
+    . -- hR : R
+      exact Or.inr hR
+
+-- Comentario de JA: Se puede demostrar con or_assoc como se muestra a
+-- continuación.
+
+-- Proof 5
+example : (P ∨ Q) ∨ R ↔ P ∨ Q ∨ R :=
+  or_assoc
 
 -- Example 6: (P → R) → (Q → S) → P ∨ Q → R ∨ S
 
