@@ -14,23 +14,44 @@ import Mathlib.Tactic
 
 variable (P Q R S : Prop)
 
--- Example 1: P → P ∨ Q
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that
+--    P → P ∨ Q
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : P → P ∨ Q := by
   intro hP
+  -- hP : P
+  -- ⊢ P ∨ Q
   left
+  -- ⊢ P
   exact hP
 
--- Automatic proof
+-- Proof 2
 example : P → P ∨ Q := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P → P ∨ Q := by
   intro hP
+  -- hP : P
+  -- ⊢ P ∨ Q
   exact Or.inl hP
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : P → P ∨ Q :=
+  fun hP => Or.inl hP
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : P → P ∨ Q :=
+  Or.inl
 
 -- Example 2: Q → P ∨ Q
 
