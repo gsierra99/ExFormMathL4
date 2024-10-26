@@ -481,28 +481,94 @@ example : (P → R) → (Q → S) → P ∨ Q → R ∨ S := by
 example : (P → R) → (Q → S) → P ∨ Q → R ∨ S :=
   Or.imp
 
--- Example 7: (P → Q) → P ∨ R → Q ∨ R
+-- ---------------------------------------------------------------------
+-- Exercise 7. Prove that
+--    (P → Q) → (P ∨ R → Q ∨ R)
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : (P → Q) → P ∨ R → Q ∨ R := by
   intro hPQ hPoR
+  -- hPQ : P → Q
+  -- hPoR : P ∨ R
+  -- ⊢ Q ∨ R
   cases' hPoR with hP hR
-  apply hPQ at hP
-  left
-  exact hP
-  right
-  exact hR
+  . -- hP : P
+    apply hPQ at hP
+    -- hP : Q
+    left
+    -- ⊢ Q
+    exact hP
+  . -- hR : R
+    right
+    -- ⊢ R
+    exact hR
 
--- Automatic proof
+-- Proof 2
 example : (P → Q) → P ∨ R → Q ∨ R := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P → Q) → P ∨ R → Q ∨ R := by
   intro hPQ hPoR
+  -- hPQ : P → Q
+  -- hPoR : P ∨ R
+  -- ⊢ Q ∨ R
   cases' hPoR with hP hR
-  exact Or.inl (hPQ hP)
-  exact Or.inr hR
+  . -- hP : P
+    exact Or.inl (hPQ hP)
+  . -- hR : R
+    exact Or.inr hR
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P → Q) → P ∨ R → Q ∨ R := by
+  rintro hPQ (hP | hR)
+  -- hPQ : P → Q
+  -- ⊢ Q ∨ R
+  . -- hP : P
+    exact Or.inl (hPQ hP)
+  . -- hR : R
+    exact Or.inr hR
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : (P → Q) → P ∨ R → Q ∨ R := by
+  intro hPQ hPoR
+  -- hPQ : P → Q
+  -- hPoR : P ∨ R
+  -- ⊢ Q ∨ R
+  apply Or.elim hPoR
+  . -- ⊢ P → Q ∨ R
+    exact fun hP => Or.inl (hPQ hP)
+  . -- ⊢ R → Q ∨ R
+    exact Or.inr
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : (P → Q) → P ∨ R → Q ∨ R := by
+  intro hPQ hPoR
+  -- hPQ : P → Q
+  -- hPoR : P ∨ R
+  -- ⊢ Q ∨ R
+  apply Or.elim hPoR
+  . -- ⊢ P → Q ∨ R
+    exact Or.inl ∘ hPQ
+  . -- ⊢ R → Q ∨ R
+    exact Or.inr
+
+-- Comentario de JA: La 6ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : (P → Q) → P ∨ R → Q ∨ R :=
+  fun hPQ hPoR => Or.elim hPoR (Or.inl ∘ hPQ) Or.inr
 
 -- Example 8: (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S)
 
