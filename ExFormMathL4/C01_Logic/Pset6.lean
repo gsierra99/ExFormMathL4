@@ -145,10 +145,37 @@ example : P ∨ Q → (P → R) → (Q → R) → R := by
   . -- hQ : Q
     exact hQR hQ
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : P ∨ Q → (P → R) → (Q → R) → R := by
+  apply Or.rec
+  . -- ⊢ P → (P → R) → (Q → R) → R
+    rintro hP hPR -
+    -- hP : P
+    -- hPR : P → R
+    -- ⊢ R
+    exact hPR hP
+  . -- ⊢ Q → (P → R) → (Q → R) → R
+    rintro hQ - hQR
+    -- hQ : Q
+    -- hQR : Q → R
+    -- ⊢ R
+    exact hQR hQ
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : P ∨ Q → (P → R) → (Q → R) → R :=
+  Or.rec (fun hP hPR _ => hPR hP)
+         (fun hQ _ hQR => hQR hQ)
+
 -- Comentario de JA: Se puede demostrar con Or.elim como se muestra a
 -- continuación.
 
--- Proof 5
+-- Proof 7
 example : P ∨ Q → (P → R) → (Q → R) → R :=
   Or.elim
 
