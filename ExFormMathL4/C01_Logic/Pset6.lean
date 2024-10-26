@@ -92,28 +92,65 @@ example : Q → P ∨ Q :=
 example : Q → P ∨ Q :=
   Or.inr
 
--- Example 3: P ∨ Q → (P → R) → (Q → R) → R
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--    P ∨ Q → ((P → R) → ((Q → R) → R))
+-- ---------------------------------------------------------------------
 
--- Detailed proof
-example : P ∨ Q → (P → R) → (Q → R) → R := by
+-- Proof 1
+example : P ∨ Q → ((P → R) → ((Q → R) → R)) := by
   intro hPoQ hPR hQR
+  -- hPoQ : P ∨ Q
+  -- hPR : P → R
+  -- hQR : Q → R
+  -- ⊢ R
   cases' hPoQ with hP hQ
-  apply hPR at hP
-  exact hP
-  apply hQR at hQ
-  exact hQ
+  . -- hP : P
+    apply hPR at hP
+    -- hP : R
+    exact hP
+  . -- hQ : Q
+    apply hQR at hQ
+    -- hQ : R
+    exact hQ
 
--- Automatic proof
+-- Proof 2
 example : P ∨ Q → (P → R) → (Q → R) → R := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ∨ Q → (P → R) → (Q → R) → R := by
   intro hPoQ hPR hQR
+  -- hPoQ : P ∨ Q
+  -- hPR : P → R
+  -- hQR : Q → R
+  -- ⊢ R
   cases' hPoQ with hP hQ
-  exact hPR hP
-  exact hQR hQ
+  . -- hP : P
+    exact hPR hP
+  . -- hQ : Q
+    exact hQR hQ
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : P ∨ Q → (P → R) → (Q → R) → R := by
+  rintro (hP | hQ) hPR hQR
+  -- hPR : P → R
+  -- hQR : Q → R
+  -- ⊢ R
+  . -- hP : P
+    exact hPR hP
+  . -- hQ : Q
+    exact hQR hQ
+
+-- Comentario de JA: Se puede demostrar con Or.elim como se muestra a
+-- continuación.
+
+-- Proof 5
+example : P ∨ Q → (P → R) → (Q → R) → R :=
+  Or.elim
 
 -- Example 4: P ∨ Q → Q ∨ P
 
