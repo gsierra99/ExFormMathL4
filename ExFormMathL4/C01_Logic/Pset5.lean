@@ -629,6 +629,13 @@ example : (P ∧ Q) ∧ R ↔ P ∧ Q ∧ R :=
   ⟨fun ⟨⟨hP, hQ⟩, hR⟩ => ⟨hP, hQ, hR⟩,
    fun ⟨hP, ⟨hQ, hR⟩⟩ => ⟨⟨hP, hQ⟩, hR⟩⟩
 
+-- Comentario de JA: Se puede demostrar con and_assoc como se muestra a
+-- continuación.
+
+-- Proof 6
+example : (P ∧ Q) ∧ R ↔ P ∧ Q ∧ R :=
+  and_assoc
+
 -- ---------------------------------------------------------------------
 -- Exercise 7. Prove that
 --    P ↔ P ∧ True
