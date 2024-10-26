@@ -765,40 +765,110 @@ example : False ↔ P ∧ False :=
   ⟨fun hF => ⟨False.elim hF, hF⟩,
    fun ⟨_, hF⟩ => hF⟩
 
--- Example 9: (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S)
+-- ---------------------------------------------------------------------
+-- Exercise 9. Prove that
+--    (P ↔ Q) → ((R ↔ S) → (P ∧ R ↔ Q ∧ S))
+-- ---------------------------------------------------------------------
 
--- Detailed proof
-example : (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S) := by
+-- Proof 1
+example : (P ↔ Q) → ((R ↔ S) → (P ∧ R ↔ Q ∧ S)) := by
   intro hPiffQ hRiffS
+  -- hPiffQ : P ↔ Q
+  -- hRiffS : R ↔ S
+  -- ⊢ P ∧ R ↔ Q ∧ S
   cases' hPiffQ with hPQ hQP
+  -- hPQ : P → Q
+  -- hQP : Q → P
   cases' hRiffS with hRS hSR
+  -- hRS : R → S
+  -- hSR : S → R
   constructor
-  intro hPyR
-  cases' hPyR with hP hR
-  constructor
-  apply hPQ
-  exact hP
-  apply hRS
-  exact hR
-  intro hQyS
-  cases' hQyS with hQ hS
-  constructor
-  apply hQP
-  exact hQ
-  apply hSR
-  exact hS
+  . -- ⊢ P ∧ R → Q ∧ S
+    intro hPR
+    -- hPR : P ∧ R
+    -- ⊢ Q ∧ S
+    cases' hPR with hP hR
+    -- hP : P
+    -- hR : R
+    constructor
+    . -- ⊢ Q
+      apply hPQ
+      -- ⊢ P
+      exact hP
+    . -- ⊢ S
+      apply hRS
+      -- ⊢ R
+      exact hR
+  . -- ⊢ Q ∧ S → P ∧ R
+    intro hQS
+    -- hQS : Q ∧ S
+    -- ⊢ P ∧ R
+    cases' hQS with hQ hS
+    -- hQ : Q
+    -- hS : S
+    constructor
+    . -- ⊢ P
+      apply hQP
+      -- ⊢ Q
+      exact hQ
+    . -- ⊢ R
+      apply hSR
+      -- ⊢ S
+      exact hS
 
--- Automatic proof
+-- Proof 2
 example : (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S) := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S) := by
   intro hPiffQ hRiffS
+  -- hPiffQ : P ↔ Q
+  -- hRiffS : R ↔ S
+  -- ⊢ P ∧ R ↔ Q ∧ S
   cases' hPiffQ with hPQ hQP
+  -- hPQ : P → Q
+  -- hQP : Q → P
   cases' hRiffS with hRS hSR
-  exact ⟨fun hPyR => ⟨hPQ hPyR.left, hRS hPyR.right⟩, fun hQyS => ⟨hQP hQyS.left, hSR hQyS.right⟩⟩
+  -- hRS : R → S
+  -- hSR : S → R
+  exact ⟨fun hPR => ⟨hPQ hPR.left, hRS hPR.right⟩,
+         fun hQS => ⟨hQP hQS.left, hSR hQS.right⟩⟩
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S) := by
+  rintro ⟨hPQ, hQP⟩ ⟨hRS, hSR⟩
+  -- hPQ : P → Q
+  -- hQP : Q → P
+  -- hRS : R → S
+  -- hSR : S → R
+  -- ⊢ P ∧ R ↔ Q ∧ S
+  exact ⟨fun ⟨hP, hR⟩ => ⟨hPQ hP, hRS hR⟩,
+         fun ⟨hQ, hS⟩ => ⟨hQP hQ, hSR hS⟩⟩
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S) :=
+  fun ⟨hPQ, hQP⟩ ⟨hRS, hSR⟩ => ⟨fun ⟨hP, hR⟩ => ⟨hPQ hP, hRS hR⟩,
+                                fun ⟨hQ, hS⟩ => ⟨hQP hQ, hSR hS⟩⟩
+
+-- Comentario de JA: Se puede demostrar con rw como se muestra a
+-- continuación.
+
+-- Proof 6
+example : (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S) := by
+  intro hPQ hRS
+  -- hPQ : P ↔ Q
+  -- hRS : R ↔ S
+  -- ⊢ P ∧ R ↔ Q ∧ S
+  rw [hPQ]
+  -- ⊢ Q ∧ R ↔ Q ∧ S
+  rw [hRS]
 
 -- Example 10: ¬(P ↔ ¬P)
 
