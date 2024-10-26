@@ -152,28 +152,84 @@ example : P ∨ Q → (P → R) → (Q → R) → R := by
 example : P ∨ Q → (P → R) → (Q → R) → R :=
   Or.elim
 
--- Example 4: P ∨ Q → Q ∨ P
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that
+--    P ∨ Q → Q ∨ P
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : P ∨ Q → Q ∨ P := by
   intro hPoQ
+  -- hPoQ : P ∨ Q
+  -- ⊢ Q ∨ P
   cases' hPoQ with hP hQ
-  right
-  exact hP
-  left
-  exact hQ
+  . -- hP : P
+    right
+    -- ⊢ P
+    exact hP
+  . -- hQ : Q
+    left
+    -- ⊢ Q
+    exact hQ
 
--- Automatic proof
+-- Proof 2
 example : P ∨ Q → Q ∨ P := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : P ∨ Q → Q ∨ P := by
   intro hPoQ
+  -- hPoQ : P ∨ Q
+  -- ⊢ Q ∨ P
   cases' hPoQ with hP hQ
-  exact Or.inr hP
-  exact Or.inl hQ
+  . -- hP : P
+    exact Or.inr hP
+  . -- hQ : Q
+    exact Or.inl hQ
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : P ∨ Q → Q ∨ P := by
+  rintro (hP | hQ)
+  -- ⊢ Q ∨ P
+  . -- hP : P
+    exact Or.inr hP
+  . -- hQ : Q
+    exact Or.inl hQ
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : P ∨ Q → Q ∨ P := by
+  apply Or.rec
+  . -- P → Q ∨ P
+    exact Or.inr
+  . -- ⊢ Q → Q ∨ P
+    exact Or.inl
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : P ∨ Q → Q ∨ P :=
+  Or.rec Or.inr Or.inl
+
+-- Comentario de JA: La 6ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 7
+example : P ∨ Q → Q ∨ P :=
+  .rec .inr .inl
+
+-- Comentario de JA: Se puede demostrar con Or.symm como se muestra a
+-- continuación.
+
+-- Proof 8
+example : P ∨ Q → Q ∨ P :=
+  Or.symm
 
 -- Example 5: (P ∨ Q) ∨ R ↔ P ∨ Q ∨ R
 
