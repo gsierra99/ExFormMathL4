@@ -688,32 +688,82 @@ example : P ↔ P ∧ True :=
   ⟨fun hP => ⟨hP, trivial⟩,
    fun ⟨hP, _⟩ => hP⟩
 
--- Example 8: False ↔ P ∧ False
+-- ---------------------------------------------------------------------
+-- Exercise 8. Prove that
+--    False ↔ P ∧ False
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : False ↔ P ∧ False := by
   constructor
-  intro hF
-  constructor
-  exfalso
-  exact hF
-  exact hF
-  intro hPyF
-  cases' hPyF with hP hF
-  exact hF
+  . -- ⊢ False → P ∧ False
+    intro hF
+    -- hF : False
+    -- ⊢ P ∧ False
+    constructor
+    . -- ⊢ P
+      exfalso
+      -- ⊢ False
+      exact hF
+    . -- ⊢ False
+      exact hF
+  . -- ⊢ P ∧ False → False
+    intro hPF
+    -- hPF : P ∧ False
+    -- ⊢ False
+    cases' hPF with hP hF
+    -- hP : P
+    -- hF : False
+    exact hF
 
--- Automatic proof
+-- Proof 2
 example : False ↔ P ∧ False := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : False ↔ P ∧ False := by
   constructor
-  intro hF
-  exact ⟨hF.elim, hF⟩
-  intro hPyF
-  exact hPyF.right.elim
+  . -- ⊢ False → P ∧ False
+    intro hF
+    -- hF : False
+    -- ⊢ P ∧ False
+    exact ⟨hF.elim, hF⟩
+  . -- P ∧ False → False
+    intro hPF
+    -- hPF : P ∧ False
+    -- ⊢ False
+    exact hPF.right.elim
 
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : False ↔ P ∧ False := by
+  constructor
+  . -- ⊢ False → P ∧ False
+    intro hF
+    -- hF : False
+    -- ⊢ P ∧ False
+    constructor
+    . -- ⊢ P
+      apply False.elim
+      -- ⊢ False
+      exact hF
+    . -- ⊢ False
+      exact hF
+  . -- ⊢ P ∧ False → False
+    rintro ⟨-, hF⟩
+    -- hF : False
+    -- ⊢ False
+    exact hF
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : False ↔ P ∧ False :=
+  ⟨fun hF => ⟨False.elim hF, hF⟩,
+   fun ⟨_, hF⟩ => hF⟩
 
 -- Example 9: (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S)
 
