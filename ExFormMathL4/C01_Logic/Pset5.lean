@@ -870,25 +870,66 @@ example : (P ↔ Q) → (R ↔ S) → (P ∧ R ↔ Q ∧ S) := by
   -- ⊢ Q ∧ R ↔ Q ∧ S
   rw [hRS]
 
--- Example 10: ¬(P ↔ ¬P)
+-- ---------------------------------------------------------------------
+-- Exercise 10. Prove that
+--    ¬(P ↔ ¬P)
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : ¬(P ↔ ¬P) := by
   intro hPiffnP
+  -- hPiffnP : P ↔ ¬P
+  -- ⊢ False
   cases' hPiffnP with hPtonP hnPtoP
+  -- hPtonP : P → ¬P
+  -- hnPtoP : ¬P → P
   have hP : P := by
     apply hnPtoP
+    -- ⊢ ¬P
     intro hP
+    -- hP : P
+    -- ⊢ False
     exact hPtonP hP hP
   exact hPtonP hP hP
 
--- Automatic proof
+-- Proof 2
 example : ¬(P ↔ ¬P) := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : ¬(P ↔ ¬P) := by
   intro hPiffnP
+    -- hPiffnP : P ↔ ¬P
+    -- ⊢ False
   cases' hPiffnP with hPtonP hnPtoP
+    -- hPtonP : P → ¬P
+    -- hnPtoP : ¬P → P
   have hP : P := hnPtoP (fun hP => hPtonP hP hP)
   exact hPtonP hP hP
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : ¬(P ↔ ¬P) := by
+  rintro ⟨hPtonP, hnPtoP⟩
+  -- hPtonP : P → ¬P
+  -- hnPtoP : ¬P → P
+  -- ⊢ False
+  exact hPtonP (hnPtoP (fun hP => hPtonP hP hP))
+               (hnPtoP (fun hP => hPtonP hP hP))
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : ¬(P ↔ ¬P) :=
+  fun ⟨hPtonP, hnPtoP⟩ => hPtonP (hnPtoP (fun hP => hPtonP hP hP))
+                                 (hnPtoP (fun hP => hPtonP hP hP))
+
+-- Comentario de JA: Se puede demostrar con iff_not_self como se muestra
+-- a continuación.
+
+-- Proof 6
+example : ¬(P ↔ ¬P) :=
+  iff_not_self
