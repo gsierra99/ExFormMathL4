@@ -570,43 +570,97 @@ example : (P → Q) → P ∨ R → Q ∨ R := by
 example : (P → Q) → P ∨ R → Q ∨ R :=
   fun hPQ hPoR => Or.elim hPoR (Or.inl ∘ hPQ) Or.inr
 
--- Example 8: (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S)
+-- ---------------------------------------------------------------------
+-- Exercise 8. Prove that
+--    (P ↔ R) → ((Q ↔ S) → (P ∨ Q ↔ R ∨ S))
+-- ---------------------------------------------------------------------
 
--- Detailed proof
-example : (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S) := by
+-- Proof 1
+example : (P ↔ R) → ((Q ↔ S) → (P ∨ Q ↔ R ∨ S)) := by
   intro hPiffR hQiffS
+  -- hPiffR : P ↔ R
+  -- hQiffS : Q ↔ S
+  -- ⊢ P ∨ Q ↔ R ∨ S
   constructor
-  intro hPoQ
-  cases' hPoQ with hP hQ
-  cases' hPiffR with hPR hRP
-  apply hPR at hP
-  left
-  exact hP
-  cases' hQiffS with hQS hSQ
-  apply hQS at hQ
-  right
-  exact hQ
-  intro hRoS
-  cases' hRoS with hR hS
-  cases' hPiffR with hPR hRP
-  apply hRP at hR
-  left
-  exact hR
-  cases' hQiffS with hQS hSQ
-  apply hSQ at hS
-  right
-  exact hS
+  . -- ⊢ P ∨ Q → R ∨ S
+    intro hPoQ
+    -- hPoQ : P ∨ Q
+    -- ⊢ R ∨ S
+    cases' hPoQ with hP hQ
+    . -- hP : P
+      cases' hPiffR with hPR hRP
+      -- hPR : P → R
+      -- hRP : R → P
+      apply hPR at hP
+      -- hP : R
+      left
+      -- ⊢ R
+      exact hP
+    . -- hQ : Q
+      cases' hQiffS with hQS hSQ
+      -- hQS : Q → S
+      -- hSQ : S → Q
+      apply hQS at hQ
+      -- hQ : S
+      right
+      -- ⊢ S
+      exact hQ
+  . -- ⊢ R ∨ S → P ∨ Q
+    intro hRoS
+    -- hRoS : R ∨ S
+    -- ⊢ P ∨ Q
+    cases' hRoS with hR hS
+    . -- hR : R
+      cases' hPiffR with hPR hRP
+      -- hPR : P → R
+      -- hRP : R → P
+      apply hRP at hR
+      -- hR : P
+      left
+      -- ⊢ P
+      exact hR
+    . -- hS : S
+      cases' hQiffS with hQS hSQ
+      -- hQS : Q → S
+      -- hSQ : S → Q
+      apply hSQ at hS
+      -- hS : Q
+      right
+      -- ⊢ Q
+      exact hS
 
--- Automatic proof
+-- Proof 2
 example : (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S) := by
   tauto
 
--- Balanced proof
-example : (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S) :=
-  by
+-- Proof 3
+example : (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S) := by
   intro h1 h2
+  -- h1 : P ↔ R
+  -- h2 : Q ↔ S
+  -- ⊢ P ∨ Q ↔ R ∨ S
   rw [h1, h2]
 
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S) :=
+  fun h1 h2 => by rw [h1, h2]
+
+-- Comentario de JA: Se puede demostrar con or_congr como se muestra a
+-- continuación.
+
+-- Proof 5
+example : (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S) :=
+  or_congr
+
+-- Comentario de JA: Se puede demostrar con Iff.or como se muestra a
+-- continuación.
+
+-- Proof 5
+example : (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S) :=
+  Iff.or
 
 -- Example 9: ¬(P ∨ Q) ↔ ¬P ∧ ¬Q
 
