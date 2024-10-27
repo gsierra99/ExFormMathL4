@@ -4,7 +4,8 @@
 -- Seville, October 27, 2024
 -- ---------------------------------------------------------------------
 
--- In this problem set, we study the limits of sequences in Lean.
+-- In this problem set, we give the standard definition of the limit of
+-- a sequence and prove some theorems about the.
 --
 -- It is based on [Section01logic/Sheet4.lean](https://tinyurl.com/25sc8h3b)
 -- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
@@ -13,10 +14,25 @@ import Mathlib.Tactic
 
 namespace Section2sheet3
 
+-- ---------------------------------------------------------------------
+-- Exercise 1. Define the function
+--    f : ℕ → ℝ
+-- such that f(n) is n² + 3.
+-- ---------------------------------------------------------------------
+
 def f : ℕ → ℝ := fun n ↦ n ^ 2 + 3
+
+-- ---------------------------------------------------------------------
+-- Exercise 2. Define the function
+--    TendsTo : (ℕ → ℝ) → ℝ → Prop
+-- such that (TendsTo a t) means that the sequence a tends to t; that
+-- is, the limit of a(n) as n tends to infinity is t.
+-- ---------------------------------------------------------------------
 
 def TendsTo (a : ℕ → ℝ) (t : ℝ) : Prop :=
   ∀ ε > 0, ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
+
+
 
 theorem tendsTo_def {a : ℕ → ℝ} {t : ℝ} :
     TendsTo a t ↔ ∀ ε, 0 < ε → ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε := by
