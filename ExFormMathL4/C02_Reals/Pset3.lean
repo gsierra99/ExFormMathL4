@@ -1,3 +1,14 @@
+-- C02_Reals/Pset3.lean
+-- Problem set 3: Limits of sequences in Lean.
+-- Gabriel Sierra Gallego.
+-- Seville, October 27, 2024
+-- ---------------------------------------------------------------------
+
+-- In this problem set, we study the limits of sequences in Lean.
+--
+-- It is based on [Section01logic/Sheet4.lean](https://tinyurl.com/25sc8h3b)
+-- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
+
 import Mathlib.Tactic
 
 namespace Section2sheet3
