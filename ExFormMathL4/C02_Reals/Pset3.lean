@@ -32,10 +32,15 @@ def f : ℕ → ℝ := fun n ↦ n ^ 2 + 3
 def TendsTo (a : ℕ → ℝ) (t : ℝ) : Prop :=
   ∀ ε > 0, ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
 
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that the sequence a tends to t if and only if
+--    ∀ ε, 0 < ε → ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
+-- ---------------------------------------------------------------------
 
-
-theorem tendsTo_def {a : ℕ → ℝ} {t : ℝ} :
-    TendsTo a t ↔ ∀ ε, 0 < ε → ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε := by
+theorem tendsTo_def
+  {a : ℕ → ℝ}
+  {t : ℝ}
+  : TendsTo a t ↔ ∀ ε, 0 < ε → ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε := by
   rfl
 
 theorem tendsTo_thirtyseven : TendsTo (fun _n ↦ 37) 37 := by
