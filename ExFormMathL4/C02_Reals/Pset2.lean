@@ -19,9 +19,16 @@ import Mathlib.Tactic
 example (x y : ℝ) : (x + y) ^ 2 = x ^ 2 + 2 * x * y + y ^ 2 := by
   ring
 
+-- ---------------------------------------------------------------------
+-- Exercise 2. Prove that
+--    (∀ a, b ∈ ℝ)(∃ x ∈ ℝ)[(a+b)³ = a³ + xa²b + 3ab² + b³
+-- ---------------------------------------------------------------------
+
 example : ∀ a b : ℝ, ∃ x, (a + b) ^ 3 = a ^ 3 + x * a ^ 2 * b + 3 * a * b ^ 2 + b ^ 3 := by
   intro a b
+  -- ⊢ ∃ x, (a + b) ^ 3 = a ^ 3 + x * a ^ 2 * b + 3 * a * b ^ 2 + b ^ 3
   use 3
+  -- ⊢ (a + b) ^ 3 = a ^ 3 + 3 * a ^ 2 * b + 3 * a * b ^ 2 + b ^ 3
   ring
 
 example : ∃ x : ℝ, ∀ y, y + y = x * y := by
