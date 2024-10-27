@@ -14,6 +14,10 @@ import Mathlib.Tactic
 
 namespace Section2sheet3
 
+variable (c : ℝ)
+variable {t : ℝ}
+variable {a : ℕ → ℝ}
+
 -- ---------------------------------------------------------------------
 -- Exercise 1. Define the function
 --    f : ℕ → ℝ
@@ -25,16 +29,16 @@ def f : ℕ → ℝ := fun n ↦ n ^ 2 + 3
 -- ---------------------------------------------------------------------
 -- Exercise 2. Define the function
 --    TendsTo : (ℕ → ℝ) → ℝ → Prop
--- such that (TendsTo a t) means that the sequence a tends to t; that
--- is, the limit of a(n) as n tends to infinity is t.
+-- such that `TendsTo a t` means that the sequence `a` tends to `t`; that
+-- is, the limit of `a(n)` as `n` tends to infinity is `t`.
 -- ---------------------------------------------------------------------
 
 def TendsTo (a : ℕ → ℝ) (t : ℝ) : Prop :=
   ∀ ε > 0, ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
 
 -- ---------------------------------------------------------------------
--- Exercise 3. Prove that t is the limit of the sequence a if and only
--- if
+-- Exercise 3. Prove that `t` is the limit of the sequence `a` if and
+-- only if
 --    ∀ ε, 0 < ε → ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
 -- ---------------------------------------------------------------------
 
@@ -105,7 +109,7 @@ by
 
 -- ---------------------------------------------------------------------
 -- Exercise 5. Prove that the limit of the constant sequence with value
--- c is c.
+-- `c` is `c`.
 -- ---------------------------------------------------------------------
 
 -- Proof in natural language
@@ -125,7 +129,6 @@ by
 
 -- Proof 1
 example
-  (c : ℝ)
   : TendsTo (fun _n ↦ c) c :=
 by
   intro ε hε
@@ -147,7 +150,6 @@ by
 
 -- Proof 2
 theorem tendsTo_const
-  (c : ℝ)
   : TendsTo (fun _n ↦ c) c :=
 by
   intro ε hε
@@ -168,19 +170,105 @@ by
   -- ⊢ 0 < ε
   exact hε
 
-theorem tendsTo_add_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-    TendsTo (fun n => a n + c) (t + c) := by
-  rw [tendsTo_def] at h
-  rw [tendsTo_def]
-  intro ε hε
-  specialize h ε hε
-  cases' h with B hB
-  use B
-  intro n hn
-  specialize hB n hn
-  norm_num
-  exact hB
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that if `a(n)` tends to `t` then `a(n) + c` tends
+-- to `t + c`.
+-- ---------------------------------------------------------------------
 
+-- Proof in natural language
+-- ================================
+
+-- Let ε ∈ ℝ such that ε > 0. We need to prove that
+--    (∃ N)(∀ n ≥ N)[|(a(n) + c) - (t + c)| < ε]                     (1)
+-- Since the limit of the sequence a(i) is t, there exists a k such that
+--    (∀ n ≥ k)[|a(n) - t| < ε]                                      (2)
+-- Let's see that (1) holds with k; that is, that
+--    (∀ n ≥ k)[|(a(n) + c) - (t + c)| < ε]
+-- Let n ≥ k. Then, by (2),
+--    |a(n) - t| < ε                                                 (3)
+-- and, consequently,
+--    |(a(n) + c) - (t + c)| = |a(n) - t|
+--                           < ε            [by (3)]
+
+-- Proofs with Lean4
+-- =================
+
+-- Proof 1
+example
+  (h : TendsTo a t)
+  : TendsTo (fun n => a n + c) (t + c) :=
+by
+  intros ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => a n + c) n - (t + c)| < ε
+  dsimp
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n + c - (t + c)| < ε
+  obtain ⟨k, hk⟩ := h ε hε
+  -- k : ℕ
+  -- hk : ∀ (n : ℕ), k ≤ n → |a n - t| < ε
+  use k
+  -- ⊢ ∀ (n : ℕ), k ≤ n → |a n + c - (t + c)| < ε
+  intros n hn
+  -- n : ℕ
+  -- hn : k ≤ n
+  calc |a n + c - (t + c)|
+     = |a n - t|           := by norm_num
+   _ < ε                   := hk n hn
+
+-- Proof 2
+example
+  (h : TendsTo a t)
+  : TendsTo (fun n => a n + c) (t + c) :=
+by
+  intros ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ N, ∀ (n : ℕ), n ≥ N → |(fun i => u i + c) n - (a + c)| < ε
+  dsimp
+  -- ⊢ ∃ N, ∀ (n : ℕ), n ≥ N → |u n + c - (a + c)| < ε
+  obtain ⟨k, hk⟩ := h ε hε
+  -- k : ℕ
+  -- hk : ∀ (n : ℕ), n ≥ k → |u n - a| < ε
+  use k
+  -- ⊢ ∀ (n : ℕ), n ≥ k → |u n + c - (a + c)| < ε
+  intros n hn
+  -- n : ℕ
+  -- hn : n ≥ k
+  -- ⊢ |u n + c - (a + c)| < ε
+  convert hk n hn using 2
+  -- ⊢ u n + c - (a + c) = u n - a
+  ring
+
+-- Proof 3
+theorem tendsTo_add_const
+  (h : TendsTo a t)
+  : TendsTo (fun n => a n + c) (t + c) :=
+by
+  rw [tendsTo_def] at h
+  -- h : ∀ (ε : ℝ), 0 < ε → ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  rw [tendsTo_def]
+  -- ⊢ ∀ (ε : ℝ), 0 < ε → ∃ B, ∀ (n : ℕ), B ≤ n → |a n + c - (t + c)| < ε
+  intro ε hε
+  -- ε : ℝ
+  -- hε : 0 < ε
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n + c - (t + c)| < ε
+  specialize h ε hε
+  -- h : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  cases' h with B hB
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  use B
+  -- ⊢ ∀ (n : ℕ), B ≤ n → |a n + c - (t + c)| < ε
+  intro n hn
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |a n + c - (t + c)| < ε
+  specialize hB n hn
+  -- hB : |a n - t| < ε
+  norm_num
+  -- ⊢ |a n - t| < ε
+  exact hB
 
 example {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n => -a n) (-t) := by
   rw [tendsTo_def] at ha
