@@ -9,3 +9,6 @@ This repository contains solutions to the exercises of the course [Formalising M
   + [4: The conjunction](./ExFormMathL4/C01_Logic/Pset4.lean)
   + [5: The bi-implication](./ExFormMathL4/C01_Logic/Pset5.lean)
   + [6: The disjunction](./ExFormMathL4/C01_Logic/Pset6.lean)
+
++ 2: Reals numbers
+  + [1: Equalities and inequalities between numerical expressions](./ExFormMathL4/C02_Reals/Pset1.lean)
