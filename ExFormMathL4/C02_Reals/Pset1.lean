@@ -1,7 +1,7 @@
 -- C02_Reals/Pset1.lean
 -- Problem set 1: Equalities and inequalities between numerical expressions.
 -- Gabriel Sierra Gallego.
--- Seville, October 27, 2024
+-- Seville, October 26, 2024
 -- ---------------------------------------------------------------------
 
 -- In this problem set, we study how to work with basic equalities and
