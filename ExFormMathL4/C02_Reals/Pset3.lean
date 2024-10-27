@@ -33,22 +33,73 @@ def TendsTo (a : ℕ → ℝ) (t : ℝ) : Prop :=
   ∀ ε > 0, ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
 
 -- ---------------------------------------------------------------------
--- Exercise 3. Prove that the sequence a tends to t if and only if
+-- Exercise 3. Prove that t is the limit of the sequence a if and only
+-- if
 --    ∀ ε, 0 < ε → ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
 -- ---------------------------------------------------------------------
 
 theorem tendsTo_def
   {a : ℕ → ℝ}
   {t : ℝ}
-  : TendsTo a t ↔ ∀ ε, 0 < ε → ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε := by
+  : TendsTo a t ↔ ∀ ε, 0 < ε → ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε :=
+by
   rfl
 
-theorem tendsTo_thirtyseven : TendsTo (fun _n ↦ 37) 37 := by
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that the limit of the constant sequence with value
+-- 37 is 37.
+-- ---------------------------------------------------------------------
+
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Tenemos que demostrar que para cada ε ∈ ℝ tal que ε > 0, existe un
+-- N ∈ ℕ, tal que (∀n ∈ ℕ)[n ≥ N → |37 - 37| < ε]. Basta tomar N como
+-- 1, ya que para todo n ≥ N se tiene
+--    |37 - 37| = |0|
+--              = 0
+--              < ε
+
+-- Demostraciones con Lean4
+-- ========================
+
+-- Proof 1
+example :
+  TendsTo (fun _n ↦ 37) 37 :=
+by
   rw [tendsTo_def]
+  -- ⊢ ∀ (ε : ℝ), 0 < ε → ∃ B, ∀ (n : ℕ), B ≤ n → |37 - 37| < ε
   intro ε hε
-  use 100
+  -- ε : ℝ
+  -- hε : 0 < ε
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |37 - 37| < ε
+  use 1
+  -- ⊢ ∀ (n : ℕ), 100 ≤ n → |37 - 37| < ε
   intro n _hn
+  -- n : ℕ
+  -- _hn : 1 ≤ n
+  -- ⊢ |37 - 37| < ε
+  show |37 - 37| < ε
+  calc |37 - 37| = |(0 : ℝ)| := by {congr ; exact sub_self 37}
+               _ = 0         := abs_zero
+               _ < ε         := hε
+
+-- Proof 2
+theorem tendsTo_thirtyseven :
+  TendsTo (fun _n ↦ 37) 37 :=
+by
+  intro ε hε
+  -- ε : ℝ
+  -- hε : 0 < ε
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |37 - 37| < ε
+  use 100
+  -- ⊢ ∀ (n : ℕ), 100 ≤ n → |37 - 37| < ε
+  intro n _hn
+  -- n : ℕ
+  -- _hn : 100 ≤ n
+  -- ⊢ |37 - 37| < ε
   norm_num
+  -- ⊢ 0 < ε
   exact hε
 
 theorem tendsTo_const (c : ℝ) : TendsTo (fun _n ↦ c) c := by
