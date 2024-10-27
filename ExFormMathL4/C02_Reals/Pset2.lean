@@ -1,3 +1,14 @@
+-- C02_Reals/Pset2.lean
+-- Problem set 2: Algebra in the real numbers.
+-- Gabriel Sierra Gallego.
+-- Seville, October 27, 2024
+-- ---------------------------------------------------------------------
+
+-- In this problem set, we study how to do algebra in the real numbers.
+--
+-- It is based on [Section01logic/Sheet4.lean](https://tinyurl.com/25sc8h3b)
+-- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
+
 import Mathlib.Tactic
 
 example (x y : ℝ) : (x + y) ^ 2 = x ^ 2 + 2 * x * y + y ^ 2 := by
