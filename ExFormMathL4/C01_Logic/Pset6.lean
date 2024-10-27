@@ -662,43 +662,144 @@ example : (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S) :=
 example : (P ↔ R) → (Q ↔ S) → (P ∨ Q ↔ R ∨ S) :=
   Iff.or
 
--- Example 9: ¬(P ∨ Q) ↔ ¬P ∧ ¬Q
+-- ---------------------------------------------------------------------
+-- Exercise 9. Prove that
+--    ¬(P ∨ Q) ↔ ¬P ∧ ¬Q
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q := by
   constructor
-  intro hPoQ
-  constructor
-  intro hP
-  apply hPoQ
-  left
-  exact hP
-  intro hQ
-  apply hPoQ
-  right
-  exact hQ
-  intro hPAnQ
-  intro hPoQ
-  cases' hPAnQ with hP hQ
-  cases' hPoQ with hP hQ
-  contradiction
-  contradiction
+  . -- ⊢ ¬(P ∨ Q) → ¬P ∧ ¬Q
+    intro hPoQ
+    -- hPoQ : ¬(P ∨ Q)
+    -- ⊢ ¬P ∧ ¬Q
+    constructor
+    . -- ⊢ ¬P
+      intro hP
+      -- hP : P
+      -- ⊢ False
+      apply hPoQ
+      -- ⊢ P ∨ Q
+      left
+      -- ⊢ P
+      exact hP
+    . -- ⊢ ¬Q
+      intro hQ
+      -- hQ : Q
+      -- ⊢ False
+      apply hPoQ
+      -- ⊢ P ∨ Q
+      right
+      -- ⊢ Q
+      exact hQ
+  . -- ⊢ ¬P ∧ ¬Q → ¬(P ∨ Q)
+    intro hPAnQ
+    -- hPAnQ : ¬P ∧ ¬Q
+    -- ⊢ ¬(P ∨ Q)
+    intro hPoQ
+    -- hPoQ : P ∨ Q
+    -- ⊢ False
+    cases' hPAnQ with hP hQ
+    -- hP : ¬P
+    -- hQ : ¬Q
+    cases' hPoQ with hP hQ
+    . -- hP : P
+      contradiction
+    . -- hQ : Q
+      contradiction
 
-
--- Automatic proof
+-- Proof 2
 example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q := by
   tauto
 
--- Balanced proof
+-- Proof 3
 example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q := by
   constructor
-  intro hPoQ
-  exact ⟨fun hP => hPoQ (Or.inl hP), fun hQ => hPoQ (Or.inr hQ)⟩
-  intro hPynQ
-  intro hPoQ
-  cases' hPoQ with hP hQ
-  exact hPynQ.left hP
-  exact hPynQ.right hQ
+  . -- ⊢ ¬(P ∨ Q) → ¬P ∧ ¬Q
+    intro hPoQ
+    -- hPoQ : ¬(P ∨ Q)
+    -- ⊢ ¬P ∧ ¬Q
+    exact ⟨fun hP => hPoQ (Or.inl hP),
+           fun hQ => hPoQ (Or.inr hQ)⟩
+  . -- ⊢ ¬P ∧ ¬Q → ¬(P ∨ Q)
+    intro hPynQ
+    -- hPynQ : ¬P ∧ ¬Q
+    -- ⊢ ¬(P ∨ Q)
+    intro hPoQ
+    -- hPoQ : P ∨ Q
+    -- ⊢ False
+    cases' hPoQ with hP hQ
+    . -- hP : P
+      exact hPynQ.left hP
+    . -- hQ : Q
+      exact hPynQ.right hQ
+
+-- Comentario de JA: La 3ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q := by
+  constructor
+  . -- ⊢ ¬(P ∨ Q) → ¬P ∧ ¬Q
+    intro hPoQ
+    -- hPoQ : ¬(P ∨ Q)
+    -- ⊢ ¬P ∧ ¬Q
+    exact ⟨hPoQ ∘ Or.inl, hPoQ ∘ Or.inr⟩
+  . -- ⊢ ¬P ∧ ¬Q → ¬(P ∨ Q)
+    rintro ⟨hnP, hnQ⟩ (hP | hQ)
+    -- hnP : ¬P
+    -- hnQ : ¬Q
+    -- ⊢ False
+    . -- hP : P
+      exact hnP hP
+    . -- hQ : Q
+      exact hnQ hQ
+
+-- Comentario de JA: La 4ª demostración se puede modificar como se
+-- muestra a continuación.
+
+-- Proof 5
+example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q := by
+  constructor
+  . -- ⊢ ¬(P ∨ Q) → ¬P ∧ ¬Q
+    intro hPoQ
+    -- hPoQ : ¬(P ∨ Q)
+    -- ⊢ ¬P ∧ ¬Q
+    exact ⟨hPoQ ∘ Or.inl, hPoQ ∘ Or.inr⟩
+  . -- ⊢ ¬P ∧ ¬Q → ¬(P ∨ Q)
+    rintro ⟨hnP, hnQ⟩ h
+    -- hnP : ¬P
+    -- hnQ : ¬Q
+    -- h : P ∨ Q
+    -- ⊢ False
+    apply Or.elim h
+    . -- ⊢ P → False
+      exact hnP
+    . -- ⊢ Q → False
+      exact hnQ
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q :=
+  ⟨fun hPoQ => ⟨hPoQ ∘ Or.inl, hPoQ ∘ Or.inr⟩,
+   fun ⟨hnP, hnQ⟩ h => Or.elim h hnP hnQ⟩
+
+-- Comentario de JA: Se puede demostrar con not_or como se muestra a
+-- continuación.
+
+-- Proof 7
+example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q :=
+  not_or
+
+-- Comentario de JA: Se puede demostrar con or_imp como se muestra a
+-- continuación.
+
+-- Proof 8
+example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q :=
+  or_imp
 
 -- Example 10: ¬(P ∧ Q) ↔ ¬P ∨ ¬Q
 
