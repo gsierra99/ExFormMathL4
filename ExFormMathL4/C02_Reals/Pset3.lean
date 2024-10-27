@@ -50,18 +50,19 @@ by
 -- 37 is 37.
 -- ---------------------------------------------------------------------
 
--- Demostración en lenguaje natural
--- ================================
+-- Proof in natural language
+-- =========================
 
--- Tenemos que demostrar que para cada ε ∈ ℝ tal que ε > 0, existe un
--- N ∈ ℕ, tal que (∀n ∈ ℕ)[n ≥ N → |37 - 37| < ε]. Basta tomar N como
--- 1, ya que para todo n ≥ N se tiene
+-- We need to prove that for every ε ∈ ℝ such that ε > 0, there exists an
+-- N ∈ ℕ such that
+--    (∀n ∈ ℕ)[n ≥ N → |37 - 37| < ε].
+-- It is sufficient to take N as 1, since for all n ≥ N we have
 --    |37 - 37| = |0|
 --              = 0
 --              < ε
 
--- Demostraciones con Lean4
--- ========================
+-- Proofs with Lean4
+-- =================
 
 -- Proof 1
 example :
@@ -102,13 +103,69 @@ by
   -- ⊢ 0 < ε
   exact hε
 
-theorem tendsTo_const (c : ℝ) : TendsTo (fun _n ↦ c) c := by
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that the limit of the constant sequence with value
+-- c is c.
+-- ---------------------------------------------------------------------
+
+-- Proof in natural language
+-- =========================
+
+-- We need to prove that for every ε ∈ ℝ such that ε > 0, there exists an
+-- N ∈ ℕ such that
+--    (∀n ∈ ℕ)[n ≥ N → |(fun _n => c) n - c| < ε].
+-- It is sufficient to take N as 1, since for all n ≥ N we have
+--    |(fun _n => c) n - c| = |c - c|
+--                          = |0|
+--                          = 0
+--                          < ε
+
+-- Proofs with Lean4
+-- =================
+
+-- Proof 1
+example
+  (c : ℝ)
+  : TendsTo (fun _n ↦ c) c :=
+by
   intro ε hε
-  dsimp only
-  use 37
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun _n => c) n - c| < ε
+  use 1
+  -- ⊢ ∀ (n : ℕ), 1 ≤ n → |(fun _n => c) n - c| < ε
   intro n _hn
+  -- n : ℕ
+  -- _hn : 1 ≤ n
+  -- ⊢ |(fun _n => c) n - c| < ε
+  show |(fun _n => c) n - c| < ε
+  calc |(fun _n => c) n - c|
+     = |c - c|   := by rfl
+   _ = |(0 : ℝ)| := by {congr ; exact sub_self c}
+   _ = 0         := abs_zero
+   _ < ε         := hε
+
+-- Proof 2
+theorem tendsTo_const
+  (c : ℝ)
+  : TendsTo (fun _n ↦ c) c :=
+by
+  intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun _n => c) n - c| < ε
+  dsimp only
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |c - c| < ε
+  use 1
+  -- ⊢ ∀ (n : ℕ), 1 ≤ n → |c - c| < ε
+  intro n _hn
+  -- n : ℕ
+  -- _hn : 1 ≤ n
+  -- ⊢ |c - c| < ε
   ring_nf
+  -- ⊢ |0| < ε
   norm_num
+  -- ⊢ 0 < ε
   exact hε
 
 theorem tendsTo_add_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
