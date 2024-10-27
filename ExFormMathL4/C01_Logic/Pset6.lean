@@ -801,28 +801,103 @@ example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q :=
 example : ¬(P ∨ Q) ↔ ¬P ∧ ¬Q :=
   or_imp
 
--- Example 10: ¬(P ∧ Q) ↔ ¬P ∨ ¬Q
+-- ---------------------------------------------------------------------
+-- Exercise 10. Prove that
+--    ¬(P ∧ Q) ↔ ¬P ∨ ¬Q
+-- ---------------------------------------------------------------------
 
--- Detailed proof
+-- Proof 1
 example : ¬(P ∧ Q) ↔ ¬P ∨ ¬Q := by
-
-  sorry
+  constructor
+  · -- ⊢ ¬(P ∧ Q) → ¬P ∨ ¬Q
+    intro h
+    -- h : ¬(P ∧ Q)
+    -- ⊢ ¬P ∨ ¬Q
+    by_cases hP : P
+    · -- hP : P
+      right
+      -- ⊢ ¬Q
+      intro hQ
+      -- hQ : Q
+      -- ⊢ False
+      apply h
+      -- ⊢ P ∧ Q
+      exact ⟨hP, hQ⟩
+    · -- hP : ¬P
+      left
+      -- ⊢ ¬P
+      exact hP
+  · -- ⊢ ¬P ∨ ¬Q → ¬(P ∧ Q)
+    rintro (hnP | hnQ) ⟨hP, hQ⟩
+    -- hP : P
+    -- hQ : Q
+    -- ⊢ False
+    · -- hnP : ¬P
+      exact hnP hP
+    · -- hnQ : ¬Q
+      exact hnQ hQ
 
 -- Automatic proof
 example : ¬(P ∧ Q) ↔ ¬P ∨ ¬Q := by
   tauto
 
--- Balanced proof
+-- Comentario de JA: La 1ª demostración se puede modificar como se
+-- muestra a continuación.
+
+-- Proof 3
 example : ¬(P ∧ Q) ↔ ¬P ∨ ¬Q := by
   constructor
-  · intro h
-    by_cases hP : P
-    · right
+  · -- ⊢ ¬(P ∧ Q) → ¬P ∨ ¬Q
+    intro h
+    -- h : ¬(P ∧ Q)
+    -- ⊢ ¬P ∨ ¬Q
+    apply (Or.elim (em P))
+    · -- ⊢ P → ¬P ∨ ¬Q
+      intro hP
+      -- hP : P
+      right
+      -- ⊢ ¬Q
       intro hQ
+      -- hQ : Q
+      -- ⊢ False
       apply h
+      -- ⊢ P ∧ Q
       exact ⟨hP, hQ⟩
-    · left
-      exact hP
-  · rintro (hnP | hnQ) ⟨hP, hQ⟩
-    · contradiction
-    · apply hnQ; exact hQ
+    · -- ⊢ ¬P → ¬P ∨ ¬Q
+      intro hnP
+      -- hnP : ¬P
+      left
+      -- ⊢ ¬P
+      exact hnP
+  · -- ⊢ ¬P ∨ ¬Q → ¬(P ∧ Q)
+    rintro h ⟨hP, hQ⟩
+    -- h : ¬P ∨ ¬Q
+    -- hP : P
+    -- hQ : Q
+    -- ⊢ False
+    apply Or.elim h
+    · -- ⊢ ¬P → False
+      intro hnP
+      -- hnP : ¬P
+      exact hnP hP
+    · -- ⊢ ¬Q → False
+      intro hnQ
+      -- hnQ : ¬Q
+      exact hnQ hQ
+
+-- Comentario de JA: La 3ª demostración se puede modificar como se
+-- muestra a continuación.
+
+-- Proof 4
+example : ¬(P ∧ Q) ↔ ¬P ∨ ¬Q :=
+  ⟨fun h => (Or.elim (em P)) (fun hP => Or.inr (fun hQ => h ⟨hP, hQ⟩))
+                             Or.inl,
+   fun h ⟨hP, hQ⟩ => (Or.elim h) (fun hnP => hnP hP)
+                                 (fun hnQ => hnQ hQ)⟩
+
+-- Comentario de JA: Se puede demostrar con not_and_or como se muestra a
+-- continuación.
+
+-- Proof 5
+example : ¬(P ∧ Q) ↔ ¬P ∨ ¬Q :=
+  not_and_or
