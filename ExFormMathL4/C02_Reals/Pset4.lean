@@ -12,7 +12,7 @@
 
 import Mathlib.Tactic
 
-variable (x y : ℝ)
+variable (x y ε : ℝ)
 variable (A B C : ℕ)
 
 -- ---------------------------------------------------------------------
@@ -67,8 +67,22 @@ example : |x| < y ↔ -y < x ∧ x < y := by
 example : |x| < y ↔ -y < x ∧ x < y :=
   abs_lt
 
-example (ε : ℝ) (hε : 0 < ε) : 0 < ε / 2 := by
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that if `0 < ε` then `0 < ε/2`.
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example
+  (hε : 0 < ε)
+  : 0 < ε / 2 :=
+by
   exact half_pos hε
+
+-- Proof 2
+example
+  (hε : 0 < ε)
+  : 0 < ε / 2 :=
+half_pos hε
 
 example (a b x y : ℝ) (h1 : a < x) (h2 : b < y) : a + b < x + y := by
   exact add_lt_add h1 h2
