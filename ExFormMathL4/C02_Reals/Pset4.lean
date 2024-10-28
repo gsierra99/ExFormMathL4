@@ -12,7 +12,7 @@
 
 import Mathlib.Tactic
 
-variable (x y ε : ℝ)
+variable (a b x y ε : ℝ)
 variable (A B C : ℕ)
 
 -- ---------------------------------------------------------------------
@@ -84,8 +84,24 @@ example
   : 0 < ε / 2 :=
 half_pos hε
 
-example (a b x y : ℝ) (h1 : a < x) (h2 : b < y) : a + b < x + y := by
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that if `a < x` and `b < y` then `a + b < x + y`.
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example
+  (h1 : a < x)
+  (h2 : b < y)
+  : a + b < x + y :=
+by
   exact add_lt_add h1 h2
+
+-- Proof 2
+example
+  (h1 : a < x)
+  (h2 : b < y)
+  : a + b < x + y :=
+add_lt_add h1 h2
 
 example (ε : ℝ) (hε : 0 < ε) : 0 < ε / 3 := by
   linarith
