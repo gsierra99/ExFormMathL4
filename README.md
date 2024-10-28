@@ -14,3 +14,4 @@ This repository contains solutions to the exercises of the course [Formalising M
   + [1: Equalities and inequalities between numerical expressions](./ExFormMathL4/C02_Reals/Pset1.lean)
   + [2: Algebra in the real numbers](./ExFormMathL4/C02_Reals/Pset2.lean)
   + [3: Limits of sequences](./ExFormMathL4/C02_Reals/Pset3.lean)
+  + [5: The `linarith` tactic](./ExFormMathL4/C02_Reals/Pset4.lean)
