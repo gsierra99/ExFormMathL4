@@ -54,8 +54,18 @@ example : max A B ≤ C ↔ A ≤ C ∧ B ≤ C := by
 example : max A B ≤ C ↔ A ≤ C ∧ B ≤ C :=
   Nat.max_le
 
-example (x y : ℝ) : |x| < y ↔ -y < x ∧ x < y := by
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that
+--    |x| < y ↔ -y < x ∧ x < y
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example : |x| < y ↔ -y < x ∧ x < y := by
   exact abs_lt
+
+-- Proof 2
+example : |x| < y ↔ -y < x ∧ x < y :=
+  abs_lt
 
 example (ε : ℝ) (hε : 0 < ε) : 0 < ε / 2 := by
   exact half_pos hε
