@@ -7,7 +7,7 @@
 -- In this problem set, we give the standard definition of the limit of
 -- a sequence and prove some theorems about the.
 --
--- It is based on [Section01logic/Sheet4.lean](https://tinyurl.com/25sc8h3b)
+-- It is based on [Section02reals/Sheet3.lean](https://tinyurl.com/29tfe98x)
 -- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
 
 import Mathlib.Tactic
@@ -176,7 +176,7 @@ by
 -- ---------------------------------------------------------------------
 
 -- Proof in natural language
--- ================================
+-- =========================
 
 -- Let ε ∈ ℝ such that ε > 0. We need to prove that
 --    (∃ N)(∀ n ≥ N)[|(a(n) + c) - (t + c)| < ε]                     (1)
@@ -270,18 +270,105 @@ by
   -- ⊢ |a n - t| < ε
   exact hB
 
-example {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n => -a n) (-t) := by
+-- ---------------------------------------------------------------------
+-- Exercise 7. Prove that if `a(n)` tends to `t` then `-a(n)` tends to
+-- `-t`.
+-- ---------------------------------------------------------------------
+
+-- Proof in natural language
+-- =========================
+
+-- Let ε ∈ ℝ such that ε > 0. We need to prove that
+--    (∃ N ∈ ℕ)(∀ n ≥ N)[|-aₙ - -t| < ε]                             (1)
+-- Since the limit of aₙ is t, there exists a k ∈ ℕ such that
+--    (∀ n ≥ k)[|aₙ - t| < ε]                                        (2)
+-- Let's see that (1) holds with k. Indeed, let n ≥ k. Then,
+--    |-aₙ - -t| = |-(aₙ - t)|
+--               = |aₙ - t|
+--               < ε           [by (2)]
+
+-- Proofs with Lean4
+-- =================
+
+-- Proof 1
+example
+  (ha : TendsTo a t)
+  : TendsTo (fun n => -a n) (-t) :=
+by
   rw [tendsTo_def] at ha
+  -- ha : ∀ (ε : ℝ), 0 < ε → ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
   rw [tendsTo_def]
+  -- ⊢ ∀ (ε : ℝ), 0 < ε → ∃ B, ∀ (n : ℕ), B ≤ n → |-a n - -t| < ε
   intro ε hε
+  -- ε : ℝ
+  -- hε : 0 < ε
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |-a n - -t| < ε
   specialize ha ε hε
+  -- ha : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
   cases' ha with B hB
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε
   use B
+  -- ⊢ ∀ (n : ℕ), B ≤ n → |-a n - -t| < ε
   intro n hn
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |-a n - -t| < ε
   specialize hB n hn
+  -- hB : |a n - t| < ε
   norm_num
+  -- ⊢ |-a n + t| < ε
   have : -a n + t = -(a n - t) := by ring
   rw [this, abs_neg]
+  -- ⊢ |a n - t| < ε
   exact hB
+
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 2
+example
+  (ha : TendsTo a t)
+  : TendsTo (fun n => -a n) (-t) :=
+by
+  unfold TendsTo at *
+  -- ha : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => -a n) n - -t| < ε
+  intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => -a n) n - -t| < ε
+  specialize ha ε hε
+  -- ha : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  obtain ⟨B, hB⟩ := ha
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  use B
+  -- ⊢ ∀ (n : ℕ), B ≤ n → |(fun n => -a n) n - -t| < ε
+  intro n hn
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |(fun n => -a n) n - -t| < ε
+  calc |(fun n => -a n) n - -t|
+       = |-a n - -t|          := rfl
+     _ = |-(a n - t)|         := by congr ; ring
+     _ = |a n - t|            := abs_neg (a n - t)
+     _ < ε                    := hB n hn
+
+-- Proof 3
+example
+  (ha : TendsTo a t)
+  : TendsTo (fun n => -a n) (-t) :=
+by
+  have h1 : ∀ n, |a n - t| = |(-a n - -t)| := by
+    intro n
+    -- n : ℕ
+    -- ⊢ |a n - t| = |-a n - -t|
+    rw [abs_sub_comm]
+    -- ⊢ |t - a n| = |-a n - -t|
+    congr 1
+    -- ⊢ t - a n = -a n - -t
+    ring
+  simpa [h1, tendsTo_def] using ha
 
 end Section2sheet3
