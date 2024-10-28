@@ -11,8 +11,25 @@
 -- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
 
 import Mathlib.Tactic
-example (x : ℝ) : |-x| = |x| := by
+
+variable (x : ℝ)
+
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that
+--    |-x| = |x|
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example : |-x| = |x| := by
   exact abs_neg x
+
+-- Proof 2
+example : |-x| = |x| :=
+  abs_neg x
+
+
+
+
 
 example (x y : ℝ) : |x - y| = |y - x| := by
   exact abs_sub_comm x y
