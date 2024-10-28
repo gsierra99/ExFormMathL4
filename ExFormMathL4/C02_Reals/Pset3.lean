@@ -355,20 +355,5 @@ by
      _ = |a n - t|            := abs_neg (a n - t)
      _ < ε                    := hB n hn
 
--- Proof 3
-example
-  (ha : TendsTo a t)
-  : TendsTo (fun n => -a n) (-t) :=
-by
-  have h1 : ∀ n, |a n - t| = |(-a n - -t)| := by
-    intro n
-    -- n : ℕ
-    -- ⊢ |a n - t| = |-a n - -t|
-    rw [abs_sub_comm]
-    -- ⊢ |t - a n| = |-a n - -t|
-    congr 1
-    -- ⊢ t - a n = -a n - -t
-    ring
-  simpa [h1, tendsTo_def] using ha
 
 end Section2sheet3
