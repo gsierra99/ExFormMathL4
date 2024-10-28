@@ -12,7 +12,7 @@
 
 import Mathlib.Tactic
 
-variable (a b x y ε : ℝ)
+variable (a b c d x y ε : ℝ)
 variable (A B C : ℕ)
 
 -- ---------------------------------------------------------------------
@@ -121,5 +121,15 @@ example
 by
   simp [hε]
 
-example (a b c d x y : ℝ) (h1 : a + c < x) (h2 : b + d < y) : a + b + c + d < x + y := by
+-- ---------------------------------------------------------------------
+-- Exercise 8. Prove that if `a + c < x` and `b + d < y` then
+-- `a + b + c + d < x + y`.
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example
+  (h1 : a + c < x)
+  (h2 : b + d < y)
+  : a + b + c + d < x + y :=
+by
   linarith
