@@ -103,8 +103,23 @@ example
   : a + b < x + y :=
 add_lt_add h1 h2
 
-example (ε : ℝ) (hε : 0 < ε) : 0 < ε / 3 := by
+-- ---------------------------------------------------------------------
+-- Exercise 7. Prove that if `0 < ε` then `0 < ε/3`.
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+example
+  (hε : 0 < ε)
+  : 0 < ε / 3 :=
+by
   linarith
+
+-- Proof 2
+example
+  (hε : 0 < ε)
+  : 0 < ε / 3 :=
+by
+  simp [hε]
 
 example (a b c d x y : ℝ) (h1 : a + c < x) (h2 : b + d < y) : a + b + c + d < x + y := by
   linarith
