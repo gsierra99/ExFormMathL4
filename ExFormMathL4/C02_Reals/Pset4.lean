@@ -1,3 +1,15 @@
+-- C02_Reals/Pset4.lean
+-- Problem set 4: The `linarith` tactic.
+-- Gabriel Sierra Gallego.
+-- Seville, October 28, 2024
+-- ---------------------------------------------------------------------
+
+-- In this problem set, we will use the tactics linarith and
+-- exact? to search for lemmas.
+--
+-- It is based on [Section02reals/Sheet4.lean](https://tinyurl.com/24fb2gzz)
+-- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
+
 import Mathlib.Tactic
 example (x : ℝ) : |-x| = |x| := by
   exact abs_neg x
