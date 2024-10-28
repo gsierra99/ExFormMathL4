@@ -1,3 +1,15 @@
+-- C02_Reals/Pset5.lean
+-- Problem set 5: Limits of sequences and linarith.
+-- Gabriel Sierra Gallego.
+-- Seville, October 28, 2024
+-- ---------------------------------------------------------------------
+
+-- In this problem set, we give the standard definition of the limit of
+-- a sequence and prove some theorems about the using linarith.
+--
+-- It is based on [Section02reals/Sheet3.lean](https://tinyurl.com/2ym6uu4n)
+-- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
+
 import Mathlib.Tactic
 import ExFormMathL4.C02_Reals.Pset3
 
