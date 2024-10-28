@@ -12,7 +12,7 @@
 
 import Mathlib.Tactic
 
-variable (x : ℝ)
+variable (x y : ℝ)
 
 -- ---------------------------------------------------------------------
 -- Exercise 1. Prove that
@@ -28,11 +28,19 @@ example : |-x| = |x| :=
   abs_neg x
 
 
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that
+--    |x - y| = |y - x|
+-- ---------------------------------------------------------------------
 
-
-
-example (x y : ℝ) : |x - y| = |y - x| := by
+-- Proof 1
+example : |x - y| = |y - x| := by
   exact abs_sub_comm x y
+
+-- Proof 2
+example : |x - y| = |y - x| :=
+  abs_sub_comm x y
+
 
 example (A B C : ℕ) : max A B ≤ C ↔ A ≤ C ∧ B ≤ C := by
   exact Nat.max_le
