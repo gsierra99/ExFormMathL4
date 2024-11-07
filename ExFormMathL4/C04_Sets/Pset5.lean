@@ -17,6 +17,12 @@ theorem mem_inter_iff : x ∈ A ∩ B ↔ x ∈ A ∧ x ∈ B :=
 
 open Set
 
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that
+--    A ∪ A = A
+-- ---------------------------------------------------------------------
+
+-- Proof 1 (detailed)
 example : A ∪ A = A := by
   ext x
   constructor
@@ -30,6 +36,23 @@ example : A ∪ A = A := by
   left
   exact hx
 
+
+-- Proof 2 (automatic)
+example : A ∪ A = A := by
+  exact union_eq_self_of_subset_left fun ⦃a⦄ a => a
+
+-- Proof 3 (equilibrated)
+example : A ∪ A = A := by
+  simp
+
+-- ---------------------------------------------------------------------
+
+-- ---------------------------------------------------------------------
+-- Exercise 2. Prove that
+--    A ∩ A = A
+-- ---------------------------------------------------------------------
+
+-- Proof 1 (detailed)
 example : A ∩ A = A := by
   ext x
   constructor
@@ -41,6 +64,20 @@ example : A ∩ A = A := by
   rw [_root_.mem_inter_iff]
   exact ⟨hx, hx⟩
 
+-- Proof 2 (automatic)
+example : A ∩ A = A := by
+  exact inter_eq_self_of_subset_right fun ⦃a⦄ a => a
+
+-- Proof 3 (equilibrated)
+example : A ∩ A = A := by
+  simp
+
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--    A ∩ ∅ = ∅
+-- ---------------------------------------------------------------------
+
+-- Proof 1 (detailed)
 example : A ∩ ∅ = ∅ := by
   ext x
   constructor
@@ -55,6 +92,20 @@ example : A ∩ ∅ = ∅ := by
   cases hx
   exact hx
 
+-- Proof 2 (automatic)
+example : A ∩ ∅ = ∅ := by
+  exact inter_empty A
+
+-- Proof 3 (equilibrated)
+example : A ∩ ∅ = ∅ := by
+  simp
+
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that
+--    A ∪ univ = univ
+-- ---------------------------------------------------------------------
+
+-- Proof 1 (detailed)
 example : A ∪ univ = univ := by
   ext x
   constructor
@@ -68,6 +119,20 @@ example : A ∪ univ = univ := by
   right
   exact hx
 
+-- Proof 2 (automatic)
+example : A ∪ univ = univ := by
+  exact union_univ A
+
+-- Proof 3 (equilibrated)
+example : A ∪ univ = univ := by
+  simp
+
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that
+--    A ⊆ B → B ⊆ A → A = B
+-- ---------------------------------------------------------------------
+
+-- Proof 1 (detailed)
 example : A ⊆ B → B ⊆ A → A = B := by
   intro hAB hBA
   ext x
@@ -80,6 +145,21 @@ example : A ⊆ B → B ⊆ A → A = B := by
   apply hBA at hx
   exact hx
 
+-- Proof 2 (automatic)
+example : A ⊆ B → B ⊆ A → A = B := by
+  exact fun a a_1 => Subset.antisymm a a_1
+
+-- Proof 3 (equilibrated)
+example : A ⊆ B → B ⊆ A → A = B := by
+  intro hAB hBA
+  exact Subset.antisymm hAB hBA
+
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that
+--    A ∩ B = B ∩ A
+-- ---------------------------------------------------------------------
+
+-- Proof 1 (detailed)
 example : A ∩ B = B ∩ A := by
   ext x
   constructor
@@ -96,6 +176,22 @@ example : A ∩ B = B ∩ A := by
   exact hxA
   exact hxB
 
+-- Proof 2 (automatic)
+example : A ∩ B = B ∩ A := by
+  exact inter_comm A B
+
+-- Proof 3 (equilibrated)
+example : A ∩ B = B ∩ A := by
+  ext x
+  simp
+  exact And.comm
+
+-- ---------------------------------------------------------------------
+-- Exercise 7. Prove that
+--    A ∩ (B ∩ C) = A ∩ B ∩ C
+-- ---------------------------------------------------------------------
+
+-- Proof 1 (detailed)
 example : A ∩ (B ∩ C) = A ∩ B ∩ C := by
   ext x
   constructor
@@ -118,6 +214,22 @@ example : A ∩ (B ∩ C) = A ∩ B ∩ C := by
   rw [_root_.mem_inter_iff]
   exact ⟨hxlr, hxr⟩
 
+-- Proof 2 (automatic)
+example : A ∩ (B ∩ C) = A ∩ B ∩ C := by
+  exact Eq.symm (inter_assoc A B C)
+
+-- Proof 3 (equilibrated)
+example : A ∩ (B ∩ C) = A ∩ B ∩ C := by
+  ext x
+  simp
+  exact Iff.symm and_assoc
+
+-- ---------------------------------------------------------------------
+-- Exercise 8. Prove that
+--    A ∪ (B ∪ C) = A ∪ B ∪ C
+-- ---------------------------------------------------------------------
+
+-- Proof 1 (detailed)
 example : A ∪ (B ∪ C) = A ∪ B ∪ C := by
   ext x
   constructor
@@ -152,6 +264,22 @@ example : A ∪ (B ∪ C) = A ∪ B ∪ C := by
   right
   exact hxr
 
+-- Proof 2 (automatic)
+example : A ∪ (B ∪ C) = A ∪ B ∪ C := by
+  exact Eq.symm (union_assoc A B C)
+
+-- Proof 3 (equilibrated)
+example : A ∪ (B ∪ C) = A ∪ B ∪ C := by
+  ext x
+  simp
+  exact Iff.symm or_assoc
+
+-- ---------------------------------------------------------------------
+-- Exercise 9. Prove that
+--    A ∪ B ∩ C = (A ∪ B) ∩ (A ∪ C)
+-- ---------------------------------------------------------------------
+
+-- Proof 1 (detailed)
 example : A ∪ B ∩ C = (A ∪ B) ∩ (A ∪ C) := by
   ext x
   constructor
@@ -191,6 +319,22 @@ example : A ∪ B ∩ C = (A ∪ B) ∩ (A ∪ C) := by
   rw [_root_.mem_inter_iff]
   exact ⟨hxlr, hxrr⟩
 
+-- Proof 2 (automatic)
+example : A ∪ B ∩ C = (A ∪ B) ∩ (A ∪ C) := by
+  exact union_inter_distrib_left A B C
+
+-- Proof 3 (equilibrated)
+example : A ∪ B ∩ C = (A ∪ B) ∩ (A ∪ C) := by
+  ext x
+  simp
+  exact or_and_left
+
+-- ---------------------------------------------------------------------
+-- Exercise 10. Prove that
+--    A ∩ (B ∪ C) = A ∩ B ∪ A ∩ C
+-- ---------------------------------------------------------------------
+
+-- Proof 1 (detailed)
 example : A ∩ (B ∪ C) = A ∩ B ∪ A ∩ C := by
   ext x
   constructor
@@ -224,3 +368,13 @@ example : A ∩ (B ∪ C) = A ∩ B ∪ A ∩ C := by
   rw [mem_union_iff]
   right
   exact hxrr
+
+-- Proof 2 (automatic)
+example : A ∩ (B ∪ C) = A ∩ B ∪ A ∩ C := by
+  exact inter_union_distrib_left A B C
+
+-- Proof 3 (equilibrated)
+example : A ∩ (B ∪ C) = A ∩ B ∪ A ∩ C := by
+  ext x
+  simp
+  exact and_or_left

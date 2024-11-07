@@ -1,3 +1,14 @@
+-- C03_Functions/Pset2.lean
+-- Problem set 2
+-- Gabriel Sierra Gallego.
+-- Seville, November 03, 2024
+-- ---------------------------------------------------------------------
+
+-- In this problem set, we work with some inductive types and prove results about them by cases.
+--
+-- It is based on [Section03functions/Sheet2.lean](https://tinyurl.com/2xlkt9kh)
+-- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
+
 import Mathlib.Tactic
 
 namespace Section3sheet2

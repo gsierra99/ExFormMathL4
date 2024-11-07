@@ -34,8 +34,6 @@ example : ∀ x, x ∈ {r : ℝ | Real.IsEven r} := by
 
 example : ∀ x, x ∉ {r : ℝ | 0 < r ∧ r < 0} := by
   intro x
-  change (x ∈ {r : ℝ | 0 < r ∧ r < 0}) → False
-  intro hx
-  rw [mem_def] at hx
-  cases' hx with hxgt0 hxlt0
-  sorry
+  simp
+  intro h
+  exact le_of_lt h
