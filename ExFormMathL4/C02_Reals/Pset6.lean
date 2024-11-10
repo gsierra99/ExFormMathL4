@@ -35,13 +35,6 @@ theorem tendsTo_thirtyseven_mul (a : ℕ → ℝ) (t : ℝ) (h : TendsTo a t) :
   simp
   rw [← mul_sub, abs_mul, abs_of_nonneg] <;> linarith
 
-/- Balanced proof -/
-theorem tendsTo_thirtyseven_mul_balanced (a : ℕ → ℝ) (t : ℝ) (h : TendsTo a t) :
-  TendsTo (fun n ↦ 37 * a n) (37 * t) := by
-
-  sorry
-
-
 /- 2. tendsTo_pos_const_mul -/
 
 /- Detailed proof -/
@@ -81,13 +74,6 @@ theorem tendsTo_pos_const_mul {a : ℕ → ℝ} {t : ℝ} (h : TendsTo a t) {c :
   rw[← lt_div_iff₀']; linarith
   exact hc
   linarith
-
-/- Balanced proof -/
-theorem tendsTo_pos_const_mul_balanced {a : ℕ → ℝ} {t : ℝ} (h : TendsTo a t) {c : ℝ} (hc : 0 < c) :
-  TendsTo (fun n ↦ c * a n) (c * t) := by
-
-  sorry
-
 
 /- 3. tendsTo_neg_const_mul -/
 
@@ -130,13 +116,6 @@ theorem tendsTo_neg_const_mul {a : ℕ → ℝ} {t : ℝ} (h : TendsTo a t) {c :
   rw [← mul_sub, abs_mul, abs_of_neg hc]
   exact (lt_div_iff₀' hc').mp hX
 
-/- Balanced proof -/
-theorem tendsTo_neg_const_mul_balanced {a : ℕ → ℝ} {t : ℝ} (h : TendsTo a t) {c : ℝ} (hc : c < 0) :
-  TendsTo (fun n ↦ c * a n) (c * t) := by
-
-  sorry
-
-
 /- 4. tendsTo_const_mul -/
 
 /- Detailed proof -/
@@ -158,13 +137,6 @@ theorem tendsTo_const_mul {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t
   · simpa using tendsTo_const 0
   · exact tendsTo_neg_const_mul h hc
 
-/- Balanced proof -/
-theorem tendsTo_const_mul_balanced {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-  TendsTo (fun n ↦ c * a n) (c * t) := by
-
-  sorry
-
-
 /- 5. tendsTo_mul_const -/
 
 /- Detailed proof -/
@@ -180,12 +152,6 @@ theorem tendsTo_mul_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t
 
   simpa [mul_comm] using tendsTo_const_mul c h
 
-/- Balanced proof -/
-theorem tendsTo_mul_const_balanced {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-  TendsTo (fun n ↦ a n * c) (t * c) := by
-
-  sorry
-
 /- 6. tendsTo_neg' -/
 
 /- Detailed proof -/
@@ -198,11 +164,6 @@ theorem tendsTo_neg'_detailed {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : T
 /- Automatic proof -/
 theorem tendsTo_neg' {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n ↦ -a n) (-t) := by
   simpa using tendsTo_const_mul (-1) ha
-
-/- Balanced proof -/
-theorem tendsTo_neg'_balanced {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n ↦ -a n) (-t) := by
-  sorry
-
 
 /- 6. tendsTo_of_tendsTo_sub -/
 
@@ -239,13 +200,6 @@ theorem tendsTo_of_tendsTo_sub {a b : ℕ → ℝ} {t u : ℝ} (h1 : TendsTo (fu
 
   simpa using tendsTo_add h1 h2
 
-/- Balanced proof -/
-theorem tendsTo_of_tendsTo_sub_balanced {a b : ℕ → ℝ} {t u : ℝ} (h1 : TendsTo (fun n ↦ a n - b n) t)
-  (h2 : TendsTo b u) : TendsTo a (t + u) := by
-
-  sorry
-
-
 /- 7. tendsTo_sub_lim_iff -/
 
 /- Detailed proof -/
@@ -281,12 +235,6 @@ theorem tendsTo_sub_lim_iff {a : ℕ → ℝ} {t : ℝ} : TendsTo a t ↔ TendsT
   · intro h
     simpa using tendsTo_add h (tendsTo_const t)
 
-/- Balanced proof -/
-theorem tendsTo_sub_lim_iff_balanced {a : ℕ → ℝ} {t : ℝ} : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 := by
-
-  sorry
-
-
 /- 8. tendsTo_zero_mul_tendsTo_zero -/
 
 /- Detailed proof -/
@@ -305,7 +253,7 @@ theorem tendsTo_zero_mul_tendsTo_zero_detailed {a b : ℕ → ℝ} (ha : TendsTo
   calc
     |a n * b n| = |a n| * |b n| := by rw [abs_mul]
     _ < ε^(1/2) * ε^(1/2) := sorry
-    _ = ε := by sorry
+    _ = ε := sorry
 
 /- Automatic proof -/
 theorem tendsTo_zero_mul_tendsTo_zero {a b : ℕ → ℝ} (ha : TendsTo a 0) (hb : TendsTo b 0) :
@@ -318,13 +266,6 @@ theorem tendsTo_zero_mul_tendsTo_zero {a b : ℕ → ℝ} (ha : TendsTo a 0) (hb
   specialize hX n (le_of_max_le_left hn)
   specialize hY n (le_of_max_le_right hn)
   simpa [abs_mul] using mul_lt_mul'' hX hY
-
-/- Balanced proof -/
-theorem tendsTo_zero_mul_tendsTo_zero_balanced {a b : ℕ → ℝ} (ha : TendsTo a 0) (hb : TendsTo b 0) :
-  TendsTo (fun n ↦ a n * b n) 0 := by
-
-  sorry
-
 
 /- 9. tendsTo_mul -/
 
@@ -356,19 +297,7 @@ theorem tendsTo_mul (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : Ten
   · exact tendsTo_const_mul t hb
   · exact tendsTo_mul_const u ha
 
-/- Balanced proof -/
-theorem tendsTo_mul_balanced (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : TendsTo b u) :
-  TendsTo (fun n ↦ a n * b n) (t * u) := by
-
-  sorry
-
-
 /- 10. tendsTo_unique -/
-
-/- Detailed proof -/
-theorem tendsTo_unique_detailed (a : ℕ → ℝ) (s t : ℝ) (hs : TendsTo a s) (ht : TendsTo a t) : s = t := by
-
-  sorry
 
 /- Automatic proof -/
 theorem tendsTo_unique (a : ℕ → ℝ) (s t : ℝ) (hs : TendsTo a s) (ht : TendsTo a t) : s = t :=
@@ -387,11 +316,5 @@ theorem tendsTo_unique (a : ℕ → ℝ) (s t : ℝ) (hs : TendsTo a s) (ht : Te
   specialize hY (max X Y) (le_max_right X Y)
   rw [abs_lt] at hX hY
   linarith
-
-/- Balanced proof -/
-theorem tendsTo_unique_balanced (a : ℕ → ℝ) (s t : ℝ) (hs : TendsTo a s) (ht : TendsTo a t) : s = t := by
-
-  sorry
-
 
 end Section2sheet6
