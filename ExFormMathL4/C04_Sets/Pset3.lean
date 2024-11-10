@@ -149,10 +149,6 @@ example : (∀ x, x ∈ A) ↔ ¬∃ x, x ∈ Aᶜ := by
   simp at hnExinAc
   exact hnExinAc x
 
--- Proof 3 (equilibrated)
-example : (∀ x, x ∈ A) ↔ ¬∃ x, x ∈ Aᶜ := by
-  sorry
-
 -- ---------------------------------------------------------------------
 -- Exercise 7. Prove that
 --    (∃ x, x ∈ A) ↔ ¬∀ x, x ∈ Aᶜ
