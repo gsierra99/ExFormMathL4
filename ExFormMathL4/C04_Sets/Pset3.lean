@@ -37,34 +37,36 @@ example : x ∉ A → x ∈ A → False := by
 example : x ∉ A → x ∈ A → False := by
   simp
 
-
 -- ---------------------------------------------------------------------
 -- Exercise 2. Prove that
 --    x ∈ A → x ∉ A → False
 -- ---------------------------------------------------------------------
 
 -- Proof 1 (detailed)
-example : x ∈ A → x ∉ A → False := by
-    intro hxA hxnA
-    apply hxnA
-    exact hxA
+example : x ∈ A → x ∉ A → False :=
+by
+  intro hxA hxnA
+  apply hxnA
+  exact hxA
 
 -- Proof 2 (automatic)
-example : x ∈ A → x ∉ A → False := by
-    exact fun a a_1 => a_1 a
+example : x ∈ A → x ∉ A → False :=
+by
+  exact fun a a_1 => a_1 a
 
 -- Proof 3 (equilibrated)
- example : x ∈ A → x ∉ A → False := by
-    simp
+example : x ∈ A → x ∉ A → False :=
+by
+  simp
 
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--    A ⊆ B → x ∉ B → x ∉ A
+-- ---------------------------------------------------------------------
 
-  -- ---------------------------------------------------------------------
-  -- Exercise 3. Prove that
-  --    A ⊆ B → x ∉ B → x ∉ A
-  -- ---------------------------------------------------------------------
-
-  -- Proof 1 (detailed)
-example : A ⊆ B → x ∉ B → x ∉ A := by
+-- Proof 1 (detailed)
+example : A ⊆ B → x ∉ B → x ∉ A :=
+by
   intro hAinB hxninB
   rw [subset_def] at hAinB
   by_contra hxinA
@@ -72,33 +74,37 @@ example : A ⊆ B → x ∉ B → x ∉ A := by
   apply hxninB
   exact hxinA
 
-  -- Proof 2 (automatic)
-example : A ⊆ B → x ∉ B → x ∉ A := by
+ -- Proof 2 (automatic)
+example : A ⊆ B → x ∉ B → x ∉ A :=
+by
   exact fun a a_1 a_2 => a_1 (a a_2)
 
-  -- Proof 3 (equilibrated)
-example : A ⊆ B → x ∉ B → x ∉ A := by
+-- Proof 3 (equilibrated)
+example : A ⊆ B → x ∉ B → x ∉ A :=
+by
   intro hAsB hxneB
   rw [subset_def] at hAsB
   exact fun a => hxneB (hAsB x a)
 
-
-  -- ---------------------------------------------------------------------
-  -- Exercise 4. Prove that
-  --    x ∉ (∅ : Set X)
-  -- ---------------------------------------------------------------------
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that
+--    x ∉ (∅ : Set X)
+-- ---------------------------------------------------------------------
 
 -- Proof 1 (detailed)
-example : x ∉ (∅ : Set X) := by
+example : x ∉ (∅ : Set X) :=
+by
   by_contra hxinv
   cases hxinv
 
 -- Proof 2 (automatic)
-example : x ∉ (∅ : Set X) := by
+example : x ∉ (∅ : Set X) :=
+by
   exact fun a => a
 
 -- Proof 3 (equilibrated)
-example : x ∉ (∅ : Set X) := by
+example : x ∉ (∅ : Set X) :=
+by
   simp
 
 -- ---------------------------------------------------------------------
@@ -107,17 +113,20 @@ example : x ∉ (∅ : Set X) := by
 -- ---------------------------------------------------------------------
 
 -- Proof 1 (detailed)
-example : x ∈ Aᶜ → x ∉ A := by
+example : x ∈ Aᶜ → x ∉ A :=
+by
   intro hxinAc
   by_contra hxninAc
   exact hxinAc hxninAc
 
 -- Proof 2 (automatic)
-example : x ∈ Aᶜ → x ∉ A := by
+example : x ∈ Aᶜ → x ∉ A :=
+by
   exact fun a => a
 
 -- Proof 3 (equilibrated)
-example : x ∈ Aᶜ → x ∉ A := by
+example : x ∈ Aᶜ → x ∉ A :=
+by
   simp
 
 -- ---------------------------------------------------------------------
@@ -126,7 +135,8 @@ example : x ∈ Aᶜ → x ∉ A := by
 -- ---------------------------------------------------------------------
 
 -- Proof 1 (detailed)
-example : (∀ x, x ∈ A) ↔ ¬∃ x, x ∈ Aᶜ := by
+example : (∀ x, x ∈ A) ↔ ¬∃ x, x ∈ Aᶜ :=
+by
   constructor
   intro hAisU
   by_contra hExinAc
@@ -140,7 +150,8 @@ example : (∀ x, x ∈ A) ↔ ¬∃ x, x ∈ Aᶜ := by
   exact hnExinAc
 
 -- Proof 2 (automatic)
-example : (∀ x, x ∈ A) ↔ ¬∃ x, x ∈ Aᶜ := by
+example : (∀ x, x ∈ A) ↔ ¬∃ x, x ∈ Aᶜ :=
+by
   constructor
   intro hAisU
   exact not_exists.mpr fun x a => a (hAisU x)
@@ -155,7 +166,8 @@ example : (∀ x, x ∈ A) ↔ ¬∃ x, x ∈ Aᶜ := by
 -- ---------------------------------------------------------------------
 
 -- Proof 1 (detailed)
-example : (∃ x, x ∈ A) ↔ ¬∀ x, x ∈ Aᶜ := by
+example : (∃ x, x ∈ A) ↔ ¬∀ x, x ∈ Aᶜ :=
+by
   constructor
   intro hExinA
   simp
@@ -164,7 +176,8 @@ example : (∃ x, x ∈ A) ↔ ¬∀ x, x ∈ Aᶜ := by
 
 
 -- Proof 2 (automatic)
-example : (∃ x, x ∈ A) ↔ ¬∀ x, x ∈ Aᶜ := by
+example : (∃ x, x ∈ A) ↔ ¬∀ x, x ∈ Aᶜ :=
+by
   exact Iff.symm Classical.not_forall_not
 
 -- Proof 3 (equilibrated)
