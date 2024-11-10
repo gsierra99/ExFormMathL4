@@ -169,6 +169,7 @@ example : g ∘ f ⁻¹' U = f ⁻¹' (g ⁻¹' U) := by
   rw [preimage, preimage] at *
   simp at *
   exact h
+  sorry
 
 -- Proof 2 (automatic)
 example : g ∘ f ⁻¹' U = f ⁻¹' (g ⁻¹' U) := by
