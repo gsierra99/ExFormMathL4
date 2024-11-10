@@ -173,7 +173,7 @@ by
   simp
   obtain ⟨x, hxinA⟩ := hExinA
   exact Exists.intro x hxinA
-
+  sorry
 
 -- Proof 2 (automatic)
 example : (∃ x, x ∈ A) ↔ ¬∀ x, x ∈ Aᶜ :=
@@ -181,8 +181,10 @@ by
   exact Iff.symm Classical.not_forall_not
 
 -- Proof 3 (equilibrated)
-example : (∃ x, x ∈ A) ↔ ¬∀ x, x ∈ Aᶜ := by
+example : (∃ x, x ∈ A) ↔ ¬∀ x, x ∈ Aᶜ :=
+by
   constructor
   intro hExinA
   simp
   exact hExinA
+  sorry
