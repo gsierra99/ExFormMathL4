@@ -20,6 +20,11 @@ open Section2sheet3 Section2sheet5
 variable {a : ℕ → ℝ}
 variable {t : ℝ }
 
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that If `a(n)` tends to `t` then `37 * a(n)` tends
+-- to `37 * t`.
+-- ---------------------------------------------------------------------
+
 /- 1. tendsTo_thirtyseven_mul -/
 
 /- Detailed proof -/
