@@ -510,6 +510,42 @@ by
    _ = ε * 1           := congrArg (ε * .) (div_self hc'')
    _ = ε               := mul_one ε
 
+-- Comentario de JA: La 2ª demostración se puede modificar como se
+-- muestra a continuación.
+
+-- Proof 4
+-- =======
+
+example
+  (h : TendsTo a t)
+  (hc : c < 0)
+  : TendsTo (fun n ↦ c * a n) (c * t) :=
+by
+  have hc' : 0 < -c := neg_pos.mpr hc
+  intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => c * a n) n - c * t| < ε
+  dsimp
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |c * a n - c * t| < ε
+  obtain ⟨B, hB⟩ := h (ε / -c) (div_pos hε hc')
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε / -c
+  use B
+  -- ⊢ ∀ (n : ℕ), B ≤ n → |c * a n - c * t| < ε
+  intro n hn
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |c * a n - c * t| < ε
+  replace hB : |a n - t| < ε / -c := hB n hn
+  rw [← mul_sub]
+  -- ⊢ |c * (a n - t)| < ε
+  rw [abs_mul]
+  -- ⊢ |c| * |a n - t| < ε
+  rw [abs_of_neg hc]
+  -- ⊢ -c * |a n - t| < ε
+  exact (lt_div_iff₀' hc').mp hB
+
 /- 4. tendsTo_const_mul -/
 
 /- Detailed proof -/
