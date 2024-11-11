@@ -474,7 +474,7 @@ by
 -- Proof 3
 -- =======
 
-theorem tendsTo_neg_const_mul
+example
   (h : TendsTo a t)
   (hc : c < 0)
   : TendsTo (fun n ↦ c * a n) (c * t) :=
@@ -545,6 +545,22 @@ by
   rw [abs_of_neg hc]
   -- ⊢ -c * |a n - t| < ε
   exact (lt_div_iff₀' hc').mp hB
+
+-- Proof 5
+-- =======
+
+theorem tendsTo_neg_const_mul
+  (h : TendsTo a t)
+  (hc : c < 0)
+  : TendsTo (fun n ↦ c * a n) (c * t) :=
+by
+  have h1 : 0 < -c := Left.neg_pos_iff.mpr hc
+  have h2 : TendsTo (fun n ↦ -c * a n) (-c * t)
+    := tendsTo_pos_const_mul h h1
+  have h3 : TendsTo (fun n ↦ -(-c * a n)) (-(-c * t))
+    := tendsTo_neg h2
+  show TendsTo (fun n ↦ c * a n) (c * t)
+  aesop
 
 /- 4. tendsTo_const_mul -/
 
