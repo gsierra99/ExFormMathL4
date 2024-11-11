@@ -25,25 +25,40 @@ variable {t : ℝ }
 -- to `37 * t`.
 -- ---------------------------------------------------------------------
 
-/- 1. tendsTo_thirtyseven_mul -/
+-- Proof 1
+-- =======
 
-/- Detailed proof -/
-theorem tendsTo_thirtyseven_mul_detailed  (h : TendsTo a t) :
-  TendsTo (fun n ↦ 37 * a n) (37 * t) := by
+example
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ 37 * a n) (37 * t) :=
+by
   rw [TendsTo] at *
+  -- h : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |37 * a n - 37 * t| < ε
   intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |37 * a n - 37 * t| < ε
   have hε' : 0 < ε / 37 := by linarith
   specialize h (ε / 37) hε'
+  -- h : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε / 37
   cases' h with B hB
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε / 37
   use B
+  -- ⊢ ∀ (n : ℕ), B ≤ n → |37 * a n - 37 * t| < ε
   intro n hn
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |37 * a n - 37 * t| < ε
   specialize hB n hn
-  calc
-    |37 * a n - 37 * t| = |37 *(a n - t)| := by rw [← mul_sub]
-    _ = |37| * |a n - t| := by rw [abs_mul]
-    _ = 37 * |a n - t| := by rw [abs_of_nonneg]; linarith
-    _ < 37 * (ε / 37) := by linarith
-    _ = ε := by linarith
+  -- hB : |a n - t| < ε / 37
+  calc |37 * a n - 37 * t|
+     = |37 * (a n - t)|    := by rw [← mul_sub]
+   _ = |37| * |a n - t|    := by rw [abs_mul]
+   _ = 37 * |a n - t|      := by rw [abs_of_nonneg]; linarith
+   _ < 37 * (ε / 37)       := by linarith
+   _ = ε                   := by linarith
 
 /- Automatic proof -/
 theorem tendsTo_thirtyseven_mul (a : ℕ → ℝ) (t : ℝ) (h : TendsTo a t) :
