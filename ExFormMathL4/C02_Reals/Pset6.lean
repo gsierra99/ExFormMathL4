@@ -177,6 +177,25 @@ by
 -- constant then `c * a(n)` tends to `c * t`.
 -- ---------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Sea ε > 0. Tenemos que demostrar que existe un B ∈ ℕ tal que
+--    (∀n ∈ ℕ)[B ≤ n → |c·a(n) - c·t| < ε]                           (1)
+-- Puesto que a(n) tends to c, existe un B ∈ ℕ tal que
+--    (∀n ∈ ℕ)[B ≤ n → |a(n) - t| < ε/c]                             (2)
+-- Sea B ∈ ℕ tal que se verifica (2). Veamos que entonces también se
+-- verifica (1). Para ello, sea n ∈ ℕ tal que
+--    B ≤ n                                                          (3)
+-- Entonces,
+--    |c·a(n) - c·t| = |c(a(n) - t)|
+--                   = |c|·|a(n) - t|
+--                   = c·|a(n) - t|     [porque c > 0]
+--                   < c·(ε/c)          [por (2) y (3)
+--                   = ε·(c/c)
+--                   = ε·1
+--                   = ε
+
 -- Proof 1
 -- =======
 
