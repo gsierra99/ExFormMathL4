@@ -18,7 +18,7 @@ namespace Section2sheet6
 open Section2sheet3 Section2sheet5
 
 variable {a : ℕ → ℝ}
-variable {t : ℝ }
+variable {c t : ℝ }
 
 -- ---------------------------------------------------------------------
 -- Exercise 1. Prove that if `a(n)` tends to `t` then `37 * a(n)` tends
@@ -397,7 +397,9 @@ by
 -- constant then `c * a(n)` tends to `c * t`.
 -- ---------------------------------------------------------------------
 
-/- Detailed proof -/
+-- Proof 1
+-- =======
+
 theorem tendsTo_neg_const_mul_detailed {a : ℕ → ℝ} {t : ℝ} (h : TendsTo a t) {c : ℝ} (hc : c < 0) :
   TendsTo (fun n ↦ c * a n) (c * t) := by
   rw [TendsTo] at *
