@@ -546,10 +546,13 @@ by
   -- ⊢ -c * |a n - t| < ε
   exact (lt_div_iff₀' hc').mp hB
 
+-- Comentario de JA: Se puede demostrar usando ejercicios anteriores
+-- como se muestra a continuación.
+
 -- Proof 5
 -- =======
 
-theorem tendsTo_neg_const_mul
+example
   (h : TendsTo a t)
   (hc : c < 0)
   : TendsTo (fun n ↦ c * a n) (c * t) :=
@@ -560,6 +563,20 @@ by
   have h3 : TendsTo (fun n ↦ -(-c * a n)) (-(-c * t))
     := tendsTo_neg h2
   show TendsTo (fun n ↦ c * a n) (c * t)
+  aesop
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+-- =======
+
+theorem tendsTo_neg_const_mul
+  (h : TendsTo a t)
+  (hc : c < 0)
+  : TendsTo (fun n ↦ c * a n) (c * t) :=
+by
+  have := tendsTo_neg (tendsTo_pos_const_mul h (Left.neg_pos_iff.mpr hc))
   aesop
 
 /- 4. tendsTo_const_mul -/
