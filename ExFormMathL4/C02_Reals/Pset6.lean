@@ -121,6 +121,42 @@ by
    _ < 37 * (ε / 37)       := by linarith
    _ = ε                   := by linarith
 
+-- Comentario de JA: La 2ª demostración se puede modificar como se
+-- muestra a continuación.
+
+-- Proof 4
+-- =======
+
+example
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ 37 * a n) (37 * t) :=
+by
+  intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => 37 * a n) n - 37 * t| < ε
+  dsimp
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |37 * a n - 37 * t| < ε
+  obtain ⟨B, hB⟩ := h (ε / 37) (by linarith)
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε / 37
+  use B
+  -- ⊢ ⊢ ∀ (n : ℕ), B ≤ n → |37 * a n - 37 * t| < ε
+  intro n hn
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |37 * a n - 37 * t| < ε
+  replace hB : |a n - t| < ε / 37 := hB n hn
+  rw [← mul_sub]
+  -- ⊢ |37 * (a n - t)| < ε
+  rw [abs_mul]
+  -- ⊢ |37| * |a n - t| < ε
+  rw [abs_of_nonneg]
+  . -- ⊢ 37 * |a n - t| < ε
+    linarith
+  . -- ⊢ 0 ≤ 37
+    linarith
+
 /- 2. tendsTo_pos_const_mul -/
 
 /- Detailed proof -/
