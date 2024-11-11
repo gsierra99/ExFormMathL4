@@ -60,15 +60,30 @@ by
    _ < 37 * (ε / 37)       := by linarith
    _ = ε                   := by linarith
 
-/- Automatic proof -/
-theorem tendsTo_thirtyseven_mul (a : ℕ → ℝ) (t : ℝ) (h : TendsTo a t) :
-    TendsTo (fun n ↦ 37 * a n) (37 * t) := by
+-- Proof 2
+-- =======
+
+example
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ 37 * a n) (37 * t) :=
+by
   intro ε hε
-  obtain ⟨X, hX⟩ := h (ε / 37) (by linarith)
-  use X
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => 37 * a n) n - 37 * t| < ε
+  obtain ⟨B, hB⟩ := h (ε / 37) (by linarith)
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε / 37
+  use B
+  -- ⊢ ∀ (n : ℕ), B ≤ n → |(fun n => 37 * a n) n - 37 * t| < ε
   intro n hn
-  specialize hX n hn
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |(fun n => 37 * a n) n - 37 * t| < ε
+  specialize hB n hn
+  -- hB : |a n - t| < ε / 37
   simp
+  -- ⊢ |37 * a n - 37 * t| < ε
   rw [← mul_sub, abs_mul, abs_of_nonneg] <;> linarith
 
 /- 2. tendsTo_pos_const_mul -/
