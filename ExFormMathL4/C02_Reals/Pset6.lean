@@ -86,6 +86,8 @@ by
   -- ⊢ |37 * a n - 37 * t| < ε
   rw [← mul_sub, abs_mul, abs_of_nonneg] <;> linarith
 
+
+
 /- 2. tendsTo_pos_const_mul -/
 
 /- Detailed proof -/
