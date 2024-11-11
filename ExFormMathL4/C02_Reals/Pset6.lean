@@ -21,7 +21,7 @@ variable {a : ℕ → ℝ}
 variable {t : ℝ }
 
 -- ---------------------------------------------------------------------
--- Exercise 1. Prove that If `a(n)` tends to `t` then `37 * a(n)` tends
+-- Exercise 1. Prove that if `a(n)` tends to `t` then `37 * a(n)` tends
 -- to `37 * t`.
 -- ---------------------------------------------------------------------
 
