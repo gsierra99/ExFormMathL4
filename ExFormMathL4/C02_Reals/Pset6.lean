@@ -86,7 +86,40 @@ by
   -- ⊢ |37 * a n - 37 * t| < ε
   rw [← mul_sub, abs_mul, abs_of_nonneg] <;> linarith
 
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
 
+-- Proof 3
+-- =======
+
+example
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ 37 * a n) (37 * t) :=
+by
+  intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => 37 * a n) n - 37 * t| < ε
+  dsimp
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |37 * a n - 37 * t| < ε
+  have hε' : 0 < ε / 37 := by linarith
+  replace h : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε / 37 := h (ε / 37) hε'
+  obtain ⟨B, hB⟩ := h
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε / 37
+  use B
+  -- ⊢ ∀ (n : ℕ), B ≤ n → |37 * a n - 37 * t| < ε
+  intro n hn
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |37 * a n - 37 * t| < ε
+  replace hB : |a n - t| < ε / 37 := hB n hn
+  calc |37 * a n - 37 * t|
+     = |37 * (a n - t)|    := by rw [← mul_sub]
+   _ = |37| * |a n - t|    := by rw [abs_mul]
+   _ = 37 * |a n - t|      := by rw [abs_of_nonneg]; linarith
+   _ < 37 * (ε / 37)       := by linarith
+   _ = ε                   := by linarith
 
 /- 2. tendsTo_pos_const_mul -/
 
