@@ -186,24 +186,35 @@ example
   : TendsTo (fun n ↦ c * a n) (c * t) :=
 by
   rw [TendsTo] at *
+  -- h : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |c * a n - c * t| < ε
   intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |c * a n - c * t| < ε
   have heps : 0 < ε / c := by exact div_pos hε hc
-  obtain ⟨X, hX⟩ := h (ε / c) heps
-  use X
+  obtain ⟨B, hB⟩ := h (ε / c) heps
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε / c
+  use B
+  -- ⊢ ∀ (n : ℕ), B ≤ n → |c * a n - c * t| < ε
   intro n hn
-  specialize hX n hn
-  calc
-    |c * a n - c * t| = |c * (a n - t)| := by rw [← mul_sub]
-    _ = |c| * |a n - t| := by rw [abs_mul]
-    _ = c * |a n - t| := by rw [abs_of_nonneg]; linarith
-    _ < c * (ε / c) := by exact (mul_lt_mul_left hc).mpr hX
-    _ = (c * ε) / c := by exact Eq.symm (mul_div_assoc c ε c)
-    _ = (ε * c) / c := by rw [mul_comm]
-    _ = ε * (c / c) := by rw [mul_div_assoc ε c c]
-    _ = ε * 1 := by
-      have hc' : c ≠ 0 := by linarith
-      rw [div_self hc']
-    _ = ε := by linarith
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |c * a n - c * t| < ε
+  specialize hB n hn
+  -- hB : |a n - t| < ε / c
+  have hc' : c ≠ 0 := by linarith
+  calc |c * a n - c * t|
+     = |c * (a n - t)|   := by rw [← mul_sub]
+   _ = |c| * |a n - t|   := by rw [abs_mul]
+   _ = c * |a n - t|     := by rw [abs_of_nonneg]; linarith
+   _ < c * (ε / c)       := by exact (mul_lt_mul_left hc).mpr hB
+   _ = (c * ε) / c       := by exact Eq.symm (mul_div_assoc c ε c)
+   _ = (ε * c) / c       := by rw [mul_comm]
+   _ = ε * (c / c)       := by rw [mul_div_assoc ε c c]
+   _ = ε * 1             := by rw [div_self hc']
+   _ = ε                 := by linarith
 
 /- Automatic proof -/
 theorem tendsTo_pos_const_mul {a : ℕ → ℝ} {t : ℝ} (h : TendsTo a t) {c : ℝ} (hc : 0 < c) :
