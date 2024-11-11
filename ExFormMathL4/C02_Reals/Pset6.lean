@@ -438,19 +438,35 @@ by
                              rw [div_self hc'']
    _ = ε               := by linarith
 
-/- Automatic proof -/
-theorem tendsTo_neg_const_mul {a : ℕ → ℝ} {t : ℝ} (h : TendsTo a t) {c : ℝ} (hc : c < 0) :
-    TendsTo (fun n ↦ c * a n) (c * t) :=
-  by
+-- Proof 2
+-- =======
+
+theorem tendsTo_neg_const_mul
+  (h : TendsTo a t)
+  (hc : c < 0)
+  : TendsTo (fun n ↦ c * a n) (c * t) :=
+by
   have hc' : 0 < -c := neg_pos.mpr hc
   intro ε hε
-  obtain ⟨X, hX⟩ := h (ε / -c) (div_pos hε hc')
-  use X
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => c * a n) n - c * t| < ε
+  obtain ⟨B, hB⟩ := h (ε / -c) (div_pos hε hc')
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε / -c
+  use B
+  -- ⊢ ∀ (n : ℕ), B ≤ n → |(fun n => c * a n) n - c * t| < ε
   intro n hn
-  specialize hX n hn
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |(fun n => c * a n) n - c * t| < ε
+  specialize hB n hn
+  -- hB : |a n - t| < ε / -c
   simp
+  -- ⊢ |c * a n - c * t| < ε
   rw [← mul_sub, abs_mul, abs_of_neg hc]
-  exact (lt_div_iff₀' hc').mp hX
+  -- ⊢ -c * |a n - t| < ε
+  exact (lt_div_iff₀' hc').mp hB
 
 /- 4. tendsTo_const_mul -/
 
