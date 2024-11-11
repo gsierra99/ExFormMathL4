@@ -25,6 +25,21 @@ variable {t : ℝ }
 -- to `37 * t`.
 -- ---------------------------------------------------------------------
 
+-- Proof in natural language
+-- =========================
+
+-- Let ε > 0. We need to prove that there exists an B ∈ ℕ such that
+--    (∀ n ∈ ℕ)[B ≤ n → |37u(n) - 37a| < ε]                             (1)
+-- Since u(n) tends to a, there exists an B ∈ ℕ such that
+--    (∀ n ∈ ℕ)[B ≤ n → |u(n) - a| < ε/37]                              (2)
+-- Let B ∈ ℕ that satisfies (2), let's see that the same B satisfies
+-- (1). For this, let n ∈ ℕ such that B ≤ n. Then,
+--    |37u(n) - 37a| = |37(u(n) - a)|
+--                   = |37||u(n) - a|
+--                   = 37|u(n) - a|
+--                   < 37(ε / 37)        [by (2)]
+--                   = ε
+
 -- Proof 1
 -- =======
 
@@ -162,7 +177,10 @@ by
 -- constant then `c * a(n)` tends to `c * t`.
 -- ---------------------------------------------------------------------
 
-theorem tendsTo_pos_const_mul_detailed
+-- Proof 1
+-- =======
+
+example
   (h : TendsTo a t)
   (hc : 0 < c)
   : TendsTo (fun n ↦ c * a n) (c * t) :=
