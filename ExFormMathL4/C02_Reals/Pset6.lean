@@ -16,10 +16,14 @@ import ExFormMathL4.C02_Reals.Pset5
 namespace Section2sheet6
 
 open Section2sheet3 Section2sheet5
+
+variable {a : ℕ → ℝ}
+variable {t : ℝ }
+
 /- 1. tendsTo_thirtyseven_mul -/
 
 /- Detailed proof -/
-theorem tendsTo_thirtyseven_mul_detailed (a : ℕ → ℝ) (t : ℝ) (h : TendsTo a t) :
+theorem tendsTo_thirtyseven_mul_detailed  (h : TendsTo a t) :
   TendsTo (fun n ↦ 37 * a n) (37 * t) := by
   rw [TendsTo] at *
   intro ε hε
