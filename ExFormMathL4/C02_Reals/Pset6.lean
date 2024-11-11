@@ -157,11 +157,16 @@ by
   . -- ⊢ 0 ≤ 37
     linarith
 
-/- 2. tendsTo_pos_const_mul -/
+-- ---------------------------------------------------------------------
+-- Exercise 2. Prove that if `a(n)` tends to `t` and `c` is a positive
+-- constant then `c * a(n)` tends to `c * t`.
+-- ---------------------------------------------------------------------
 
-/- Detailed proof -/
-theorem tendsTo_pos_const_mul_detailed {a : ℕ → ℝ} {t : ℝ} (h : TendsTo a t) {c : ℝ} (hc : 0 < c) :
-  TendsTo (fun n ↦ c * a n) (c * t) := by
+theorem tendsTo_pos_const_mul_detailed
+  (h : TendsTo a t)
+  (hc : 0 < c)
+  : TendsTo (fun n ↦ c * a n) (c * t) :=
+by
   rw [TendsTo] at *
   intro ε hε
   have heps : 0 < ε / c := by exact div_pos hε hc
