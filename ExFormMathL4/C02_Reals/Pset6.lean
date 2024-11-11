@@ -216,20 +216,44 @@ by
    _ = ε * 1             := by rw [div_self hc']
    _ = ε                 := by linarith
 
-/- Automatic proof -/
-theorem tendsTo_pos_const_mul {a : ℕ → ℝ} {t : ℝ} (h : TendsTo a t) {c : ℝ} (hc : 0 < c) :
-    TendsTo (fun n ↦ c * a n) (c * t) := by
+-- Proof 2
+-- =======
+
+lemma tendsTo_pos_const_mul
+  (h : TendsTo a t)
+  (hc : 0 < c)
+  : TendsTo (fun n ↦ c * a n) (c * t) :=
+by
   rw [TendsTo] at *
+  -- h : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |c * a n - c * t| < ε
   intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |c * a n - c * t| < ε
   have heps : 0 < (ε / c) := by exact div_pos hε hc
-  obtain ⟨X, hX⟩ := h (ε / c) heps
-  use X
+  obtain ⟨B, hB⟩ := h (ε / c) heps
+  -- B : ℕ
+  -- hB : ∀ (n : ℕ), B ≤ n → |a n - t| < ε / c
+  use B
+  -- ⊢ ∀ (n : ℕ), B ≤ n → |c * a n - c * t| < ε
   intro n hn
-  specialize hX n hn
+  -- n : ℕ
+  -- hn : B ≤ n
+  -- ⊢ |c * a n - c * t| < ε
+  specialize hB n hn
+  -- hB : |a n - t| < ε / c
   rw [← mul_sub, abs_mul, abs_of_nonneg]
-  rw[← lt_div_iff₀']; linarith
-  exact hc
-  linarith
+  . -- ⊢ c * |a n - t| < ε
+    rw[← lt_div_iff₀']
+    -- ⊢ |a n - t| < ε / c
+    linarith
+    -- ⊢ 0 < c
+    exact hc
+  . -- ⊢ 0 ≤ c
+    linarith
+
+
 
 /- 3. tendsTo_neg_const_mul -/
 
