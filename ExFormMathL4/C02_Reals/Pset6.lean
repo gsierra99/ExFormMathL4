@@ -1,3 +1,15 @@
+-- C02_Reals/Pset6.lean
+-- Problem set 6: Limits of sequences (3)
+-- Gabriel Sierra Gallego.
+-- Seville, November 11, 2024
+-- ---------------------------------------------------------------------
+
+-- In this problem set, we prove some theorems about the limit of
+-- a sequence.
+--
+-- It is based on [Section02reals/Sheet6.lean](https://tinyurl.com/2xly8hhc)
+-- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
+
 import Mathlib.Tactic
 import ExFormMathL4.C02_Reals.Pset5
 
