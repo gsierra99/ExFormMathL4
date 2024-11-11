@@ -392,7 +392,10 @@ by
   . -- ⊢ 0 ≤ c
     exact le_of_lt hc
 
-/- 3. tendsTo_neg_const_mul -/
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that if `a(n)` tends to `t` and `c` is a negative
+-- constant then `c * a(n)` tends to `c * t`.
+-- ---------------------------------------------------------------------
 
 /- Detailed proof -/
 theorem tendsTo_neg_const_mul_detailed {a : ℕ → ℝ} {t : ℝ} (h : TendsTo a t) {c : ℝ} (hc : c < 0) :
