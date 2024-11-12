@@ -655,6 +655,7 @@ by
 -- =======
 
 example
+  (c : ℝ)
   (h : TendsTo a t)
   : TendsTo (fun n ↦ a n * c) (t * c) :=
 by
@@ -662,7 +663,7 @@ by
   -- ⊢ TendsTo (fun n => c * a n) (c * t)
   rw [mul_comm]
   -- ⊢ TendsTo (fun n => c * a n) (t * c)
-  have h1 := tendsTo_const_mul h
+  exact tendsTo_const_mul h
 
 /- Automatic proof -/
 theorem tendsTo_mul_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
