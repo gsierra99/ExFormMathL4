@@ -646,11 +646,16 @@ by
     -- ⊢ TendsTo (fun n => c * a n) (c * t)
     exact tendsTo_neg_const_mul h hc
 
-/- 5. tendsTo_mul_const -/
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that if `a(n)` tends to `t` and `c` is a constant
+-- then `a(n) * c` tends to `t * c`.
+-- ---------------------------------------------------------------------
 
 /- Detailed proof -/
-theorem tendsTo_mul_const_detailed {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-  TendsTo (fun n ↦ a n * c) (t * c) := by
+theorem tendsTo_mul_const_detailed
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ a n * c) (t * c) :=
+by
   simp [mul_comm]
   rw [mul_comm]
   exact tendsTo_const_mul c h
