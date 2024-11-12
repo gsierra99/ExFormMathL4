@@ -691,10 +691,12 @@ by
   simp at h
   exact h
 
-
 /- Automatic proof -/
-theorem tendsTo_neg' {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n ↦ -a n) (-t) := by
-  simpa using tendsTo_const_mul (-1) ha
+theorem tendsTo_neg'
+  (ha : TendsTo a t)
+  : TendsTo (fun n ↦ -a n) (-t) :=
+by
+  simpa using @tendsTo_const_mul _ (-1) _ ha
 
 /- 6. tendsTo_of_tendsTo_sub -/
 
