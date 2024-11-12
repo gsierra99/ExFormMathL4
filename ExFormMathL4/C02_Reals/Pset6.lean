@@ -651,6 +651,11 @@ by
 -- then `a(n) * c` tends to `t * c`.
 -- ---------------------------------------------------------------------
 
+-- Natural language proof
+-- ======================
+
+-- It is an immediate consequence of tendsTo_const_mul.
+
 -- Proof 1
 -- =======
 
