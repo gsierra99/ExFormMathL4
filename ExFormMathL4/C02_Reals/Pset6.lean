@@ -704,7 +704,8 @@ by
 
 example
   (h1 : TendsTo (fun n ↦ a n - b n) t)
-  (h2 : TendsTo b u) : TendsTo a (t + u) := by
+  (h2 : TendsTo b u) : TendsTo a (t + u) :=
+by
   rw [TendsTo] at *
   intro ε hε
   have hε' : 0 < ε / 2 := by linarith
@@ -727,6 +728,9 @@ example
     _ ≤ |a n - b n - t| + |b n - u| := by exact abs_add _ _
     _ < ε / 2 + ε / 2 := by linarith
     _ = ε := by linarith
+
+-- Comentario de JA: La 1ª demostración no usa los ejercicios anteriores
+-- y se debe de eliminar.
 
 
 /- Automatic proof -/
