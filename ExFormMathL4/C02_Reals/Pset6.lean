@@ -665,11 +665,15 @@ by
   -- ⊢ TendsTo (fun n => c * a n) (t * c)
   exact tendsTo_const_mul h
 
-/- Automatic proof -/
-theorem tendsTo_mul_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-    TendsTo (fun n ↦ a n * c) (t * c) := by
+-- Proof 2
+-- =======
 
-  simpa [mul_comm] using tendsTo_const_mul c h
+theorem tendsTo_mul_const
+  (c : ℝ)
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ a n * c) (t * c) :=
+by
+  simpa [mul_comm] using tendsTo_const_mul h
 
 /- 6. tendsTo_neg' -/
 
