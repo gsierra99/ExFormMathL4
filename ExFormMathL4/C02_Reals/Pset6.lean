@@ -695,12 +695,15 @@ by
   simpa using tendsTo_const_mul (-1) ha
 
 -- ---------------------------------------------------------------------
--- Exercise 7. Prove that If `a(n)` tends to `t` and `b(n)` tends to `u`
--- then `a(n) - b(n)` tends to `t - u`
+-- Exercise 7. Prove that if `a(n) - b(n)` tends to `t` and `b(n)` tends
+-- to `u` then `a(n)` tends to `t + u`.
 -- ---------------------------------------------------------------------
 
-/- Detailed proof -/
-theorem tendsTo_of_tendsTo_sub_detailed {a b : ℕ → ℝ} {t u : ℝ} (h1 : TendsTo (fun n ↦ a n - b n) t)
+-- Proof 1
+-- =======
+
+example
+  (h1 : TendsTo (fun n ↦ a n - b n) t)
   (h2 : TendsTo b u) : TendsTo a (t + u) := by
   rw [TendsTo] at *
   intro ε hε
