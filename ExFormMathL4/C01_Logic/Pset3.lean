@@ -562,7 +562,7 @@ example : ¬¬P → P := by
 -- muestra a continuación.
 
 -- Proof 5
-example : ¬¬P → P := by?
+example : ¬¬P → P := by
   intro hnnP
   -- hnnP : ¬¬P
   -- ⊢ P

@@ -41,12 +41,6 @@ example : S ⊆ f ⁻¹' (f '' S) := by
 example : S ⊆ f ⁻¹' (f '' S) := by
   exact subset_preimage_image f S
 
--- Proof 3 (equilibrated)
-example : S ⊆ f ⁻¹' (f '' S) := by
-  sorry
-
-
-
 -- ---------------------------------------------------------------------
 -- Exercise 2. Prove that
 --    f '' (f ⁻¹' T) ⊆ T
@@ -64,11 +58,6 @@ example : f '' (f ⁻¹' T) ⊆ T := by
 -- Proof 2 (automatic)
 example : f '' (f ⁻¹' T) ⊆ T := by
   exact image_preimage_subset f T
-
--- Proof 3 (equilibrated)
-example : f '' (f ⁻¹' T) ⊆ T := by
-  sorry
-
 
 -- ---------------------------------------------------------------------
 -- Exercise 3. Prove that
@@ -180,6 +169,7 @@ example : g ∘ f ⁻¹' U = f ⁻¹' (g ⁻¹' U) := by
   rw [preimage, preimage] at *
   simp at *
   exact h
+  sorry
 
 -- Proof 2 (automatic)
 example : g ∘ f ⁻¹' U = f ⁻¹' (g ⁻¹' U) := by
@@ -224,13 +214,5 @@ example : g ∘ f '' S = g '' (f '' S) := by
 -- ---------------------------------------------------------------------
 
 -- Proof 1 (detailed)
-example (f : ℕ → ℕ) (h : ∀ x, f x = 37) : False := by
-  sorry
-
--- Proof 2 (automatic)
-example (f : ℕ → ℕ) (h : ∀ x, f x = 37) : False := by
-  sorry
-
--- Proof 3 (equilibrated)
 example (f : ℕ → ℕ) (h : ∀ x, f x = 37) : False := by
   sorry

@@ -237,7 +237,3 @@ example (h : ∀ g : G, g * g = 1) : ∀ g h : G, g * h = h * g :=
     exact h g
   intro g h
   rw [useful (g * h), mul_inv_rev, ← useful g, ← useful h]
-
--- Proof 3
-example (h : ∀ g : G, g * g = 1) : ∀ g h : G, g * h = h * g := by
-  sorry
