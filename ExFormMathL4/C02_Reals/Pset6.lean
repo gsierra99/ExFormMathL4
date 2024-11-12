@@ -735,12 +735,30 @@ by
 -- Proof 2
 -- =======
 
-theorem tendsTo_of_tendsTo_sub
+example
   (h1 : TendsTo (fun n ↦ a n - b n) t)
   (h2 : TendsTo b u)
   : TendsTo a (t + u) :=
 by
   simpa using tendsTo_add h1 h2
+
+-- Comentario de JA: La 2ª demostración se puede detallar como se
+-- muestra a continuación.
+
+-- Proof 3
+-- =======
+
+theorem tendsTo_of_tendsTo_sub
+  (h1 : TendsTo (fun n ↦ a n - b n) t)
+  (h2 : TendsTo b u)
+  : TendsTo a (t + u) :=
+by
+  have h3 : TendsTo (fun n ↦ (a n - b n) + (b n)) (t + u)
+    := tendsTo_add h1 h2
+  simp at h3
+  -- h3 : TendsTo (fun n => a n) (t + u)
+  exact h3
+
 
 /- 8. tendsTo_sub_lim_iff -/
 
