@@ -562,31 +562,17 @@ by
 -- Proof 5
 -- =======
 
-example
+lemma tendsTo_neg_const_mul
   (h : TendsTo a t)
   (hc : c < 0)
   : TendsTo (fun n ↦ c * a n) (c * t) :=
 by
   have h1 : 0 < -c := Left.neg_pos_iff.mpr hc
   have h2 : TendsTo (fun n ↦ -c * a n) (-c * t)
-    := tendsTo_pos_const_mul h h1
+    := by exact tendsTo_pos_const_mul (-c) h h1
   have h3 : TendsTo (fun n ↦ -(-c * a n)) (-(-c * t))
     := tendsTo_neg h2
   show TendsTo (fun n ↦ c * a n) (c * t)
-  aesop
-
--- Comentario de JA: La 5ª demostración se puede simplificar como se
--- muestra a continuación.
-
--- Proof 6
--- =======
-
-theorem tendsTo_neg_const_mul
-  (h : TendsTo a t)
-  (hc : c < 0)
-  : TendsTo (fun n ↦ c * a n) (c * t) :=
-by
-  have := tendsTo_neg (tendsTo_pos_const_mul h (Left.neg_pos_iff.mpr hc))
   aesop
 
 -- ---------------------------------------------------------------------
@@ -618,17 +604,17 @@ by
   obtain hcpos | hczero | hcneg := lt_trichotomy 0 c
   . -- hcpos : 0 < c
     -- ⊢ TendsTo (fun n => c * a n) (c * t)
-    exact tendsTo_pos_const_mul h hcpos
+    exact tendsTo_pos_const_mul c h hcpos
   . -- hczero : 0 = c
     -- ⊢ TendsTo (fun n => c * a n) (c * t)
     rw [← hczero]
     -- ⊢ TendsTo (fun n => 0 * a n) (0 * t)
     simp
     -- ⊢ TendsTo (fun n => 0) 0
-    exact tendsTo_const
+    exact tendsTo_const 0
   . -- hcneg : c < 0
     -- ⊢ TendsTo (fun n => c * a n) (c * t)
-    exact tendsTo_neg_const_mul h hcneg
+    exact tendsTo_neg_const_mul c h hcneg
 
 -- Proof 2
 -- =======
@@ -640,12 +626,12 @@ by
   obtain hc | rfl | hc := lt_trichotomy 0 c
   · -- hc : 0 < c
     -- ⊢ TendsTo (fun n => c * a n) (c * t)
-    exact tendsTo_pos_const_mul h hc
+    exact tendsTo_pos_const_mul c h hc
   · -- ⊢ TendsTo (fun n => 0 * a n) (0 * t)
-    simpa using tendsTo_const
+    simpa using tendsTo_const 0
   · -- hc : c < 0
     -- ⊢ TendsTo (fun n => c * a n) (c * t)
-    exact tendsTo_neg_const_mul h hc
+    exact tendsTo_neg_const_mul c h hc
 
 -- ---------------------------------------------------------------------
 -- Exercise 5. Prove that if `a(n)` tends to `t` and `c` is a constant
@@ -669,7 +655,7 @@ by
   -- ⊢ TendsTo (fun n => c * a n) (c * t)
   rw [mul_comm]
   -- ⊢ TendsTo (fun n => c * a n) (t * c)
-  exact tendsTo_const_mul h
+  exact tendsTo_const_mul c h
 
 -- Proof 2
 -- =======
@@ -679,7 +665,7 @@ theorem tendsTo_mul_const
   (h : TendsTo a t)
   : TendsTo (fun n ↦ a n * c) (t * c) :=
 by
-  simpa [mul_comm] using tendsTo_const_mul h
+  simpa [mul_comm] using tendsTo_const_mul c h
 
 /- 6. tendsTo_neg' -/
 
@@ -688,7 +674,7 @@ theorem tendsTo_neg'_detailed
   (ha : TendsTo a t)
   : TendsTo (fun n ↦ -a n) (-t) :=
 by
-  have h : TendsTo (fun n ↦ -1 * a n) (-1 * t) := tendsTo_const_mul ha
+  have h : TendsTo (fun n ↦ -1 * a n) (-1 * t) := tendsTo_const_mul (-1) ha
   simp at h
   exact h
 
@@ -697,7 +683,7 @@ theorem tendsTo_neg'
   (ha : TendsTo a t)
   : TendsTo (fun n ↦ -a n) (-t) :=
 by
-  simpa using @tendsTo_const_mul _ (-1) _ ha
+  simpa using tendsTo_const_mul (-1) ha
 
 /- 7. tendsTo_of_tendsTo_sub -/
 
