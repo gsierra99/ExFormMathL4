@@ -18,7 +18,7 @@ namespace Section2sheet6
 open Section2sheet3 Section2sheet5
 
 variable {a : ℕ → ℝ}
-variable {c t : ℝ }
+variable {c t : ℝ}
 
 -- ---------------------------------------------------------------------
 -- Exercise 1. Prove that if `a(n)` tends to `t` then `37 * a(n)` tends
@@ -624,7 +624,7 @@ by
     -- ⊢ TendsTo (fun n => 0 * a n) (0 * t)
     simp
     -- ⊢ TendsTo (fun n => 0) 0
-    exact tendsTo_const 0
+    exact tendsTo_const
   . -- hcneg : c < 0
     -- ⊢ TendsTo (fun n => c * a n) (c * t)
     exact tendsTo_neg_const_mul h hcneg
@@ -641,7 +641,7 @@ by
     -- ⊢ TendsTo (fun n => c * a n) (c * t)
     exact tendsTo_pos_const_mul h hc
   · -- ⊢ TendsTo (fun n => 0 * a n) (0 * t)
-    simpa using tendsTo_const 0
+    simpa using tendsTo_const
   · -- hc : c < 0
     -- ⊢ TendsTo (fun n => c * a n) (c * t)
     exact tendsTo_neg_const_mul h hc
@@ -651,14 +651,18 @@ by
 -- then `a(n) * c` tends to `t * c`.
 -- ---------------------------------------------------------------------
 
-/- Detailed proof -/
-theorem tendsTo_mul_const_detailed
+-- Proof 1
+-- =======
+
+example
   (h : TendsTo a t)
   : TendsTo (fun n ↦ a n * c) (t * c) :=
 by
   simp [mul_comm]
+  -- ⊢ TendsTo (fun n => c * a n) (c * t)
   rw [mul_comm]
-  exact tendsTo_const_mul c h
+  -- ⊢ TendsTo (fun n => c * a n) (t * c)
+  have h1 := tendsTo_const_mul h
 
 /- Automatic proof -/
 theorem tendsTo_mul_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
