@@ -732,11 +732,14 @@ by
 -- Comentario de JA: La 1ª demostración no usa los ejercicios anteriores
 -- y se debe de eliminar.
 
+-- Proof 2
+-- =======
 
-/- Automatic proof -/
-theorem tendsTo_of_tendsTo_sub {a b : ℕ → ℝ} {t u : ℝ} (h1 : TendsTo (fun n ↦ a n - b n) t)
-    (h2 : TendsTo b u) : TendsTo a (t + u) := by
-
+theorem tendsTo_of_tendsTo_sub
+  (h1 : TendsTo (fun n ↦ a n - b n) t)
+  (h2 : TendsTo b u)
+  : TendsTo a (t + u) :=
+by
   simpa using tendsTo_add h1 h2
 
 /- 7. tendsTo_sub_lim_iff -/
