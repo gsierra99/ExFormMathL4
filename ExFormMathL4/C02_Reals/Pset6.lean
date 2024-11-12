@@ -397,6 +397,15 @@ by
 -- constant then `c * a(n)` tends to `c * t`.
 -- ---------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Natural language proof
+-- ======================
+
+-- If c < 0, then -c > 0 and, by tendsTo_pos_const_mul, -c⋅a(n) tends to
+-- -c⋅t and, by tendsTo_neg, c⋅a(n) tends to c⋅t.
+
 -- Proof 1
 -- =======
 
