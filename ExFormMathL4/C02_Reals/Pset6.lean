@@ -683,8 +683,11 @@ by
 /- 6. tendsTo_neg' -/
 
 /- Detailed proof -/
-theorem tendsTo_neg'_detailed {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n ↦ -a n) (-t) := by
-  have h : TendsTo (fun n ↦ -1 * a n) (-1 * t) := tendsTo_const_mul (-1) ha
+theorem tendsTo_neg'_detailed
+  (ha : TendsTo a t)
+  : TendsTo (fun n ↦ -a n) (-t) :=
+by
+  have h : TendsTo (fun n ↦ -1 * a n) (-1 * t) := tendsTo_const_mul ha
   simp at h
   exact h
 
