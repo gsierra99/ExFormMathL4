@@ -615,14 +615,22 @@ by
     -- ⊢ TendsTo (fun n => c * a n) (c * t)
     exact tendsTo_neg_const_mul h hcneg
 
-/- Automatic proof -/
-theorem tendsTo_const_mul {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-    TendsTo (fun n ↦ c * a n) (c * t) :=
-  by
+-- Proof 2
+-- =======
+
+theorem tendsTo_const_mul
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ c * a n) (c * t) :=
+by
   obtain hc | rfl | hc := lt_trichotomy 0 c
-  · exact tendsTo_pos_const_mul h hc
-  · simpa using tendsTo_const 0
-  · exact tendsTo_neg_const_mul h hc
+  · -- hc : 0 < c
+    -- ⊢ TendsTo (fun n => c * a n) (c * t)
+    exact tendsTo_pos_const_mul h hc
+  · -- ⊢ TendsTo (fun n => 0 * a n) (0 * t)
+    simpa using tendsTo_const 0
+  · -- hc : c < 0
+    -- ⊢ TendsTo (fun n => c * a n) (c * t)
+    exact tendsTo_neg_const_mul h hc
 
 /- 5. tendsTo_mul_const -/
 
