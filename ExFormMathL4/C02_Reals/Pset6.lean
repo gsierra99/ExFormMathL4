@@ -588,7 +588,10 @@ by
   have := tendsTo_neg (tendsTo_pos_const_mul h (Left.neg_pos_iff.mpr hc))
   aesop
 
-/- 4. tendsTo_const_mul -/
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that if `a(n)` tends to `t` and `c` is a constant
+-- then `c * a(n)` tends to `c * t`.
+-- ---------------------------------------------------------------------
 
 /- Detailed proof -/
 theorem tendsTo_const_mul_detailed {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
