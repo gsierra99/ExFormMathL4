@@ -672,13 +672,17 @@ by
 -- to `-t`.
 -- ---------------------------------------------------------------------
 
-/- Detailed proof -/
+-- Proof 1
+-- =======
+
 theorem tendsTo_neg'_detailed
   (ha : TendsTo a t)
   : TendsTo (fun n ↦ -a n) (-t) :=
 by
-  have h : TendsTo (fun n ↦ -1 * a n) (-1 * t) := tendsTo_const_mul (-1) ha
+  have h : TendsTo (fun n ↦ -1 * a n) (-1 * t)
+    := tendsTo_const_mul (-1) ha
   simp at h
+  -- h : TendsTo (fun n => -a n) (-t)
   exact h
 
 /- Automatic proof -/
