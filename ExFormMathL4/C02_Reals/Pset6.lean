@@ -18,7 +18,8 @@ namespace Section2sheet6
 open Section2sheet3 Section2sheet5
 
 variable {a : ℕ → ℝ}
-variable {c t : ℝ}
+variable {t : ℝ}
+variable (c : ℝ)
 
 -- ---------------------------------------------------------------------
 -- Exercise 1. Prove that if `a(n)` tends to `t` then `37 * a(n)` tends
@@ -698,7 +699,7 @@ theorem tendsTo_neg'
 by
   simpa using @tendsTo_const_mul _ (-1) _ ha
 
-/- 6. tendsTo_of_tendsTo_sub -/
+/- 7. tendsTo_of_tendsTo_sub -/
 
 /- Detailed proof -/
 theorem tendsTo_of_tendsTo_sub_detailed {a b : ℕ → ℝ} {t u : ℝ} (h1 : TendsTo (fun n ↦ a n - b n) t)
