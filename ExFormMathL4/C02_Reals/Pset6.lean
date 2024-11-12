@@ -593,15 +593,27 @@ by
 -- then `c * a(n)` tends to `c * t`.
 -- ---------------------------------------------------------------------
 
-/- Detailed proof -/
-theorem tendsTo_const_mul_detailed {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-  TendsTo (fun n ↦ c * a n) (c * t) := by
+-- Proof 1
+-- =======
+
+example
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ c * a n) (c * t) :=
+by
   obtain hcpos | hczero | hcneg := lt_trichotomy 0 c
-  exact tendsTo_pos_const_mul h hcpos
-  rw [← hczero]
-  simp
-  exact tendsTo_const 0
-  exact tendsTo_neg_const_mul h hcneg
+  . -- hcpos : 0 < c
+    -- ⊢ TendsTo (fun n => c * a n) (c * t)
+    exact tendsTo_pos_const_mul h hcpos
+  . -- hczero : 0 = c
+    -- ⊢ TendsTo (fun n => c * a n) (c * t)
+    rw [← hczero]
+    -- ⊢ TendsTo (fun n => 0 * a n) (0 * t)
+    simp
+    -- ⊢ TendsTo (fun n => 0) 0
+    exact tendsTo_const 0
+  . -- hcneg : c < 0
+    -- ⊢ TendsTo (fun n => c * a n) (c * t)
+    exact tendsTo_neg_const_mul h hcneg
 
 /- Automatic proof -/
 theorem tendsTo_const_mul {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
