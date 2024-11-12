@@ -675,7 +675,7 @@ by
 -- Proof 1
 -- =======
 
-theorem tendsTo_neg'_detailed
+example
   (ha : TendsTo a t)
   : TendsTo (fun n ↦ -a n) (-t) :=
 by
@@ -685,14 +685,19 @@ by
   -- h : TendsTo (fun n => -a n) (-t)
   exact h
 
-/- Automatic proof -/
+-- Proof 2
+-- =======
+
 theorem tendsTo_neg'
   (ha : TendsTo a t)
   : TendsTo (fun n ↦ -a n) (-t) :=
 by
   simpa using tendsTo_const_mul (-1) ha
 
-/- 7. tendsTo_of_tendsTo_sub -/
+-- ---------------------------------------------------------------------
+-- Exercise 7. Prove that If `a(n)` tends to `t` and `b(n)` tends to `u`
+-- then `a(n) - b(n)` tends to `t - u`
+-- ---------------------------------------------------------------------
 
 /- Detailed proof -/
 theorem tendsTo_of_tendsTo_sub_detailed {a b : ℕ → ℝ} {t u : ℝ} (h1 : TendsTo (fun n ↦ a n - b n) t)
