@@ -14,7 +14,7 @@ import Mathlib.Tactic
 
 namespace Section2sheet3
 
-variable {c : ℝ}
+variable (c : ℝ)
 variable {t : ℝ}
 variable {a : ℕ → ℝ}
 
