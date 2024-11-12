@@ -667,7 +667,10 @@ theorem tendsTo_mul_const
 by
   simpa [mul_comm] using tendsTo_const_mul c h
 
-/- 6. tendsTo_neg' -/
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that if `a(n)` tends to `t`,  then `-a(n)` tends
+-- to `-t`.
+-- ---------------------------------------------------------------------
 
 /- Detailed proof -/
 theorem tendsTo_neg'_detailed
