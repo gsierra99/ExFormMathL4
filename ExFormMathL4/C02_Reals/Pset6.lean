@@ -742,7 +742,7 @@ theorem tendsTo_of_tendsTo_sub
 by
   simpa using tendsTo_add h1 h2
 
-/- 7. tendsTo_sub_lim_iff -/
+/- 8. tendsTo_sub_lim_iff -/
 
 /- Detailed proof -/
 theorem tendsTo_sub_lim_iff_detailed {a : ℕ → ℝ} {t : ℝ} : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 := by
@@ -777,7 +777,7 @@ theorem tendsTo_sub_lim_iff {a : ℕ → ℝ} {t : ℝ} : TendsTo a t ↔ TendsT
   · intro h
     simpa using tendsTo_add h (tendsTo_const t)
 
-/- 8. tendsTo_zero_mul_tendsTo_zero -/
+/- 9. tendsTo_zero_mul_tendsTo_zero -/
 
 /- Detailed proof -/
 theorem tendsTo_zero_mul_tendsTo_zero_detailed {a b : ℕ → ℝ} (ha : TendsTo a 0) (hb : TendsTo b 0) :
@@ -809,7 +809,7 @@ theorem tendsTo_zero_mul_tendsTo_zero {a b : ℕ → ℝ} (ha : TendsTo a 0) (hb
   specialize hY n (le_of_max_le_right hn)
   simpa [abs_mul] using mul_lt_mul'' hX hY
 
-/- 9. tendsTo_mul -/
+/- 10. tendsTo_mul -/
 
 /- Detailed proof -/
 theorem tendsTo_mul_detailed (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : TendsTo b u) :
@@ -839,7 +839,7 @@ theorem tendsTo_mul (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : Ten
   · exact tendsTo_const_mul t hb
   · exact tendsTo_mul_const u ha
 
-/- 10. tendsTo_unique -/
+/- 11. tendsTo_unique -/
 
 /- Automatic proof -/
 theorem tendsTo_unique (a : ℕ → ℝ) (s t : ℝ) (hs : TendsTo a s) (ht : TendsTo a t) : s = t :=
