@@ -593,6 +593,20 @@ by
 -- then `c * a(n)` tends to `c * t`.
 -- ---------------------------------------------------------------------
 
+-- Natural language proof
+-- ======================
+
+-- Three cases are considered.
+--
+-- Case 1: Suppose that c > 0. Then, by the property
+-- tendsTo_pos_const_mul, we have the desired result.
+--
+-- Case 2: Suppose that c = 0. Then, by the property tendsTo_const, we
+-- obtain the result.
+--
+-- Case 3: Suppose that c < 0. Then, by the property
+-- tendsTo_neg_const_mul, the result follows.
+
 -- Proof 1
 -- =======
 
