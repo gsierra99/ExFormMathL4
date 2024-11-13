@@ -947,16 +947,34 @@ by
    _ < √ε * √ε       := mul_lt_mul'' hX hY han hbn
    _ = ε             := Real.mul_self_sqrt (le_of_lt hε)
 
-/- Automatic proof -/
-theorem tendsTo_zero_mul_tendsTo_zero {a b : ℕ → ℝ} (ha : TendsTo a 0) (hb : TendsTo b 0) :
-    TendsTo (fun n ↦ a n * b n) 0 := by
+-- Proof 2
+-- =======
+
+theorem tendsTo_zero_mul_tendsTo_zero
+  (ha : TendsTo a 0)
+  (hb : TendsTo b 0)
+  : TendsTo (fun n ↦ a n * b n) 0 :=
+by
   intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => a n * b n) n - 0| < ε
   obtain ⟨X, hX⟩ := ha ε hε
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - 0| < ε
   obtain ⟨Y, hY⟩ := hb 1 zero_lt_one
-  use max X Y
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |b n - 0| < 1
+  use Nat.max X Y
+  -- ⊢ ∀ (n : ℕ), X.max Y ≤ n → |(fun n => a n * b n) n - 0| < ε
   intro n hn
+  -- n : ℕ
+  -- hn : X.max Y ≤ n
+  -- ⊢ |(fun n => a n * b n) n - 0| < ε
   specialize hX n (le_of_max_le_left hn)
+  -- hX : |a n - 0| < ε
   specialize hY n (le_of_max_le_right hn)
+  -- hY : |b n - 0| < 1
   simpa [abs_mul] using mul_lt_mul'' hX hY
 
 /- 10. tendsTo_mul -/
