@@ -759,8 +759,10 @@ by
   -- h3 : TendsTo (fun n => a n) (t + u)
   exact h3
 
-
-/- 8. tendsTo_sub_lim_iff -/
+-- ---------------------------------------------------------------------
+-- Exercise 8. Prove that if `a(n)` tends to `t` then `a(n)-t` tends to
+-- `0`.
+-- ---------------------------------------------------------------------
 
 /- Detailed proof -/
 theorem tendsTo_sub_lim_iff_detailed {a : ℕ → ℝ} {t : ℝ} : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 := by
