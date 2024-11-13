@@ -950,7 +950,7 @@ by
 -- Proof 2
 -- =======
 
-theorem tendsTo_zero_mul_tendsTo_zero
+example
   (ha : TendsTo a 0)
   (hb : TendsTo b 0)
   : TendsTo (fun n ↦ a n * b n) 0 :=
@@ -975,7 +975,50 @@ by
   -- hX : |a n - 0| < ε
   specialize hY n (le_of_max_le_right hn)
   -- hY : |b n - 0| < 1
+  rw [sub_zero] at *
+
   simpa [abs_mul] using mul_lt_mul'' hX hY
+
+-- Comentario de JA: La 2ª demostración se puede desarrollar como se
+-- muestra a continuación.
+
+-- Proof 3
+-- =======
+
+theorem tendsTo_zero_mul_tendsTo_zero
+  (ha : TendsTo a 0)
+  (hb : TendsTo b 0)
+  : TendsTo (fun n ↦ a n * b n) 0 :=
+by
+  intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => a n * b n) n - 0| < ε
+  simp [abs_zero]
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n * b n| < ε
+  obtain ⟨X, hX⟩ := ha ε hε
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - 0| < ε
+  obtain ⟨Y, hY⟩ := hb 1 zero_lt_one
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |b n - 0| < 1
+  use Nat.max X Y
+  -- ⊢ ∀ (n : ℕ), X.max Y ≤ n → |a n * b n| < ε
+  intro n hn
+  -- n : ℕ
+  -- hn : X.max Y ≤ n
+  -- ⊢ |(fun n => a n * b n) n - 0| < ε
+  have hX : |a n - 0| < ε := hX n (le_of_max_le_left hn)
+  have hY : |b n - 0| < 1 := hY n (le_of_max_le_right hn)
+  simp [abs_zero] at hX hY
+  -- hX : |a n| < ε
+  -- hY : |b n| < 1
+  have han : 0 ≤ |a n| := abs_nonneg (a n)
+  have hbn : 0 ≤ |b n| := abs_nonneg (b n)
+  calc |a n * b n|
+     = |a n| * |b n| := abs_mul (a n) (b n)
+   _ < ε * 1         := mul_lt_mul'' hX hY han hbn
+   _ = ε             := mul_one ε
 
 /- 10. tendsTo_mul -/
 
