@@ -1002,12 +1002,13 @@ by
   obtain ⟨Y, hY⟩ := hb 1 zero_lt_one
   -- Y : ℕ
   -- hY : ∀ (n : ℕ), Y ≤ n → |b n - 0| < 1
-  use Nat.max X Y
-  -- ⊢ ∀ (n : ℕ), X.max Y ≤ n → |a n * b n| < ε
+  let Z := Nat.max X Y
+  use Z
+  -- ⊢ ∀ (n : ℕ), Z ≤ n → |a n * b n| < ε
   intro n hn
   -- n : ℕ
-  -- hn : X.max Y ≤ n
-  -- ⊢ |(fun n => a n * b n) n - 0| < ε
+  -- hn : Z ≤ n
+  -- ⊢ |a n * b n| < ε
   have hX : |a n - 0| < ε := hX n (le_of_max_le_left hn)
   have hY : |b n - 0| < 1 := hY n (le_of_max_le_right hn)
   simp [abs_zero] at hX hY
