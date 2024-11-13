@@ -1005,10 +1005,53 @@ by
   -- ⊢ |(fun n => a n * b n) n| < ε
   simpa [abs_mul] using mul_lt_mul'' hX hY
 
--- Comentario de JA: La 2ª demostración se puede desarrollar como se
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
 -- muestra a continuación.
 
 -- Proof 3
+-- =======
+
+example
+  (ha : TendsTo a 0)
+  (hb : TendsTo b 0)
+  : TendsTo (fun n ↦ a n * b n) 0 :=
+by
+  intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => a n * b n) n - 0| < ε
+  simp [sub_zero]
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n * b n| < ε
+  obtain ⟨X, hX⟩ := ha ε hε
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - 0| < ε
+  have h1 : 0 < (1 : ℝ) := Real.zero_lt_one
+  obtain ⟨Y, hY⟩ := hb 1 h1
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |b n - 0| < 1
+  let Z := Nat.max X Y
+  use Z
+  -- ⊢ ∀ (n : ℕ), Z ≤ n → |a n * b n| < ε
+  intro n hn
+  -- n : ℕ
+  -- hn : Z ≤ n
+  -- ⊢ |a n * b n | < ε
+  have hX : |a n - 0| < ε := hX n (le_of_max_le_left hn)
+  have hY : |b n - 0| < 1 := hY n (le_of_max_le_right hn)
+  rw [sub_zero] at *
+  -- hX : |a n| < ε
+  -- hY : |b n| < 1
+  have han : 0 ≤ |a n| := abs_nonneg (a n)
+  have hbn : 0 ≤ |b n| := abs_nonneg (b n)
+  calc |a n * b n|
+     = |a n| * |b n| := abs_mul (a n) (b n)
+   _ < ε * 1         := mul_lt_mul'' hX hY han hbn
+   _ = ε             := mul_one ε
+
+-- Comentario de JA: La 2ª demostración se puede desarrollar como se
+-- muestra a continuación.
+
+-- Proof 4
 -- =======
 
 theorem tendsTo_zero_mul_tendsTo_zero
