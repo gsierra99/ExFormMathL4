@@ -764,6 +764,27 @@ by
 -- `0`.
 -- ---------------------------------------------------------------------
 
+-- Natural language proof
+-- ======================
+
+-- The two implications will be demonstrated.
+--
+-- (⟹) Suppose that
+--    a(n) tends to t                                              (1)
+-- Also, by tendsTo_const,
+--    (n ↦ t) tends to t                                           (2)
+-- From (1) and (2), by tendsTo_sub, it follows that
+--    (n ↦ a(n) - t) tends to (t - t)
+-- Simplifying, we obtain that
+--    (n ↦ a(n) - t) tends to 0
+--
+-- (⟸) Suppose that
+--    (n ↦ a(n) - t) tends to 0                                    (3)
+-- From (3) and (2), by tendsTo_sub, it follows that
+--    (n ↦ a(n) - t + t) tends to (0 + t)
+-- Simplifying, we obtain that
+--    a(n) tends to t
+
 -- Proof 1
 -- =======
 
