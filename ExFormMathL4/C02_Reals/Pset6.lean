@@ -1006,7 +1006,7 @@ by
   simpa [abs_mul] using mul_lt_mul'' hX hY
 
 -- Comentario de JA: La 1ª demostración se puede simplificar como se
--- muestra a continuación.
+-- muestra a continuación .
 
 -- Proof 3
 -- =======
