@@ -903,6 +903,30 @@ by
 -- their product tends to zero.
 -- ---------------------------------------------------------------------
 
+-- Natural language proof
+-- ======================
+
+-- Since a(n) and b(n) tend to 0, there exist X, Y ∈ ℕ such that
+--    (∀n ∈ ℕ)[X ≤ n → |a(n) - 0| < ε]                               (1)
+--    (∀n ∈ ℕ)[Y ≤ n → |b(n) - 0| < 1]                               (2)
+-- Let
+--    Z = máx(X, Y).                                                 (3)
+-- We are going to prove that
+--    (∀n ∈ ℕ)[Z ≤ n → |a(n)·b(n) - 0| < ε]
+-- For this, let n ∈ ℕ such that
+--    Z ≤ n                                                          (4)
+-- By (3) and (4) we have that
+--    X ≤ n                                                          (5)
+--    Y ≤ n                                                          (6)
+-- By (5) and (1), we have that
+--    |a(n)| < ε                                                     (7)
+-- By (6) and (2), we have that
+--    |b(n)| < 1                                                     (8)
+-- Therefore
+--    |a(n)·b(n) - 0| = |a(n)|·|b(n)|
+--                    < ε·1             [by (7) and (8)]
+--                    = ε
+
 -- Proof 1
 -- =======
 
@@ -976,7 +1000,9 @@ by
   specialize hY n (le_of_max_le_right hn)
   -- hY : |b n - 0| < 1
   rw [sub_zero] at *
-
+  -- hX : |a n| < ε
+  -- hY : |b n| < 1
+  -- ⊢ |(fun n => a n * b n) n| < ε
   simpa [abs_mul] using mul_lt_mul'' hX hY
 
 -- Comentario de JA: La 2ª demostración se puede desarrollar como se
