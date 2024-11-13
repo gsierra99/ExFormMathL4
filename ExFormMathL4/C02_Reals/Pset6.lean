@@ -771,26 +771,60 @@ example
   : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
 by
   constructor
-  intro h
-  rw [TendsTo] at *
-  intro ε hε
-  specialize h ε hε
-  cases' h with X hX
-  use X
-  intro n hn
-  specialize hX n hn
-  simp
-  exact hX
-  intro h
-  rw [TendsTo] at *
-  intro ε hε
-  specialize h ε hε
-  cases' h with X hX
-  use X
-  intro n hn
-  specialize hX n hn
-  simp at hX
-  exact hX
+  . -- ⊢ TendsTo a t → TendsTo (fun n => a n - t) 0
+    intro h
+    -- h : TendsTo a t
+    -- ⊢ TendsTo (fun n => a n - t) 0
+    rw [TendsTo] at *
+    -- h : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+    -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t - 0| < ε
+    intro ε hε
+    -- ε : ℝ
+    -- hε : ε > 0
+    -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t - 0| < ε
+    specialize h ε hε
+    -- h : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+    cases' h with X hX
+    -- X : ℕ
+    -- hX : ∀ (n : ℕ), X ≤ n → |a n - t| < ε
+    use X
+    -- ⊢ ∀ (n : ℕ), X ≤ n → |a n - t - 0| < ε
+    intro n hn
+    -- n : ℕ
+    -- hn : X ≤ n
+    -- ⊢ |a n - t - 0| < ε
+    specialize hX n hn
+    -- hX : |a n - t| < ε
+    simp
+    -- ⊢ |a n - t| < ε
+    exact hX
+  . -- ⊢ TendsTo (fun n => a n - t) 0 → TendsTo a t
+    intro h
+    -- h : TendsTo (fun n => a n - t) 0
+    -- ⊢ TendsTo a t
+    rw [TendsTo] at *
+    -- h : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t - 0| < ε
+    -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+    intro ε hε
+    -- ε : ℝ
+    -- hε : ε > 0
+    -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+    specialize h ε hε
+    -- h : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t - 0| < ε
+    cases' h with X hX
+    -- X : ℕ
+    -- hX : ∀ (n : ℕ), X ≤ n → |a n - t - 0| < ε
+    use X
+    -- ⊢ ∀ (n : ℕ), X ≤ n → |a n - t| < ε
+    intro n hn
+    -- n : ℕ
+    -- hn : X ≤ n
+    -- ⊢ |a n - t| < ε
+    specialize hX n hn
+    -- hX : |a n - t - 0| < ε
+    simp at hX
+    -- hX : |a n - t| < ε
+    exact hX
 
 /- Automatic proof -/
 theorem tendsTo_sub_lim_iff {a : ℕ → ℝ} {t : ℝ} : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
