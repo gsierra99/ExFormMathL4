@@ -898,7 +898,10 @@ by
       := by simp_all only [sub_add_cancel, zero_add]
     exact h3
 
-/- 9. tendsTo_zero_mul_tendsTo_zero -/
+-- ---------------------------------------------------------------------
+-- Exercise 9. Prove that if `a(n)` and `b(n)` both tend to zero, then
+-- their product tends to zero.
+-- ---------------------------------------------------------------------
 
 /- Detailed proof -/
 theorem tendsTo_zero_mul_tendsTo_zero_detailed {a b : ℕ → ℝ} (ha : TendsTo a 0) (hb : TendsTo b 0) :
