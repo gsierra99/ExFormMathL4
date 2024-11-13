@@ -829,7 +829,7 @@ by
 -- Proof 2
 -- =======
 
-theorem tendsTo_sub_lim_iff
+example
   : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
 by
   constructor
@@ -843,6 +843,39 @@ by
     -- h : TendsTo (fun n => a n - t) 0
     -- ⊢ TendsTo a t
     simpa using tendsTo_add h (tendsTo_const t)
+
+-- Comentario de JA: La 2ª demostración se puede desarrollar como se
+-- muestra a continuación.
+
+-- Proof 3
+-- =======
+
+theorem tendsTo_sub_lim_iff
+  : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
+by
+  constructor
+  · -- ⊢ TendsTo a t → TendsTo (fun n => a n - t) 0
+    intro h
+    -- h : TendsTo a t
+    -- ⊢ TendsTo (fun n => a n - t) 0
+    have h1 : TendsTo (fun n => t) t
+      := tendsTo_const t
+    have h2 : TendsTo (fun n => a n - t) (t - t)
+      := tendsTo_sub h h1
+    have h3 : TendsTo (fun n => a n - t) 0
+      := by simp_all only [sub_self]
+    exact h3
+  · -- ⊢ TendsTo (fun n => a n - t) 0 → TendsTo a t
+    intro h
+    -- h : TendsTo (fun n => a n - t) 0
+    -- ⊢ TendsTo a t
+    have h1 : TendsTo (fun n => t) t
+      := tendsTo_const t
+    have h2 : TendsTo (fun n => a n - t + t) (0 + t)
+      := tendsTo_add h h1
+    have h3 : TendsTo a t
+      := by simp_all only [sub_add_cancel, zero_add]
+    exact h3
 
 /- 9. tendsTo_zero_mul_tendsTo_zero -/
 
