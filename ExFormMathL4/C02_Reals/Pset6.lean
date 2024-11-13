@@ -760,12 +760,16 @@ by
   exact h3
 
 -- ---------------------------------------------------------------------
--- Exercise 8. Prove that if `a(n)` tends to `t` then `a(n)-t` tends to
+-- Exercise 8. Prove that `a(n)` tends to `t` iff `a(n)-t` tends to
 -- `0`.
 -- ---------------------------------------------------------------------
 
-/- Detailed proof -/
-theorem tendsTo_sub_lim_iff_detailed {a : ℕ → ℝ} {t : ℝ} : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 := by
+-- Proof 1
+-- =======
+
+example
+  : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
+by
   constructor
   intro h
   rw [TendsTo] at *
