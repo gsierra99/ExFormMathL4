@@ -826,13 +826,22 @@ by
     -- hX : |a n - t| < ε
     exact hX
 
-/- Automatic proof -/
-theorem tendsTo_sub_lim_iff {a : ℕ → ℝ} {t : ℝ} : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
-  by
+-- Proof 2
+-- =======
+
+theorem tendsTo_sub_lim_iff
+  : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
+by
   constructor
-  · intro h
+  · -- ⊢ TendsTo a t → TendsTo (fun n => a n - t) 0
+    intro h
+    -- h : TendsTo a t
+    -- ⊢ TendsTo (fun n => a n - t) 0
     simpa using tendsTo_sub h (tendsTo_const t)
-  · intro h
+  · -- ⊢ TendsTo (fun n => a n - t) 0 → TendsTo a t
+    intro h
+    -- h : TendsTo (fun n => a n - t) 0
+    -- ⊢ TendsTo a t
     simpa using tendsTo_add h (tendsTo_const t)
 
 /- 9. tendsTo_zero_mul_tendsTo_zero -/
