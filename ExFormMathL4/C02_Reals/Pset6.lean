@@ -18,7 +18,8 @@ namespace Section2sheet6
 open Section2sheet3 Section2sheet5
 
 variable {a : ℕ → ℝ}
-variable {c t : ℝ }
+variable {t : ℝ}
+variable (c : ℝ)
 
 -- ---------------------------------------------------------------------
 -- Exercise 1. Prove that if `a(n)` tends to `t` then `37 * a(n)` tends
@@ -397,6 +398,15 @@ by
 -- constant then `c * a(n)` tends to `c * t`.
 -- ---------------------------------------------------------------------
 
+-- Demostración en lenguaje natural
+-- ================================
+
+-- Natural language proof
+-- ======================
+
+-- If c < 0, then -c > 0 and, by tendsTo_pos_const_mul, -c⋅a(n) tends to
+-- -c⋅t and, by tendsTo_neg, c⋅a(n) tends to c⋅t.
+
 -- Proof 1
 -- =======
 
@@ -552,87 +562,150 @@ by
 -- Proof 5
 -- =======
 
-example
+lemma tendsTo_neg_const_mul
   (h : TendsTo a t)
   (hc : c < 0)
   : TendsTo (fun n ↦ c * a n) (c * t) :=
 by
   have h1 : 0 < -c := Left.neg_pos_iff.mpr hc
   have h2 : TendsTo (fun n ↦ -c * a n) (-c * t)
-    := tendsTo_pos_const_mul h h1
+    := by exact tendsTo_pos_const_mul (-c) h h1
   have h3 : TendsTo (fun n ↦ -(-c * a n)) (-(-c * t))
     := tendsTo_neg h2
   show TendsTo (fun n ↦ c * a n) (c * t)
   aesop
 
--- Comentario de JA: La 5ª demostración se puede simplificar como se
--- muestra a continuación.
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that if `a(n)` tends to `t` and `c` is a constant
+-- then `c * a(n)` tends to `c * t`.
+-- ---------------------------------------------------------------------
 
--- Proof 6
+-- Natural language proof
+-- ======================
+
+-- Three cases are considered.
+--
+-- Case 1: Suppose that c > 0. Then, by the property
+-- tendsTo_pos_const_mul, we have the desired result.
+--
+-- Case 2: Suppose that c = 0. Then, by the property tendsTo_const, we
+-- obtain the result.
+--
+-- Case 3: Suppose that c < 0. Then, by the property
+-- tendsTo_neg_const_mul, the result follows.
+
+-- Proof 1
 -- =======
 
-theorem tendsTo_neg_const_mul
+example
   (h : TendsTo a t)
-  (hc : c < 0)
   : TendsTo (fun n ↦ c * a n) (c * t) :=
 by
-  have := tendsTo_neg (tendsTo_pos_const_mul h (Left.neg_pos_iff.mpr hc))
-  aesop
-
-/- 4. tendsTo_const_mul -/
-
-/- Detailed proof -/
-theorem tendsTo_const_mul_detailed {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-  TendsTo (fun n ↦ c * a n) (c * t) := by
   obtain hcpos | hczero | hcneg := lt_trichotomy 0 c
-  exact tendsTo_pos_const_mul h hcpos
-  rw [← hczero]
-  simp
-  exact tendsTo_const 0
-  exact tendsTo_neg_const_mul h hcneg
+  . -- hcpos : 0 < c
+    -- ⊢ TendsTo (fun n => c * a n) (c * t)
+    exact tendsTo_pos_const_mul c h hcpos
+  . -- hczero : 0 = c
+    -- ⊢ TendsTo (fun n => c * a n) (c * t)
+    rw [← hczero]
+    -- ⊢ TendsTo (fun n => 0 * a n) (0 * t)
+    simp
+    -- ⊢ TendsTo (fun n => 0) 0
+    exact tendsTo_const 0
+  . -- hcneg : c < 0
+    -- ⊢ TendsTo (fun n => c * a n) (c * t)
+    exact tendsTo_neg_const_mul c h hcneg
 
-/- Automatic proof -/
-theorem tendsTo_const_mul {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-    TendsTo (fun n ↦ c * a n) (c * t) :=
-  by
+-- Proof 2
+-- =======
+
+theorem tendsTo_const_mul
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ c * a n) (c * t) :=
+by
   obtain hc | rfl | hc := lt_trichotomy 0 c
-  · exact tendsTo_pos_const_mul h hc
-  · simpa using tendsTo_const 0
-  · exact tendsTo_neg_const_mul h hc
+  · -- hc : 0 < c
+    -- ⊢ TendsTo (fun n => c * a n) (c * t)
+    exact tendsTo_pos_const_mul c h hc
+  · -- ⊢ TendsTo (fun n => 0 * a n) (0 * t)
+    simpa using tendsTo_const 0
+  · -- hc : c < 0
+    -- ⊢ TendsTo (fun n => c * a n) (c * t)
+    exact tendsTo_neg_const_mul c h hc
 
-/- 5. tendsTo_mul_const -/
+-- ---------------------------------------------------------------------
+-- Exercise 5. Prove that if `a(n)` tends to `t` and `c` is a constant
+-- then `a(n) * c` tends to `t * c`.
+-- ---------------------------------------------------------------------
 
-/- Detailed proof -/
-theorem tendsTo_mul_const_detailed {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-  TendsTo (fun n ↦ a n * c) (t * c) := by
+-- Natural language proof
+-- ======================
+
+-- It is an immediate consequence of tendsTo_const_mul.
+
+-- Proof 1
+-- =======
+
+example
+  (c : ℝ)
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ a n * c) (t * c) :=
+by
   simp [mul_comm]
+  -- ⊢ TendsTo (fun n => c * a n) (c * t)
   rw [mul_comm]
+  -- ⊢ TendsTo (fun n => c * a n) (t * c)
   exact tendsTo_const_mul c h
 
-/- Automatic proof -/
-theorem tendsTo_mul_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t) :
-    TendsTo (fun n ↦ a n * c) (t * c) := by
+-- Proof 2
+-- =======
 
+theorem tendsTo_mul_const
+  (c : ℝ)
+  (h : TendsTo a t)
+  : TendsTo (fun n ↦ a n * c) (t * c) :=
+by
   simpa [mul_comm] using tendsTo_const_mul c h
 
-/- 6. tendsTo_neg' -/
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that if `a(n)` tends to `t`,  then `-a(n)` tends
+-- to `-t`.
+-- ---------------------------------------------------------------------
 
-/- Detailed proof -/
-theorem tendsTo_neg'_detailed {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n ↦ -a n) (-t) := by
-  have h : TendsTo (fun n ↦ -1 * a n) (-1 * t) := tendsTo_const_mul (-1) ha
+-- Proof 1
+-- =======
+
+example
+  (ha : TendsTo a t)
+  : TendsTo (fun n ↦ -a n) (-t) :=
+by
+  have h : TendsTo (fun n ↦ -1 * a n) (-1 * t)
+    := tendsTo_const_mul (-1) ha
   simp at h
+  -- h : TendsTo (fun n => -a n) (-t)
   exact h
 
+-- Proof 2
+-- =======
 
-/- Automatic proof -/
-theorem tendsTo_neg' {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n ↦ -a n) (-t) := by
+theorem tendsTo_neg'
+  (ha : TendsTo a t)
+  : TendsTo (fun n ↦ -a n) (-t) :=
+by
   simpa using tendsTo_const_mul (-1) ha
 
-/- 6. tendsTo_of_tendsTo_sub -/
+-- ---------------------------------------------------------------------
+-- Exercise 7. Prove that if `a(n) - b(n)` tends to `t` and `b(n)` tends
+-- to `u` then `a(n)` tends to `t + u`.
+-- ---------------------------------------------------------------------
 
-/- Detailed proof -/
-theorem tendsTo_of_tendsTo_sub_detailed {a b : ℕ → ℝ} {t u : ℝ} (h1 : TendsTo (fun n ↦ a n - b n) t)
-  (h2 : TendsTo b u) : TendsTo a (t + u) := by
+-- Proof 1
+-- =======
+
+example
+  (h1 : TendsTo (fun n ↦ a n - b n) t)
+  (h2 : TendsTo b u) : TendsTo a (t + u) :=
+by
   rw [TendsTo] at *
   intro ε hε
   have hε' : 0 < ε / 2 := by linarith
@@ -656,81 +729,368 @@ theorem tendsTo_of_tendsTo_sub_detailed {a b : ℕ → ℝ} {t u : ℝ} (h1 : Te
     _ < ε / 2 + ε / 2 := by linarith
     _ = ε := by linarith
 
+-- Comentario de JA: La 1ª demostración no usa los ejercicios anteriores
+-- y se debe de eliminar.
 
-/- Automatic proof -/
-theorem tendsTo_of_tendsTo_sub {a b : ℕ → ℝ} {t u : ℝ} (h1 : TendsTo (fun n ↦ a n - b n) t)
-    (h2 : TendsTo b u) : TendsTo a (t + u) := by
+-- Proof 2
+-- =======
 
+example
+  (h1 : TendsTo (fun n ↦ a n - b n) t)
+  (h2 : TendsTo b u)
+  : TendsTo a (t + u) :=
+by
   simpa using tendsTo_add h1 h2
 
-/- 7. tendsTo_sub_lim_iff -/
+-- Comentario de JA: La 2ª demostración se puede detallar como se
+-- muestra a continuación.
 
-/- Detailed proof -/
-theorem tendsTo_sub_lim_iff_detailed {a : ℕ → ℝ} {t : ℝ} : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 := by
-  constructor
-  intro h
-  rw [TendsTo] at *
-  intro ε hε
-  specialize h ε hε
-  cases' h with X hX
-  use X
-  intro n hn
-  specialize hX n hn
-  simp
-  exact hX
-  intro h
-  rw [TendsTo] at *
-  intro ε hε
-  specialize h ε hε
-  cases' h with X hX
-  use X
-  intro n hn
-  specialize hX n hn
-  simp at hX
-  exact hX
+-- Proof 3
+-- =======
 
-/- Automatic proof -/
-theorem tendsTo_sub_lim_iff {a : ℕ → ℝ} {t : ℝ} : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
-  by
+theorem tendsTo_of_tendsTo_sub
+  (h1 : TendsTo (fun n ↦ a n - b n) t)
+  (h2 : TendsTo b u)
+  : TendsTo a (t + u) :=
+by
+  have h3 : TendsTo (fun n ↦ (a n - b n) + (b n)) (t + u)
+    := tendsTo_add h1 h2
+  simp at h3
+  -- h3 : TendsTo (fun n => a n) (t + u)
+  exact h3
+
+-- ---------------------------------------------------------------------
+-- Exercise 8. Prove that `a(n)` tends to `t` iff `a(n)-t` tends to
+-- `0`.
+-- ---------------------------------------------------------------------
+
+-- Natural language proof
+-- ======================
+
+-- The two implications will be demonstrated.
+--
+-- (⟹) Suppose that
+--    a(n) tends to t                                              (1)
+-- Also, by tendsTo_const,
+--    (n ↦ t) tends to t                                           (2)
+-- From (1) and (2), by tendsTo_sub, it follows that
+--    (n ↦ a(n) - t) tends to (t - t)
+-- Simplifying, we obtain that
+--    (n ↦ a(n) - t) tends to 0
+--
+-- (⟸) Suppose that
+--    (n ↦ a(n) - t) tends to 0                                    (3)
+-- From (3) and (2), by tendsTo_sub, it follows that
+--    (n ↦ a(n) - t + t) tends to (0 + t)
+-- Simplifying, we obtain that
+--    a(n) tends to t
+
+-- Proof 1
+-- =======
+
+example
+  : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
+by
   constructor
-  · intro h
+  . -- ⊢ TendsTo a t → TendsTo (fun n => a n - t) 0
+    intro h
+    -- h : TendsTo a t
+    -- ⊢ TendsTo (fun n => a n - t) 0
+    rw [TendsTo] at *
+    -- h : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+    -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t - 0| < ε
+    intro ε hε
+    -- ε : ℝ
+    -- hε : ε > 0
+    -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t - 0| < ε
+    specialize h ε hε
+    -- h : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+    cases' h with X hX
+    -- X : ℕ
+    -- hX : ∀ (n : ℕ), X ≤ n → |a n - t| < ε
+    use X
+    -- ⊢ ∀ (n : ℕ), X ≤ n → |a n - t - 0| < ε
+    intro n hn
+    -- n : ℕ
+    -- hn : X ≤ n
+    -- ⊢ |a n - t - 0| < ε
+    specialize hX n hn
+    -- hX : |a n - t| < ε
+    simp
+    -- ⊢ |a n - t| < ε
+    exact hX
+  . -- ⊢ TendsTo (fun n => a n - t) 0 → TendsTo a t
+    intro h
+    -- h : TendsTo (fun n => a n - t) 0
+    -- ⊢ TendsTo a t
+    rw [TendsTo] at *
+    -- h : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t - 0| < ε
+    -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+    intro ε hε
+    -- ε : ℝ
+    -- hε : ε > 0
+    -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+    specialize h ε hε
+    -- h : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t - 0| < ε
+    cases' h with X hX
+    -- X : ℕ
+    -- hX : ∀ (n : ℕ), X ≤ n → |a n - t - 0| < ε
+    use X
+    -- ⊢ ∀ (n : ℕ), X ≤ n → |a n - t| < ε
+    intro n hn
+    -- n : ℕ
+    -- hn : X ≤ n
+    -- ⊢ |a n - t| < ε
+    specialize hX n hn
+    -- hX : |a n - t - 0| < ε
+    simp at hX
+    -- hX : |a n - t| < ε
+    exact hX
+
+-- Proof 2
+-- =======
+
+example
+  : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
+by
+  constructor
+  · -- ⊢ TendsTo a t → TendsTo (fun n => a n - t) 0
+    intro h
+    -- h : TendsTo a t
+    -- ⊢ TendsTo (fun n => a n - t) 0
     simpa using tendsTo_sub h (tendsTo_const t)
-  · intro h
+  · -- ⊢ TendsTo (fun n => a n - t) 0 → TendsTo a t
+    intro h
+    -- h : TendsTo (fun n => a n - t) 0
+    -- ⊢ TendsTo a t
     simpa using tendsTo_add h (tendsTo_const t)
 
-/- 8. tendsTo_zero_mul_tendsTo_zero -/
+-- Comentario de JA: La 2ª demostración se puede desarrollar como se
+-- muestra a continuación.
 
-/- Detailed proof -/
-theorem tendsTo_zero_mul_tendsTo_zero_detailed {a b : ℕ → ℝ} (ha : TendsTo a 0) (hb : TendsTo b 0) :
-  TendsTo (fun n ↦ a n * b n) 0 := by
+-- Proof 3
+-- =======
+
+theorem tendsTo_sub_lim_iff
+  : TendsTo a t ↔ TendsTo (fun n ↦ a n - t) 0 :=
+by
+  constructor
+  · -- ⊢ TendsTo a t → TendsTo (fun n => a n - t) 0
+    intro h
+    -- h : TendsTo a t
+    -- ⊢ TendsTo (fun n => a n - t) 0
+    have h1 : TendsTo (fun n => t) t
+      := tendsTo_const t
+    have h2 : TendsTo (fun n => a n - t) (t - t)
+      := tendsTo_sub h h1
+    have h3 : TendsTo (fun n => a n - t) 0
+      := by simp_all only [sub_self]
+    exact h3
+  · -- ⊢ TendsTo (fun n => a n - t) 0 → TendsTo a t
+    intro h
+    -- h : TendsTo (fun n => a n - t) 0
+    -- ⊢ TendsTo a t
+    have h1 : TendsTo (fun n => t) t
+      := tendsTo_const t
+    have h2 : TendsTo (fun n => a n - t + t) (0 + t)
+      := tendsTo_add h h1
+    have h3 : TendsTo a t
+      := by simp_all only [sub_add_cancel, zero_add]
+    exact h3
+
+-- ---------------------------------------------------------------------
+-- Exercise 9. Prove that if `a(n)` and `b(n)` both tend to zero, then
+-- their product tends to zero.
+-- ---------------------------------------------------------------------
+
+-- Natural language proof
+-- ======================
+
+-- Since a(n) and b(n) tend to 0, there exist X, Y ∈ ℕ such that
+--    (∀n ∈ ℕ)[X ≤ n → |a(n) - 0| < ε]                               (1)
+--    (∀n ∈ ℕ)[Y ≤ n → |b(n) - 0| < 1]                               (2)
+-- Let
+--    Z = máx(X, Y).                                                 (3)
+-- We are going to prove that
+--    (∀n ∈ ℕ)[Z ≤ n → |a(n)·b(n) - 0| < ε]
+-- For this, let n ∈ ℕ such that
+--    Z ≤ n                                                          (4)
+-- By (3) and (4) we have that
+--    X ≤ n                                                          (5)
+--    Y ≤ n                                                          (6)
+-- By (5) and (1), we have that
+--    |a(n)| < ε                                                     (7)
+-- By (6) and (2), we have that
+--    |b(n)| < 1                                                     (8)
+-- Therefore
+--    |a(n)·b(n) - 0| = |a(n)|·|b(n)|
+--                    < ε·1             [by (7) and (8)]
+--                    = ε
+
+-- Proof 1
+-- =======
+
+example
+  (ha : TendsTo a 0)
+  (hb : TendsTo b 0)
+  : TendsTo (fun n ↦ a n * b n) 0 :=
+by
   rw [TendsTo] at *
+  -- ha : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - 0| < ε
+  -- hb : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |b n - 0| < ε
+  -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n * b n - 0| < ε
   intro ε hε
-  have hsqrteps : 0 < ε^(1/2) := by exact pow_pos hε (1 / 2)
-  obtain ⟨X, hX⟩ := ha (ε^(1/2)) hsqrteps
-  obtain ⟨Y, hY⟩ := hb (ε^(1/2)) hsqrteps
-  use max X Y
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n * b n - 0| < ε
+  have hsqrteps : 0 < √ε := Real.sqrt_pos_of_pos hε
+  obtain ⟨X, hX⟩ := ha (√ε) hsqrteps
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - 0| < √ε
+  obtain ⟨Y, hY⟩ := hb (√ε) hsqrteps
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |b n - 0| < √ε
+  use Nat.max X Y
+  -- ⊢ ∀ (n : ℕ), X.max Y ≤ n → |a n * b n - 0| < ε
   intro n hn
+  -- n : ℕ
+  -- hn : X.max Y ≤ n
+  -- ⊢ |a n * b n - 0| < ε
   specialize hX n (le_of_max_le_left hn)
+  -- hX : |a n - 0| < √ε
   specialize hY n (le_of_max_le_right hn)
+  -- hY : |b n - 0| < √ε
   rw [sub_zero] at *
-  calc
-    |a n * b n| = |a n| * |b n| := by rw [abs_mul]
-    _ < ε^(1/2) * ε^(1/2) := sorry
-    _ = ε := sorry
+  -- hX : |a n| < √ε
+  -- hY : |b n| < √ε
+  -- ⊢ |a n * b n| < ε
+  have han : 0 ≤ |a n| := abs_nonneg (a n)
+  have hbn : 0 ≤ |b n| := abs_nonneg (b n)
+  calc |a n * b n|
+     = |a n| * |b n| := abs_mul (a n) (b n)
+   _ < √ε * √ε       := mul_lt_mul'' hX hY han hbn
+   _ = ε             := Real.mul_self_sqrt (le_of_lt hε)
 
-/- Automatic proof -/
-theorem tendsTo_zero_mul_tendsTo_zero {a b : ℕ → ℝ} (ha : TendsTo a 0) (hb : TendsTo b 0) :
-    TendsTo (fun n ↦ a n * b n) 0 := by
+-- Proof 2
+-- =======
+
+example
+  (ha : TendsTo a 0)
+  (hb : TendsTo b 0)
+  : TendsTo (fun n ↦ a n * b n) 0 :=
+by
   intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => a n * b n) n - 0| < ε
   obtain ⟨X, hX⟩ := ha ε hε
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - 0| < ε
   obtain ⟨Y, hY⟩ := hb 1 zero_lt_one
-  use max X Y
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |b n - 0| < 1
+  use Nat.max X Y
+  -- ⊢ ∀ (n : ℕ), X.max Y ≤ n → |(fun n => a n * b n) n - 0| < ε
   intro n hn
+  -- n : ℕ
+  -- hn : X.max Y ≤ n
+  -- ⊢ |(fun n => a n * b n) n - 0| < ε
   specialize hX n (le_of_max_le_left hn)
+  -- hX : |a n - 0| < ε
   specialize hY n (le_of_max_le_right hn)
+  -- hY : |b n - 0| < 1
+  rw [sub_zero] at *
+  -- hX : |a n| < ε
+  -- hY : |b n| < 1
+  -- ⊢ |(fun n => a n * b n) n| < ε
   simpa [abs_mul] using mul_lt_mul'' hX hY
 
-/- 9. tendsTo_mul -/
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación .
+
+-- Proof 3
+-- =======
+
+example
+  (ha : TendsTo a 0)
+  (hb : TendsTo b 0)
+  : TendsTo (fun n ↦ a n * b n) 0 :=
+by
+  intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => a n * b n) n - 0| < ε
+  simp [sub_zero]
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n * b n| < ε
+  obtain ⟨X, hX⟩ := ha ε hε
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - 0| < ε
+  have h1 : 0 < (1 : ℝ) := Real.zero_lt_one
+  obtain ⟨Y, hY⟩ := hb 1 h1
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |b n - 0| < 1
+  let Z := Nat.max X Y
+  use Z
+  -- ⊢ ∀ (n : ℕ), Z ≤ n → |a n * b n| < ε
+  intro n hn
+  -- n : ℕ
+  -- hn : Z ≤ n
+  -- ⊢ |a n * b n | < ε
+  have hX : |a n - 0| < ε := hX n (le_of_max_le_left hn)
+  have hY : |b n - 0| < 1 := hY n (le_of_max_le_right hn)
+  rw [sub_zero] at *
+  -- hX : |a n| < ε
+  -- hY : |b n| < 1
+  have han : 0 ≤ |a n| := abs_nonneg (a n)
+  have hbn : 0 ≤ |b n| := abs_nonneg (b n)
+  calc |a n * b n|
+     = |a n| * |b n| := abs_mul (a n) (b n)
+   _ < ε * 1         := mul_lt_mul'' hX hY han hbn
+   _ = ε             := mul_one ε
+
+-- Comentario de JA: La 2ª demostración se puede desarrollar como se
+-- muestra a continuación.
+
+-- Proof 4
+-- =======
+
+theorem tendsTo_zero_mul_tendsTo_zero
+  (ha : TendsTo a 0)
+  (hb : TendsTo b 0)
+  : TendsTo (fun n ↦ a n * b n) 0 :=
+by
+  intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |(fun n => a n * b n) n - 0| < ε
+  simp [abs_zero]
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n * b n| < ε
+  obtain ⟨X, hX⟩ := ha ε hε
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - 0| < ε
+  obtain ⟨Y, hY⟩ := hb 1 zero_lt_one
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |b n - 0| < 1
+  let Z := Nat.max X Y
+  use Z
+  -- ⊢ ∀ (n : ℕ), Z ≤ n → |a n * b n| < ε
+  intro n hn
+  -- n : ℕ
+  -- hn : Z ≤ n
+  -- ⊢ |a n * b n| < ε
+  have hX : |a n - 0| < ε := hX n (le_of_max_le_left hn)
+  have hY : |b n - 0| < 1 := hY n (le_of_max_le_right hn)
+  simp [abs_zero] at hX hY
+  -- hX : |a n| < ε
+  -- hY : |b n| < 1
+  have han : 0 ≤ |a n| := abs_nonneg (a n)
+  have hbn : 0 ≤ |b n| := abs_nonneg (b n)
+  calc |a n * b n|
+     = |a n| * |b n| := abs_mul (a n) (b n)
+   _ < ε * 1         := mul_lt_mul'' hX hY han hbn
+   _ = ε             := mul_one ε
+
+/- 10. tendsTo_mul -/
 
 /- Detailed proof -/
 theorem tendsTo_mul_detailed (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : TendsTo b u) :
@@ -760,7 +1120,7 @@ theorem tendsTo_mul (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : Ten
   · exact tendsTo_const_mul t hb
   · exact tendsTo_mul_const u ha
 
-/- 10. tendsTo_unique -/
+/- 11. tendsTo_unique -/
 
 /- Automatic proof -/
 theorem tendsTo_unique (a : ℕ → ℝ) (s t : ℝ) (hs : TendsTo a s) (ht : TendsTo a t) : s = t :=
