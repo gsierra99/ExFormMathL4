@@ -1092,6 +1092,25 @@ by
 -- `u` then `a(n)·b(n)` tends to `t·u`.
 -- ---------------------------------------------------------------------
 
+-- Natural language proof
+-- ======================
+
+-- Since aₙ tends to t and bₙ tends to u, we have that
+--    `aₙ-t` tends to `0`                                          (1)
+--    `bₙ-u` tends to `0`                                          (2)
+-- From (1) and (2) we have that
+--    `(aₙ-t)(bₙ-u)` tends to `0`                                  (3)
+-- From (2) we have that
+--    `t·(bₙ-u)` tends to `t·0`                                    (4)
+-- From (1) we have that
+--    `(aₙ-t)·u` tends to `0·u`                                    (5)
+-- From (3), (4) and (5) we have that
+--    `(aₙ-t)(bₙ-u)+t·(bₙ-u)+(aₙ-t)·u` tends to `0+t·0+0·u`
+-- and, simplifying, we get that
+--    `aₙ·bₙ-t·u` tends to `0`
+-- Therefore,
+--    `aₙ·bₙ` tends to `t·u`
+
 -- Proof 1
 -- =======
 
@@ -1130,7 +1149,7 @@ by
   -- hY : |b n - u| < ε
   sorry
 
--- Comentario de JA: La 1 demostración no se puede concluir a partir de
+-- Comentario de JA: La 1ª demostración no se puede concluir a partir de
 -- hX y hY exclusivamente, como se ve en el siguiente contraejemplo
 -- haciendo aₙ = 10, t = 9, bₙ = 10, u = 9 y ε = 2 se tiene
 --    |aₙ - t| < ε
