@@ -17,8 +17,8 @@ namespace Section2sheet6
 
 open Section2sheet3 Section2sheet5
 
-variable {a : ℕ → ℝ}
-variable {t : ℝ}
+variable {a b : ℕ → ℝ}
+variable {t u : ℝ}
 variable (c : ℝ)
 
 -- ---------------------------------------------------------------------
@@ -1092,19 +1092,44 @@ by
 -- `u` then `a(n)·b(n)` tends to `t·u`.
 -- ---------------------------------------------------------------------
 
-theorem tendsTo_mul_detailed (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : TendsTo b u) :
-  TendsTo (fun n ↦ a n * b n) (t * u) := by
+-- Proof 1
+-- =======
+
+example
+  (ha : TendsTo a t)
+  (hb : TendsTo b u)
+  : TendsTo (fun n ↦ a n * b n) (t * u) :=
+by
   rw [TendsTo] at *
+  -- ha : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  -- hb : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |b n - u| < ε
+  -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n * b n - t * u| < ε
   intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n * b n - t * u| < ε
   specialize ha ε hε
+  -- ha : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
   specialize hb ε hε
+  -- hb : ∃ B, ∀ (n : ℕ), B ≤ n → |b n - u| < ε
   cases' ha with X hX
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - t| < ε
   cases' hb with Y hY
-  use max X Y
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |b n - u| < ε
+  use Nat.max X Y
+  -- ⊢ ∀ (n : ℕ), X.max Y ≤ n → |a n * b n - t * u| < ε
   intro n hn
+  -- n : ℕ
+  -- hn : X.max Y ≤ n
+  -- ⊢ |a n * b n - t * u| < ε
   specialize hX n (le_of_max_le_left hn)
+  -- hX : |a n - t| < ε
   specialize hY n (le_of_max_le_right hn)
+  -- hY : |b n - u| < ε
   sorry
+
 
 /- Automatic proof -/
 theorem tendsTo_mul (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : TendsTo b u) :
