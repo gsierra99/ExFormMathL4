@@ -1140,7 +1140,7 @@ by
 -- Proof 2
 -- =======
 
-theorem tendsTo_mul
+example
   (ha : TendsTo a t)
   (hb : TendsTo b u)
   : TendsTo (fun n ↦ a n * b n) (t * u) :=
@@ -1165,6 +1165,43 @@ by
   · -- ⊢ TendsTo (fun n => t * (b n - u)) (t * 0)
     exact tendsTo_const_mul t hb
   · -- ⊢ TendsTo (fun n => (a n - t) * u) (0 * u)
+    exact tendsTo_mul_const u ha
+
+-- Comentario de JA: La 2ª demostración se puede modificar como se
+-- muestra a continuación.
+
+-- Proof 3
+-- =======
+
+theorem tendsTo_mul
+  (ha : TendsTo a t)
+  (hb : TendsTo b u)
+  : TendsTo (fun n ↦ a n * b n) (t * u) :=
+by
+  rw [tendsTo_sub_lim_iff] at *
+  -- ha : TendsTo (fun n => a n - t) 0
+  -- hb : TendsTo (fun n => b n - u) 0
+  -- ⊢ TendsTo (fun n => a n * b n - t * u) 0
+  have h : ∀ n, a n * b n - t * u
+                = (a n - t) * (b n - u)
+                  + t * (b n - u)
+                  + (a n - t) * u :=
+    by intro n
+       -- n : ℕ
+       -- ⊢ a n * b n - t * u = (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u
+       ring
+  simp [h]
+  -- ⊢ TendsTo (fun n => (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u) 0
+  rw [show (0 : ℝ) = 0 + t * 0 + 0 * u by simp]
+  -- ⊢ TendsTo (fun n => (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u) (0 + t * 0 + 0 * u)
+  apply tendsTo_add
+  . -- ⊢ TendsTo (fun n => (a n - t) * (b n - u) + t * (b n - u)) (0 + t * 0)
+    apply tendsTo_add
+    . -- ⊢ TendsTo (fun n => (a n - t) * (b n - u)) 0
+      exact tendsTo_zero_mul_tendsTo_zero ha hb
+    . -- ⊢ TendsTo (fun n => t * (b n - u)) (t * 0)
+      exact tendsTo_const_mul t hb
+  . -- ⊢ TendsTo (fun n => (a n - t) * u) (0 * u)
     exact tendsTo_mul_const u ha
 
 /- 11. tendsTo_unique -/
