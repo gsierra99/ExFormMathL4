@@ -1130,10 +1130,21 @@ by
   -- hY : |b n - u| < ε
   sorry
 
+-- Comentario de JA: La 1 demostración no se puede concluir a partir de
+-- hX y hY exclusivamente, como se ve en el siguiente contraejemplo
+-- haciendo aₙ = 10, t = 9, bₙ = 10, u = 9 y ε = 2 se tiene
+--    |aₙ - t| < ε
+--    |bₙ - u| < ε
+--    |aₙ·bₙ - t·u| > ε
 
-/- Automatic proof -/
-theorem tendsTo_mul (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : TendsTo b u) :
-    TendsTo (fun n ↦ a n * b n) (t * u) := by
+-- Proof 2
+-- =======
+
+theorem tendsTo_mul
+  (ha : TendsTo a t)
+  (hb : TendsTo b u)
+  : TendsTo (fun n ↦ a n * b n) (t * u) :=
+by
   rw [tendsTo_sub_lim_iff] at *
   have h : ∀ n, a n * b n - t * u = (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u := by
     intro n; ring
