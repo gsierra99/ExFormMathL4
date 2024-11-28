@@ -1087,9 +1087,11 @@ by
    _ < ε * 1         := mul_lt_mul'' hX hY han hbn
    _ = ε             := mul_one ε
 
-/- 10. tendsTo_mul -/
+-- ---------------------------------------------------------------------
+-- Exercise 10. Prove that if `a(n)` tends to `t` and `b(n)` tends to
+-- `u` then `a(n)·b(n)` tends to `t·u`.
+-- ---------------------------------------------------------------------
 
-/- Detailed proof -/
 theorem tendsTo_mul_detailed (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : TendsTo b u) :
   TendsTo (fun n ↦ a n * b n) (t * u) := by
   rw [TendsTo] at *
