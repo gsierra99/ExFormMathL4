@@ -398,9 +398,6 @@ by
 -- constant then `c * a(n)` tends to `c * t`.
 -- ---------------------------------------------------------------------
 
--- Demostración en lenguaje natural
--- ================================
-
 -- Natural language proof
 -- ======================
 
