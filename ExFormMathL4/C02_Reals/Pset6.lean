@@ -17,8 +17,8 @@ namespace Section2sheet6
 
 open Section2sheet3 Section2sheet5
 
-variable {a : ℕ → ℝ}
-variable {t : ℝ}
+variable {a b : ℕ → ℝ}
+variable {t u : ℝ}
 variable (c : ℝ)
 
 -- ---------------------------------------------------------------------
@@ -397,9 +397,6 @@ by
 -- Exercise 3. Prove that if `a(n)` tends to `t` and `c` is a negative
 -- constant then `c * a(n)` tends to `c * t`.
 -- ---------------------------------------------------------------------
-
--- Demostración en lenguaje natural
--- ================================
 
 -- Natural language proof
 -- ======================
@@ -1090,35 +1087,173 @@ by
    _ < ε * 1         := mul_lt_mul'' hX hY han hbn
    _ = ε             := mul_one ε
 
-/- 10. tendsTo_mul -/
+-- ---------------------------------------------------------------------
+-- Exercise 10. Prove that if `a(n)` tends to `t` and `b(n)` tends to
+-- `u` then `a(n)·b(n)` tends to `t·u`.
+-- ---------------------------------------------------------------------
 
-/- Detailed proof -/
-theorem tendsTo_mul_detailed (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : TendsTo b u) :
-  TendsTo (fun n ↦ a n * b n) (t * u) := by
+-- Natural language proof
+-- ======================
+
+-- Since aₙ tends to t and bₙ tends to u, we have that
+--    `aₙ-t` tends to `0`                                          (1)
+--    `bₙ-u` tends to `0`                                          (2)
+-- From (1) and (2) we have that
+--    `(aₙ-t)(bₙ-u)` tends to `0`                                  (3)
+-- From (2) we have that
+--    `t·(bₙ-u)` tends to `t·0`                                    (4)
+-- From (1) we have that
+--    `(aₙ-t)·u` tends to `0·u`                                    (5)
+-- From (3), (4) and (5) we have that
+--    `(aₙ-t)(bₙ-u)+t·(bₙ-u)+(aₙ-t)·u` tends to `0+t·0+0·u`
+-- and, simplifying, we get that
+--    `aₙ·bₙ-t·u` tends to `0`
+-- Therefore,
+--    `aₙ·bₙ` tends to `t·u`
+
+-- Proof 1
+-- =======
+
+example
+  (ha : TendsTo a t)
+  (hb : TendsTo b u)
+  : TendsTo (fun n ↦ a n * b n) (t * u) :=
+by
   rw [TendsTo] at *
+  -- ha : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
+  -- hb : ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |b n - u| < ε
+  -- ⊢ ∀ ε > 0, ∃ B, ∀ (n : ℕ), B ≤ n → |a n * b n - t * u| < ε
   intro ε hε
+  -- ε : ℝ
+  -- hε : ε > 0
+  -- ⊢ ∃ B, ∀ (n : ℕ), B ≤ n → |a n * b n - t * u| < ε
   specialize ha ε hε
+  -- ha : ∃ B, ∀ (n : ℕ), B ≤ n → |a n - t| < ε
   specialize hb ε hε
+  -- hb : ∃ B, ∀ (n : ℕ), B ≤ n → |b n - u| < ε
   cases' ha with X hX
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - t| < ε
   cases' hb with Y hY
-  use max X Y
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |b n - u| < ε
+  use Nat.max X Y
+  -- ⊢ ∀ (n : ℕ), X.max Y ≤ n → |a n * b n - t * u| < ε
   intro n hn
+  -- n : ℕ
+  -- hn : X.max Y ≤ n
+  -- ⊢ |a n * b n - t * u| < ε
   specialize hX n (le_of_max_le_left hn)
+  -- hX : |a n - t| < ε
   specialize hY n (le_of_max_le_right hn)
+  -- hY : |b n - u| < ε
   sorry
 
-/- Automatic proof -/
-theorem tendsTo_mul (a b : ℕ → ℝ) (t u : ℝ) (ha : TendsTo a t) (hb : TendsTo b u) :
-    TendsTo (fun n ↦ a n * b n) (t * u) := by
+-- Comentario de JA: La 1ª demostración no se puede concluir a partir de
+-- hX y hY exclusivamente, como se ve en el siguiente contraejemplo
+-- haciendo aₙ = 10, t = 9, bₙ = 10, u = 9 y ε = 2 se tiene
+--    |aₙ - t| < ε
+--    |bₙ - u| < ε
+--    |aₙ·bₙ - t·u| > ε
+
+-- Proof 2
+-- =======
+
+example
+  (ha : TendsTo a t)
+  (hb : TendsTo b u)
+  : TendsTo (fun n ↦ a n * b n) (t * u) :=
+by
   rw [tendsTo_sub_lim_iff] at *
-  have h : ∀ n, a n * b n - t * u = (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u := by
-    intro n; ring
+  -- ha : TendsTo (fun n => a n - t) 0
+  -- hb : TendsTo (fun n => b n - u) 0
+  -- ⊢ TendsTo (fun n => a n * b n - t * u) 0
+  have h : ∀ n, a n * b n - t * u
+                = (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u :=
+       by intro n
+          -- n : ℕ
+          -- ⊢ a n * b n - t * u = (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u
+          ring
   simp [h]
+  -- ⊢ TendsTo (fun n => (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u) 0
   rw [show (0 : ℝ) = 0 + t * 0 + 0 * u by simp]
+  -- ⊢ TendsTo (fun n => (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u) (0 + t * 0 + 0 * u)
   refine' tendsTo_add (tendsTo_add _ _) _
-  · exact tendsTo_zero_mul_tendsTo_zero ha hb
-  · exact tendsTo_const_mul t hb
-  · exact tendsTo_mul_const u ha
+  · -- ⊢ TendsTo (fun n => (a n - t) * (b n - u)) 0
+    exact tendsTo_zero_mul_tendsTo_zero ha hb
+  · -- ⊢ TendsTo (fun n => t * (b n - u)) (t * 0)
+    exact tendsTo_const_mul t hb
+  · -- ⊢ TendsTo (fun n => (a n - t) * u) (0 * u)
+    exact tendsTo_mul_const u ha
+
+-- Comentario de JA: La 2ª demostración se puede modificar como se
+-- muestra a continuación.
+
+-- Proof 3
+-- =======
+
+example
+  (ha : TendsTo a t)
+  (hb : TendsTo b u)
+  : TendsTo (fun n ↦ a n * b n) (t * u) :=
+by
+  rw [tendsTo_sub_lim_iff] at *
+  -- ha : TendsTo (fun n => a n - t) 0
+  -- hb : TendsTo (fun n => b n - u) 0
+  -- ⊢ TendsTo (fun n => a n * b n - t * u) 0
+  have h : ∀ n, a n * b n - t * u
+                = (a n - t) * (b n - u)
+                  + t * (b n - u)
+                  + (a n - t) * u :=
+    by intro n
+       -- n : ℕ
+       -- ⊢ a n * b n - t * u = (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u
+       ring
+  simp [h]
+  -- ⊢ TendsTo (fun n => (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u) 0
+  rw [show (0 : ℝ) = 0 + t * 0 + 0 * u by simp]
+  -- ⊢ TendsTo (fun n => (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u) (0 + t * 0 + 0 * u)
+  apply tendsTo_add
+  . -- ⊢ TendsTo (fun n => (a n - t) * (b n - u) + t * (b n - u)) (0 + t * 0)
+    apply tendsTo_add
+    . -- ⊢ TendsTo (fun n => (a n - t) * (b n - u)) 0
+      exact tendsTo_zero_mul_tendsTo_zero ha hb
+    . -- ⊢ TendsTo (fun n => t * (b n - u)) (t * 0)
+      exact tendsTo_const_mul t hb
+  . -- ⊢ TendsTo (fun n => (a n - t) * u) (0 * u)
+    exact tendsTo_mul_const u ha
+
+-- Proof 4
+-- =======
+
+theorem tendsTo_mul
+  (ha : TendsTo a t)
+  (hb : TendsTo b u)
+  : TendsTo (fun n ↦ a n * b n) (t * u) :=
+by
+  rw [tendsTo_sub_lim_iff] at *
+  -- ha : TendsTo (fun n => a n - t) 0
+  -- hb : TendsTo (fun n => b n - u) 0
+  -- ⊢ TendsTo (fun n => a n * b n - t * u) 0
+  have h : ∀ n, a n * b n - t * u
+                = (a n - t) * (b n - u)
+                  + t * (b n - u)
+                  + (a n - t) * u :=
+    by intro n
+       -- n : ℕ
+       -- ⊢ a n * b n - t * u = (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u
+       ring
+  simp [h]
+  -- ⊢ TendsTo (fun n => (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u) 0
+  rw [show (0 : ℝ) = 0 + t * 0 + 0 * u by simp]
+  -- ⊢ TendsTo (fun n => (a n - t) * (b n - u) + t * (b n - u) + (a n - t) * u) (0 + t * 0 + 0 * u)
+  have h1 : TendsTo (fun n => (a n - t) * (b n - u)) 0
+    := tendsTo_zero_mul_tendsTo_zero ha hb
+  have h2 : TendsTo (fun n => t * (b n - u)) (t * 0)
+    := tendsTo_const_mul t hb
+  have h3 : TendsTo (fun n => (a n - t) * u) (0 * u)
+    := tendsTo_mul_const u ha
+  exact tendsTo_add (tendsTo_add h1 h2) h3
 
 /- 11. tendsTo_unique -/
 
