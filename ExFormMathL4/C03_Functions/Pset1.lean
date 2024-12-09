@@ -4,12 +4,13 @@
 -- Seville, November 03, 2024
 -- ---------------------------------------------------------------------
 
--- In this problem set, we study how to work with inyectivity, surjectivity, biyectivity of functions.
+-- In this problem set, we study how to work with inyectivity,
+--surjectivity, biyectivity of functions.
 --
--- It is based on [Section03functions/Sheet1.lean](https://tinyurl.com/2xlkt9kh)
+-- It is based on [Section03functions/Sheet1.lean](https://tinyurl.com/2bbg8hdw)
 -- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
 
-import Mathlib.Tactic -- imports all the Lean tactics
+import Mathlib.Tactic
 
 namespace Section3sheet1
 
