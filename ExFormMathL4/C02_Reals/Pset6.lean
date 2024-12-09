@@ -1262,6 +1262,27 @@ by
 -- Natural language proof
 -- ======================
 
+-- We will prove it by reductio ad absurdum. Suppose that s ≠ t.
+-- Let ε = |s - t|. Then, ε/2 > 0 and, since s is a limit of a,
+-- there exists an X ∈ ℕ such that
+--    (∀n ∈ ℕ)[n ≥ X → |a(n) - s| < ε/2]                             (1)
+-- and, since t is also a limit of a, there exists a Y ∈ ℕ such that
+--    (∀n ∈ ℕ)[n ≥ Y → |a(n) - t| < ε/2]                             (2)
+-- Let Z = max(X, Y). Then, Z ≥ X and Z ≥ Y and, by (2) and (3), we have
+--    |a(Z) - s| < ε/2                                               (3)
+--    |a(Z) - t| < ε/2                                               (4)
+
+-- To obtain a contradiction, it is enough to prove that ε < ε. Its
+-- proof is
+--    ε = |s - t|
+--      = |(s - t) + 0|
+--      = |(s - t) + (a(Z) - a(Z))|
+--      = |(a(Z) - t) + (s - a(Z))|
+--      ≤ |a(Z) - t| + |s - a(Z)|
+--      = |a(Z) - t| + |a(Z) - s|
+--      < ε/2 + ε/2                   [by (3) and (4)]
+--      = ε
+
 -- Proof 1
 -- =======
 
