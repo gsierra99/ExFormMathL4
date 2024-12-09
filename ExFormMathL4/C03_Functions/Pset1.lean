@@ -55,24 +55,35 @@ by rfl
 theorem comp_eval : (g ∘ f) x = g (f x) :=
 by rfl
 
-
 -- ---------------------------------------------------------------------
--- Exercise 1. Prove that
---    Injective (id : X → X)
+-- Exercise 6. Prove that the identity function is injective.
 -- ---------------------------------------------------------------------
 
--- Proof 1 (detailed)
-example : Injective (id : X → X) := by
+-- Proof 1
+-- =======
+
+example : Injective (id : X → X) :=
+by
   rw [injective_def]
+  -- ⊢ ∀ (a b : X), id a = id b → a = b
   intro a b hid
+  -- a b : X
+  -- hid : id a = id b
+  -- ⊢ a = b
   rw [id_eval, id_eval] at hid
+  -- hid : a = b
   exact hid
 
--- Proof 2 (automatic)
-example : Injective (id : X → X) := by
+-- Proof 2
+-- =======
+
+example : Injective (id : X → X) :=
+by
   simp [injective_def, id_eval]
 
--- Proof 3 (equilibrated)
+-- Proof 3
+-- =======
+
 example : Injective (id : X → X) :=
   fun a b h => by
     rw [id_eval, id_eval] at h
