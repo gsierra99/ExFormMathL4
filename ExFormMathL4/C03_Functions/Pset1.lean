@@ -17,9 +17,16 @@ namespace Section3sheet1
 open Function
 
 variable (X Y Z : Type)
+variable (f : X → Y)
 
-theorem injective_def (f : X → Y) : Injective f ↔ ∀ a b : X, f a = f b → a = b := by
-  rfl
+-- ---------------------------------------------------------------------
+-- Exercise 1. Prove that f is injective iff
+--    ∀ a b : X, f a = f b → a = b
+-- ---------------------------------------------------------------------
+
+theorem injective_def :
+  Injective f ↔ ∀ a b : X, f a = f b → a = b :=
+by rfl
 
 theorem surjective_def (f : X → Y) : Surjective f ↔ ∀ b : Y, ∃ a : X, f a = b := by
   rfl
