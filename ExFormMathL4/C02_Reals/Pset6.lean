@@ -1286,7 +1286,7 @@ by
       exact ne_comm.mp h
   . -- h2 : s < t
     -- ⊢ False
-    set ε := t - s with hε
+    let ε := t - s
     have hε : 0 < ε := sub_pos.mpr h2
     obtain ⟨X, hX⟩ := hs (ε / 2) (by linarith)
     -- X : ℕ
@@ -1302,5 +1302,42 @@ by
     -- hX : -(ε / 2) < a (X.max Y) - s ∧ a (X.max Y) - s < ε / 2
     -- hY : -(ε / 2) < a (X.max Y) - t ∧ a (X.max Y) - t < ε / 2
     linarith
+
+-- Proof 2
+-- =======
+
+example
+  (hs : TendsTo a s)
+  (ht : TendsTo a t)
+  : s = t :=
+by
+  by_contra h
+  -- h : ¬s = t
+  -- ⊢ False
+  let ε := |s - t|
+  have hε : 0 < ε := abs_sub_pos.mpr h
+  obtain ⟨X, hX⟩ := hs (ε / 2) (by linarith)
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - s| < ε / 2
+  obtain ⟨Y, hY⟩ := ht (ε / 2) (by linarith)
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |a n - t| < ε / 2
+  let Z := Nat.max X Y
+  specialize hX Z (le_max_left X Y)
+  -- hX : |a Z - s| < ε / 2
+  specialize hY Z (le_max_right X Y)
+  -- hY : |a Z - t| < ε / 2
+  have h2 : ε < ε := by calc
+    ε = |s - t|                 := rfl
+    _ = |(s - t) + 0|           := by {congr ; exact (add_zero (s - t)).symm}
+    _ = |(s - t) + (a Z - a Z)| := by {congr ; exact (sub_self (a Z)).symm}
+    _ = |(a Z - t) + (s - a Z)| := congrArg (fun x => |x|) (by ring)
+    _ ≤ |a Z - t| + |s - a Z|   := abs_add (a Z - t) (s - a Z)
+    _ = |a Z - t| + |a Z - s|   := congrArg (|a Z - t| + .) (abs_sub_comm s (a Z))
+    _ < ε / 2 + ε / 2           := add_lt_add hY hX
+    _ = ε                       := add_halves ε
+  have h3 : ¬(ε < ε) := lt_irrefl ε
+  show False
+  exact h3 h2
 
 end Section2sheet6
