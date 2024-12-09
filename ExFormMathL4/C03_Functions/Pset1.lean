@@ -112,6 +112,15 @@ by
 example : Injective (id : X → X) :=
 fun _ _ h => h
 
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+-- =======
+
+example : Injective (id : X → X) :=
+injective_id
+
 -- ---------------------------------------------------------------------
 -- Exercise 2. Prove that
 --    Surjective (id : X → X)
