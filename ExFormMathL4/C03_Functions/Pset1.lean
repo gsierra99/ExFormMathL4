@@ -103,7 +103,14 @@ by
   -- ⊢ a = b
   exact h
 
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
 
+-- Proof 5
+-- =======
+
+example : Injective (id : X → X) :=
+fun _ _ h => h
 
 -- ---------------------------------------------------------------------
 -- Exercise 2. Prove that
