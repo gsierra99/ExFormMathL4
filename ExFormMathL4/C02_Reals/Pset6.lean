@@ -1255,24 +1255,52 @@ by
     := tendsTo_mul_const u ha
   exact tendsTo_add (tendsTo_add h1 h2) h3
 
-/- 11. tendsTo_unique -/
+-- ---------------------------------------------------------------------
+-- Exercise 11. Prove that a sequence has at most one limit.
+-- ---------------------------------------------------------------------
 
-/- Automatic proof -/
-theorem tendsTo_unique (a : ℕ → ℝ) (s t : ℝ) (hs : TendsTo a s) (ht : TendsTo a t) : s = t :=
-  by
+-- Natural language proof
+-- ======================
+
+-- Proof 1
+-- =======
+
+theorem tendsTo_unique
+  (hs : TendsTo a s)
+  (ht : TendsTo a t)
+  : s = t :=
+by
   by_contra h
+  -- h : ¬s = t
+  -- ⊢ False
   wlog h2 : s < t
-  · cases' Ne.lt_or_lt h with h3 h3
-    · contradiction
-    · apply this _ _ _ ht hs _ h3
+  · -- this : ∀ {a : ℕ → ℝ} {t s : ℝ}, TendsTo a s → TendsTo a t → ¬s = t → s < t → False
+    -- h2 : ¬s < t
+    -- ⊢ False
+    cases' Ne.lt_or_lt h with h3 h3
+    · -- h3 : s < t
+      contradiction
+    · -- h3 : t < s
+      apply this ht hs _ h3
+      -- ⊢ ¬t = s
       exact ne_comm.mp h
-  set ε := t - s with hε
-  have hε : 0 < ε := sub_pos.mpr h2
-  obtain ⟨X, hX⟩ := hs (ε / 2) (by linarith)
-  obtain ⟨Y, hY⟩ := ht (ε / 2) (by linarith)
-  specialize hX (max X Y) (le_max_left X Y)
-  specialize hY (max X Y) (le_max_right X Y)
-  rw [abs_lt] at hX hY
-  linarith
+  . -- h2 : s < t
+    -- ⊢ False
+    set ε := t - s with hε
+    have hε : 0 < ε := sub_pos.mpr h2
+    obtain ⟨X, hX⟩ := hs (ε / 2) (by linarith)
+    -- X : ℕ
+    -- hX : ∀ (n : ℕ), X ≤ n → |a n - s| < ε / 2
+    obtain ⟨Y, hY⟩ := ht (ε / 2) (by linarith)
+    -- Y : ℕ
+    -- hY : ∀ (n : ℕ), Y ≤ n → |a n - t| < ε / 2
+    specialize hX (Nat.max X Y) (le_max_left X Y)
+    -- hX : |a (X.max Y) - s| < ε / 2
+    specialize hY (Nat.max X Y) (le_max_right X Y)
+    -- hY : |a (X.max Y) - t| < ε / 2
+    rw [abs_lt] at hX hY
+    -- hX : -(ε / 2) < a (X.max Y) - s ∧ a (X.max Y) - s < ε / 2
+    -- hY : -(ε / 2) < a (X.max Y) - t ∧ a (X.max Y) - t < ε / 2
+    linarith
 
 end Section2sheet6
