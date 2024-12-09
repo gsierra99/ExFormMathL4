@@ -17,6 +17,7 @@ namespace Section3sheet1
 open Function
 
 variable (X Y Z : Type)
+variable (x : X)
 variable (f : X → Y)
 
 -- ---------------------------------------------------------------------
@@ -37,8 +38,13 @@ theorem surjective_def :
   Surjective f ↔ ∀ b : Y, ∃ a : X, f a = b :=
 by rfl
 
-theorem id_eval (x : X) : id x = x := by
-  rfl
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--    id x = x
+-- ---------------------------------------------------------------------
+
+theorem id_eval : id x = x :=
+by rfl
 
 theorem comp_eval (f : X → Y) (g : Y → Z) (x : X) : (g ∘ f) x = g (f x) := by
   rfl
