@@ -89,6 +89,21 @@ example : Injective (id : X → X) :=
     rw [id_eval, id_eval] at h
     exact h
 
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+-- =======
+
+example : Injective (id : X → X) :=
+by
+  intro a b h
+  -- a b : X
+  -- h : id a = id b
+  -- ⊢ a = b
+  exact h
+
+
 
 -- ---------------------------------------------------------------------
 -- Exercise 2. Prove that
