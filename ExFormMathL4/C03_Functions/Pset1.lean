@@ -19,6 +19,7 @@ open Function
 variable (X Y Z : Type)
 variable (x : X)
 variable (f : X → Y)
+variable (g : Y → Z)
 
 -- ---------------------------------------------------------------------
 -- Exercise 1. Prove that f is injective iff
@@ -46,8 +47,13 @@ by rfl
 theorem id_eval : id x = x :=
 by rfl
 
-theorem comp_eval (f : X → Y) (g : Y → Z) (x : X) : (g ∘ f) x = g (f x) := by
-  rfl
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that
+--    (g ∘ f) x = g (f x)
+-- ---------------------------------------------------------------------
+
+theorem comp_eval : (g ∘ f) x = g (f x) :=
+by rfl
 
 
 -- ---------------------------------------------------------------------
