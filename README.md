@@ -17,3 +17,6 @@ This repository contains solutions to the exercises of the course [Formalising M
   + [4: The `linarith` tactic](./ExFormMathL4/C02_Reals/Pset4.lean)
   + [5: Limits of sequences (2)](./ExFormMathL4/C02_Reals/Pset5.lean)
   + [6: Limits of sequences (3)](./ExFormMathL4/C02_Reals/Pset6.lean)
+
++ 3: Functions
+  + [1: Functions in Lean](./ExFormMathL4/C03_Functions/Pset1.lean)
