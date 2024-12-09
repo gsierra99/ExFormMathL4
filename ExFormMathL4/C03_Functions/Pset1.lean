@@ -28,8 +28,14 @@ theorem injective_def :
   Injective f ↔ ∀ a b : X, f a = f b → a = b :=
 by rfl
 
-theorem surjective_def (f : X → Y) : Surjective f ↔ ∀ b : Y, ∃ a : X, f a = b := by
-  rfl
+-- ---------------------------------------------------------------------
+-- Exercise 2. Prove that f is surjective iff
+--    ∀ b : Y, ∃ a : X, f a = b
+-- ---------------------------------------------------------------------
+
+theorem surjective_def :
+  Surjective f ↔ ∀ b : Y, ∃ a : X, f a = b :=
+by rfl
 
 theorem id_eval (x : X) : id x = x := by
   rfl
