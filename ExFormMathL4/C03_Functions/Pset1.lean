@@ -152,6 +152,18 @@ example : Surjective (id : X → X) :=
     use b
     exact rfl
 
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+-- =======
+
+example : Surjective (id : X → X) :=
+by
+  intro b
+  -- b : X
+  -- ⊢ ∃ a, id a = b
+  exact ⟨b, rfl⟩
 
 -- ---------------------------------------------------------------------
 -- Exercise 3. Prove that
