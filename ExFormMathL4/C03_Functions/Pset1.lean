@@ -139,8 +139,10 @@ by
   -- ⊢ id b = b
   exact rfl
 
--- Proof 2 (automatic)
-example : Surjective (id : X → X) := by
+-- Proof 2
+-- =======
+example : Surjective (id : X → X) :=
+by
   simp [surjective_def, id_eval]
 
 -- Proof 3 (equilibrated)
