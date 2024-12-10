@@ -165,6 +165,15 @@ by
   -- ⊢ ∃ a, id a = b
   exact ⟨b, rfl⟩
 
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+-- =======
+
+example : Surjective (id : X → X) :=
+fun b => ⟨b, rfl⟩
+
 -- ---------------------------------------------------------------------
 -- Exercise 3. Prove that
 --    (f : X → Y) (g : Y → Z) (hf : Injective f) (hg : Injective g) : Injective (g ∘ f)
