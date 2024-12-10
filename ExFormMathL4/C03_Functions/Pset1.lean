@@ -125,11 +125,18 @@ injective_id
 -- Exercise 7. Prove that the identity function is surjective.
 -- ---------------------------------------------------------------------
 
--- Proof 1 (detailed)
-example : Surjective (id : X → X) := by
+-- Proof 1
+-- =======
+
+example : Surjective (id : X → X) :=
+by
   rw [surjective_def]
+  -- ⊢ ∀ (b : X), ∃ a, id a = b
   intro b
+  -- b : X
+  -- ⊢ ∃ a, id a = b
   use b
+  -- ⊢ id b = b
   exact rfl
 
 -- Proof 2 (automatic)
