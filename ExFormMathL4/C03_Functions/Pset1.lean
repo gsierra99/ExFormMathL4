@@ -174,6 +174,15 @@ by
 example : Surjective (id : X → X) :=
 fun b => ⟨b, rfl⟩
 
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+-- =======
+
+example : Surjective (id : X → X) :=
+surjective_id
+
 -- ---------------------------------------------------------------------
 -- Exercise 3. Prove that
 --    (f : X → Y) (g : Y → Z) (hf : Injective f) (hg : Injective g) : Injective (g ∘ f)
