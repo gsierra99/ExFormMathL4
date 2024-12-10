@@ -122,8 +122,7 @@ example : Injective (id : X → X) :=
 injective_id
 
 -- ---------------------------------------------------------------------
--- Exercise 2. Prove that
---    Surjective (id : X → X)
+-- Exercise 7. Prove that the identity function is surjective.
 -- ---------------------------------------------------------------------
 
 -- Proof 1 (detailed)
