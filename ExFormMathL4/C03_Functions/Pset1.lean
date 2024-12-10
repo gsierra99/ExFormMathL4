@@ -145,11 +145,13 @@ example : Surjective (id : X → X) :=
 by
   simp [surjective_def, id_eval]
 
--- Proof 3 (equilibrated)
+-- Proof 3
+-- =======
 example : Surjective (id : X → X) :=
   fun b => by
     use b
     exact rfl
+
 
 -- ---------------------------------------------------------------------
 -- Exercise 3. Prove that
