@@ -4,76 +4,184 @@
 -- Seville, November 03, 2024
 -- ---------------------------------------------------------------------
 
--- In this problem set, we study how to work with inyectivity, surjectivity, biyectivity of functions.
+-- In this problem set, we study how to work with inyectivity,
+--surjectivity, biyectivity of functions.
 --
--- It is based on [Section03functions/Sheet1.lean](https://tinyurl.com/2xlkt9kh)
+-- It is based on [Section03functions/Sheet1.lean](https://tinyurl.com/2bbg8hdw)
 -- from [Kevin Buzzard's course](https://tinyurl.com/26ek593r).
 
-import Mathlib.Tactic -- imports all the Lean tactics
+import Mathlib.Tactic
 
 namespace Section3sheet1
 
 open Function
 
 variable (X Y Z : Type)
-
-theorem injective_def (f : X → Y) : Injective f ↔ ∀ a b : X, f a = f b → a = b := by
-  rfl
-
-theorem surjective_def (f : X → Y) : Surjective f ↔ ∀ b : Y, ∃ a : X, f a = b := by
-  rfl
-
-theorem id_eval (x : X) : id x = x := by
-  rfl
-
-theorem comp_eval (f : X → Y) (g : Y → Z) (x : X) : (g ∘ f) x = g (f x) := by
-  rfl
-
+variable (x : X)
+variable (f : X → Y)
+variable (g : Y → Z)
 
 -- ---------------------------------------------------------------------
--- Exercise 1. Prove that
---    Injective (id : X → X)
+-- Exercise 1. Prove that f is injective iff
+--    ∀ a b : X, f a = f b → a = b
 -- ---------------------------------------------------------------------
 
--- Proof 1 (detailed)
-example : Injective (id : X → X) := by
+theorem injective_def :
+  Injective f ↔ ∀ a b : X, f a = f b → a = b :=
+by rfl
+
+-- ---------------------------------------------------------------------
+-- Exercise 2. Prove that f is surjective iff
+--    ∀ b : Y, ∃ a : X, f a = b
+-- ---------------------------------------------------------------------
+
+theorem surjective_def :
+  Surjective f ↔ ∀ b : Y, ∃ a : X, f a = b :=
+by rfl
+
+-- ---------------------------------------------------------------------
+-- Exercise 3. Prove that
+--    id x = x
+-- ---------------------------------------------------------------------
+
+theorem id_eval : id x = x :=
+by rfl
+
+-- ---------------------------------------------------------------------
+-- Exercise 4. Prove that
+--    (g ∘ f) x = g (f x)
+-- ---------------------------------------------------------------------
+
+theorem comp_eval : (g ∘ f) x = g (f x) :=
+by rfl
+
+-- ---------------------------------------------------------------------
+-- Exercise 6. Prove that the identity function is injective.
+-- ---------------------------------------------------------------------
+
+-- Proof 1
+-- =======
+
+example : Injective (id : X → X) :=
+by
   rw [injective_def]
+  -- ⊢ ∀ (a b : X), id a = id b → a = b
   intro a b hid
+  -- a b : X
+  -- hid : id a = id b
+  -- ⊢ a = b
   rw [id_eval, id_eval] at hid
+  -- hid : a = b
   exact hid
 
--- Proof 2 (automatic)
-example : Injective (id : X → X) := by
+-- Proof 2
+-- =======
+
+example : Injective (id : X → X) :=
+by
   simp [injective_def, id_eval]
 
--- Proof 3 (equilibrated)
+-- Proof 3
+-- =======
+
 example : Injective (id : X → X) :=
   fun a b h => by
     rw [id_eval, id_eval] at h
     exact h
 
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+-- =======
+
+example : Injective (id : X → X) :=
+by
+  intro a b h
+  -- a b : X
+  -- h : id a = id b
+  -- ⊢ a = b
+  exact h
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+-- =======
+
+example : Injective (id : X → X) :=
+fun _ _ h => h
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+-- =======
+
+example : Injective (id : X → X) :=
+injective_id
 
 -- ---------------------------------------------------------------------
--- Exercise 2. Prove that
---    Surjective (id : X → X)
+-- Exercise 7. Prove that the identity function is surjective.
 -- ---------------------------------------------------------------------
 
--- Proof 1 (detailed)
-example : Surjective (id : X → X) := by
+-- Proof 1
+-- =======
+
+example : Surjective (id : X → X) :=
+by
   rw [surjective_def]
+  -- ⊢ ∀ (b : X), ∃ a, id a = b
   intro b
+  -- b : X
+  -- ⊢ ∃ a, id a = b
   use b
+  -- ⊢ id b = b
   exact rfl
 
--- Proof 2 (automatic)
-example : Surjective (id : X → X) := by
+-- Proof 2
+-- =======
+example : Surjective (id : X → X) :=
+by
   simp [surjective_def, id_eval]
 
--- Proof 3 (equilibrated)
+-- Proof 3
+-- =======
 example : Surjective (id : X → X) :=
   fun b => by
     use b
     exact rfl
+
+-- Comentario de JA: La 1ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 4
+-- =======
+
+example : Surjective (id : X → X) :=
+by
+  intro b
+  -- b : X
+  -- ⊢ ∃ a, id a = b
+  exact ⟨b, rfl⟩
+
+-- Comentario de JA: La 4ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 5
+-- =======
+
+example : Surjective (id : X → X) :=
+fun b => ⟨b, rfl⟩
+
+-- Comentario de JA: La 5ª demostración se puede simplificar como se
+-- muestra a continuación.
+
+-- Proof 6
+-- =======
+
+example : Surjective (id : X → X) :=
+surjective_id
 
 -- ---------------------------------------------------------------------
 -- Exercise 3. Prove that

@@ -1255,24 +1255,110 @@ by
     := tendsTo_mul_const u ha
   exact tendsTo_add (tendsTo_add h1 h2) h3
 
-/- 11. tendsTo_unique -/
+-- ---------------------------------------------------------------------
+-- Exercise 11. Prove that a sequence has at most one limit.
+-- ---------------------------------------------------------------------
 
-/- Automatic proof -/
-theorem tendsTo_unique (a : ℕ → ℝ) (s t : ℝ) (hs : TendsTo a s) (ht : TendsTo a t) : s = t :=
-  by
+-- Natural language proof
+-- ======================
+
+-- We will prove it by reductio ad absurdum. Suppose that s ≠ t.
+-- Let ε = |s - t|. Then, ε/2 > 0 and, since s is a limit of a,
+-- there exists an X ∈ ℕ such that
+--    (∀n ∈ ℕ)[n ≥ X → |a(n) - s| < ε/2]                             (1)
+-- and, since t is also a limit of a, there exists a Y ∈ ℕ such that
+--    (∀n ∈ ℕ)[n ≥ Y → |a(n) - t| < ε/2]                             (2)
+-- Let Z = max(X, Y). Then, Z ≥ X and Z ≥ Y and, by (2) and (3), we have
+--    |a(Z) - s| < ε/2                                               (3)
+--    |a(Z) - t| < ε/2                                               (4)
+
+-- To obtain a contradiction, it is enough to prove that ε < ε. Its
+-- proof is
+--    ε = |s - t|
+--      = |(s - t) + 0|
+--      = |(s - t) + (a(Z) - a(Z))|
+--      = |(a(Z) - t) + (s - a(Z))|
+--      ≤ |a(Z) - t| + |s - a(Z)|
+--      = |a(Z) - t| + |a(Z) - s|
+--      < ε/2 + ε/2                   [by (3) and (4)]
+--      = ε
+
+-- Proof 1
+-- =======
+
+theorem tendsTo_unique
+  (hs : TendsTo a s)
+  (ht : TendsTo a t)
+  : s = t :=
+by
   by_contra h
+  -- h : ¬s = t
+  -- ⊢ False
   wlog h2 : s < t
-  · cases' Ne.lt_or_lt h with h3 h3
-    · contradiction
-    · apply this _ _ _ ht hs _ h3
+  · -- this : ∀ {a : ℕ → ℝ} {t s : ℝ}, TendsTo a s → TendsTo a t → ¬s = t → s < t → False
+    -- h2 : ¬s < t
+    -- ⊢ False
+    cases' Ne.lt_or_lt h with h3 h3
+    · -- h3 : s < t
+      contradiction
+    · -- h3 : t < s
+      apply this ht hs _ h3
+      -- ⊢ ¬t = s
       exact ne_comm.mp h
-  set ε := t - s with hε
-  have hε : 0 < ε := sub_pos.mpr h2
+  . -- h2 : s < t
+    -- ⊢ False
+    let ε := t - s
+    have hε : 0 < ε := sub_pos.mpr h2
+    obtain ⟨X, hX⟩ := hs (ε / 2) (by linarith)
+    -- X : ℕ
+    -- hX : ∀ (n : ℕ), X ≤ n → |a n - s| < ε / 2
+    obtain ⟨Y, hY⟩ := ht (ε / 2) (by linarith)
+    -- Y : ℕ
+    -- hY : ∀ (n : ℕ), Y ≤ n → |a n - t| < ε / 2
+    specialize hX (Nat.max X Y) (le_max_left X Y)
+    -- hX : |a (X.max Y) - s| < ε / 2
+    specialize hY (Nat.max X Y) (le_max_right X Y)
+    -- hY : |a (X.max Y) - t| < ε / 2
+    rw [abs_lt] at hX hY
+    -- hX : -(ε / 2) < a (X.max Y) - s ∧ a (X.max Y) - s < ε / 2
+    -- hY : -(ε / 2) < a (X.max Y) - t ∧ a (X.max Y) - t < ε / 2
+    linarith
+
+-- Proof 2
+-- =======
+
+example
+  (hs : TendsTo a s)
+  (ht : TendsTo a t)
+  : s = t :=
+by
+  by_contra h
+  -- h : ¬s = t
+  -- ⊢ False
+  let ε := |s - t|
+  have hε : 0 < ε := abs_sub_pos.mpr h
   obtain ⟨X, hX⟩ := hs (ε / 2) (by linarith)
+  -- X : ℕ
+  -- hX : ∀ (n : ℕ), X ≤ n → |a n - s| < ε / 2
   obtain ⟨Y, hY⟩ := ht (ε / 2) (by linarith)
-  specialize hX (max X Y) (le_max_left X Y)
-  specialize hY (max X Y) (le_max_right X Y)
-  rw [abs_lt] at hX hY
-  linarith
+  -- Y : ℕ
+  -- hY : ∀ (n : ℕ), Y ≤ n → |a n - t| < ε / 2
+  let Z := Nat.max X Y
+  specialize hX Z (le_max_left X Y)
+  -- hX : |a Z - s| < ε / 2
+  specialize hY Z (le_max_right X Y)
+  -- hY : |a Z - t| < ε / 2
+  have h2 : ε < ε := by calc
+    ε = |s - t|                 := rfl
+    _ = |(s - t) + 0|           := by {congr ; exact (add_zero (s - t)).symm}
+    _ = |(s - t) + (a Z - a Z)| := by {congr ; exact (sub_self (a Z)).symm}
+    _ = |(a Z - t) + (s - a Z)| := congrArg (fun x => |x|) (by ring)
+    _ ≤ |a Z - t| + |s - a Z|   := abs_add (a Z - t) (s - a Z)
+    _ = |a Z - t| + |a Z - s|   := congrArg (|a Z - t| + .) (abs_sub_comm s (a Z))
+    _ < ε / 2 + ε / 2           := add_lt_add hY hX
+    _ = ε                       := add_halves ε
+  have h3 : ¬(ε < ε) := lt_irrefl ε
+  show False
+  exact h3 h2
 
 end Section2sheet6
