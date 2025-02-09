@@ -46,12 +46,20 @@ open Filter Set
 open scoped Filter
 -- for 𝓟 notation
 
-example (S T : Set α) : 𝓟 S ≤ 𝓟 T ↔ S ⊆ T := sorry
+example (S T : Set α) : 𝓟 S ≤ 𝓟 T ↔ S ⊆ T := by
+  constructor
+  intro h
+  simp at h
+  assumption
+  intro h
+  simp
+  assumption
 
 -- Here's another useful lemma about principal filters.
 -- It's called `le_principal_iff` in mathlib but why
 -- not try proving it yourself?
-example (F : Filter α) (S : Set α) : F ≤ 𝓟 S ↔ S ∈ F := sorry
+example (F : Filter α) (S : Set α) : F ≤ 𝓟 S ↔ S ∈ F := by
+  simp
 
 /-
 
@@ -63,9 +71,20 @@ the intersection of `Fᵢ.sets` is also a filter. Let's check this.
 -/
 def lub {I : Type} (F : I → Filter α) : Filter α where
   sets := {X | ∀ i, X ∈ F i}
-  univ_sets := sorry
-  sets_of_superset := sorry
-  inter_sets := sorry
+  univ_sets := by simp
+  sets_of_superset := by
+    intro S T h hSsT
+    simp at *
+    intro i
+    specialize h i
+    exact mem_of_superset h hSsT
+  inter_sets := by
+    intros S T hS hT
+    simp at *
+    intro i
+    specialize hS i
+    specialize hT i
+    exact ⟨hS, hT⟩
 
 /-
 
@@ -74,11 +93,20 @@ two axioms.
 
 -/
 -- it's an upper bound
-example (I : Type) (F : I → Filter α) (i : I) : F i ≤ lub F := sorry
+example (I : Type) (F : I → Filter α) (i : I) : F i ≤ lub F := by
+  change (lub F).sets ⊆ (F i).sets
+  rw [subset_def]
+  intro x hx
+  exact hx i
 
 -- it's ≤ all other upper bounds
 example (I : Type) (F : I → Filter α) (G : Filter α) (hG : ∀ i, F i ≤ G) :
-    lub F ≤ G := sorry
+    lub F ≤ G := by
+    change G.sets ⊆ (lub F).sets
+    rw [subset_def]
+    intro x hx i
+    by_contra h
+    exact h (hG i hx)
 
 /-
 
@@ -97,7 +125,16 @@ def glb {I : Type} (F : I → Filter α) : Filter α :=
   lub fun G : {G : Filter α | ∀ i, (F i).sets ⊆ G.sets} ↦ G.1
 
 -- it's a lower bound
-example (I : Type) (F : I → Filter α) (i : I) : glb F ≤ F i := sorry
+example (I : Type) (F : I → Filter α) (i : I) : glb F ≤ F i := by
+  change (F i).sets ⊆ (glb F).sets
+  rw [subset_def]
+  intro x hx
+  unfold glb
+  simp
+  intro G
+
+
+  sorry
 
 -- it's ≥ all other lower bounds
 example (I : Type) (F : I → Filter α) (G : Filter α) (hG : ∀ i, G ≤ F i) :
